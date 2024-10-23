@@ -10,7 +10,6 @@ class UserController:
         self.user_bp = Blueprint('user_bp', __name__)
         print('UserController initialized')
 
-        # Bind 'self' to the 'create_user' method using functools.partial
         self.user_bp.add_url_rule('/user', 'create_user', partial(self.create_user), methods=['POST'])
     
     def create_user(self):

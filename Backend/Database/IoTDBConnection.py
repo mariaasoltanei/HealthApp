@@ -11,7 +11,7 @@ class IoTDBConnection:
     def connect(self):
         """Establish connection to IoTDB."""
         self.session = Session(self.host, self.port, self.username, self.password)
-        self.session.open(False)  # Set False for non-encryption
+        self.session.open(False)
         print(f"Connected to IoTDB at {self.host}:{self.port}")
 
     def close(self):
