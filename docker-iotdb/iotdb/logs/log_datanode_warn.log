@@ -1,0 +1,4 @@
+2024-10-20 20:56:26,455 [IoTDB-Shutdown-Hook] WARN  o.a.i.c.conf.CommonConfig:489 - Change system status to ReadOnly! Only query statements are permitted! 
+2024-10-20 20:56:26,539 [IoTDB-Shutdown-Hook] WARN  o.a.i.d.p.c.ConfigNodeClient:238 - The current node may have been down TEndPoint(ip:iotdb, port:10710),try next node 
+2024-10-20 20:56:26,543 [IoTDB-Shutdown-Hook] WARN  o.a.i.d.p.c.ConfigNodeClient:263 - The current node may have been down TEndPoint(ip:iotdb, port:10710),try next node 
+2024-10-20 20:56:28,549 [IoTDB-Shutdown-Hook] WARN  o.a.i.d.p.c.ConfigNodeClient:263 - The current node may have been down TEndPoint(ip:iotdb, port:10710),try next node 

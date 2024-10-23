@@ -1,0 +1,4 @@
+2024-10-20 20:56:26,639 [0@group-000000000000-StateMachineUpdater] WARN  o.a.i.d.c.IoTDBDescriptor:147 - Cannot find IOTDB_HOME or IOTDB_CONF environment variable when loading config file iotdb-common.properties, use default configuration 
+2024-10-20 20:56:26,640 [0@group-000000000000-StateMachineUpdater] WARN  o.a.i.d.c.IoTDBDescriptor:193 - Couldn't load the configuration iotdb-common.properties from any of the known sources. 
+2024-10-20 20:56:26,641 [0@group-000000000000-StateMachineUpdater] WARN  o.a.i.d.c.IoTDBDescriptor:147 - Cannot find IOTDB_HOME or IOTDB_CONF environment variable when loading config file iotdb-datanode.properties, use default configuration 
+2024-10-20 20:56:26,641 [0@group-000000000000-StateMachineUpdater] WARN  o.a.i.d.c.IoTDBDescriptor:225 - Couldn't load the configuration iotdb-datanode.properties from any of the known sources. 

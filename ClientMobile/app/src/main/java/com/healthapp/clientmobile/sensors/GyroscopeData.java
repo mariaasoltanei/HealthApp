@@ -1,4 +1,4 @@
-package com.healthapp.clientmobile.domain.sensors;
+package com.healthapp.clientmobile.sensors;
 
 import java.util.Date;
 

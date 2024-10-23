@@ -1,4 +1,4 @@
-package com.healthapp.clientmobile.domain.user;
+package com.healthapp.clientmobile.domain.user.models;
 
 public class User {
     private String firstName;
