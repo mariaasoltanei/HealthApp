@@ -1,5 +1,7 @@
 from dataclasses import dataclass
 from typing import Optional
+from datetime import datetime
+from Database.User.Models.UserDB import UserDB
 
 @dataclass
 class User:
@@ -89,3 +91,34 @@ class User:
         if not 1.0 <= value <= 2.5:
             raise ValueError("Activity multiplier must be between 1.0 and 2.5")
         self._activity_multiplier = value
+
+    @staticmethod
+    def from_userdb(userdb: UserDB) -> "User":
+        """Convert a UserDB instance to a User instance."""
+        return User(
+            first_name=userdb.first_name,
+            last_name=userdb.last_name,
+            email=userdb.email,
+            birth_date=userdb.birth_date.isoformat() if userdb.birth_date else None,
+            height=userdb.height,
+            weight=userdb.weight,
+            gender=userdb.gender,
+            activity_multiplier=userdb.activity_multiplier
+        )
+
+    def to_userdb(self, user_id: int) -> UserDB:
+        """Convert a User instance to a UserDB instance."""
+        now = datetime.now()
+        return UserDB(
+            id=user_id,
+            created_at=now,
+            updated_at=now,
+            first_name=self.first_name,
+            last_name=self.last_name,
+            email=self.email,
+            birth_date=datetime.fromisoformat(self.birth_date) if self.birth_date else None,
+            height=self.height,
+            weight=self.weight,
+            gender=self.gender,
+            activity_multiplier=self.activity_multiplier
+        )

@@ -1,35 +1,26 @@
 from flask import Flask, g
 from Database.IoTDBConnection import IoTDBConnection
-from WebAPI.User.UserController import user_bp
+from WebAPI.User.UserController import user_blueprint
+from Database.User.UserRepository import UserRepository
 import os
 from dotenv import load_dotenv
 
 load_dotenv()
 
-app = Flask(__name__)
-app.register_blueprint(user_bp)
+def create_app():
+    """Factory function to create and configure the Flask app."""
+    app = Flask(__name__)
 
+    app.register_blueprint(user_blueprint, url_prefix='/users')
 
-def get_db_connection():
-    if 'iotdb_connection' not in g:
-        g.iotdb_connection = IoTDBConnection(
-            host=os.getenv('iotdb_ip'), 
-            port=int(os.getenv('iotdb_port')),
-            username=os.getenv('iotdb_username'), 
-            password=os.getenv('iotdb_password')
-        )
-        g.iotdb_connection.connect()
-    return g.iotdb_connection
+    initialize_database()
 
-@app.before_first_request
-def init_db():
-    get_db_connection()
+    return app
 
-# @app.teardown_appcontext
-# def close_db_connection(exception):
-#     connection = g.pop('iotdb_connection', None)
-#     if connection is not None:
-#         connection.close()
+def initialize_database():
+    repository = UserRepository()
+    repository.create_timeseries()
 
-if __name__ == "__main__":
+if __name__ == '__main__':
+    app = create_app()
     app.run(debug=True)

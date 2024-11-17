@@ -1,4 +1,4 @@
-2024-10-20 20:56:28,550 [IoTDB-Shutdown-Hook] ERROR o.a.i.d.s.IoTDBShutdownHook:133 - Failed to borrow ConfigNodeClient 
+2024-11-17 13:00:41,635 [IoTDB-Shutdown-Hook] ERROR o.a.i.d.s.IoTDBShutdownHook:133 - Failed to borrow ConfigNodeClient 
 org.apache.iotdb.commons.client.exception.ClientManagerException: net.sf.cglib.core.CodeGenerationException: org.apache.thrift.TException-->Fail to connect to any config node. Please check status of ConfigNodes or logs of connected DataNode
 	at org.apache.iotdb.commons.client.ClientManager.borrowClient(ClientManager.java:55)
 	at org.apache.iotdb.db.service.IoTDBShutdownHook.run(IoTDBShutdownHook.java:123)
@@ -28,4 +28,4 @@ Caused by: org.apache.thrift.TException: Fail to connect to any config node. Ple
 	at java.base/java.lang.reflect.Constructor.newInstance(Unknown Source)
 	at net.sf.cglib.core.ReflectUtils.newInstance(ReflectUtils.java:291)
 	... 13 common frames omitted
-2024-10-20 20:56:28,554 [IoTDB-Shutdown-Hook] ERROR o.a.i.d.s.IoTDBShutdownHook:138 - Reporting DataNode shutdown failed. The cluster will still take the current DataNode as Running for a few seconds. 
+2024-11-17 13:00:41,641 [IoTDB-Shutdown-Hook] ERROR o.a.i.d.s.IoTDBShutdownHook:138 - Reporting DataNode shutdown failed. The cluster will still take the current DataNode as Running for a few seconds. 

@@ -1,17 +1,24 @@
 from Database.User.UserRepository import UserRepository
+from Domain.User.Models.User import User
+from Domain.User.Models.UserMappingExtensions import user_to_userdb, userdb_to_user
 
 class UserService:
-    def __init__(self, user_repository: UserRepository):
-        self.user_repository = user_repository
+    """Service layer for user-related operations."""
+    def __init__(self):
+        self.user_repository = UserRepository()
 
-    def get_user(self, user_id):
-        return self.user_repository.get_user(user_id)
+    def register_user(self, user: User):
+        user_id = "1"
+        user_db = user_to_userdb(user, user_id)
+        print("Service message:",user_db)
 
-    def create_user(self, user):
-        return self.user_repository.create_user(user)
+        self.user_repository.add_user_to_iotdb(user_db)
 
-    def update_user(self, user_id, user):
-        return self.user_repository.update_user(user_id, user)
+        return {"message": "User registered successfully"}
 
-    def delete_user(self, user_id):
-        return self.user_repository.delete_user(user_id)
+    def get_user_by_id(self, user_id: int) -> User:
+        # Retrieve from IoTDB and convert to User
+        user_db = self.user_repository.find_user_by_id(user_id)
+        if not user_db:
+            raise ValueError("User not found")
+        return userdb_to_user(user_db)

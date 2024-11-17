@@ -1,22 +1,33 @@
 from flask import Blueprint, request, jsonify
 from Domain.User.UserService import UserService
-from WebAPI.User.Models.CreateUserDto import CreateUserDto
-from WebAPI.User.UserMappingExtensions import UserMappingExtensions
+from Domain.User.Models.UserMappingExtensions import user_to_userdb
 from functools import partial
+from Domain.User.Models.User import User
 
-class UserController:
-    def __init__(self, user_service: UserService):
-        self.user_service = user_service
-        self.user_bp = Blueprint('user_bp', __name__)
-        print('UserController initialized')
+user_blueprint = Blueprint('user', __name__)
+user_service = UserService()
 
-        self.user_bp.add_url_rule('/user', 'create_user', partial(self.create_user), methods=['POST'])
-    
-    def create_user(self):
-        data = request.get_json()
-        create_user_dto = CreateUserDto(**data)
+@user_blueprint.route('/register', methods=['POST'])
+def register_user():
+    try:
+        user_data = request.json
 
-        user = UserMappingExtensions.create_from_dto(create_user_dto)
-        self.user_service.create_user(user)
+        user = User(
+            first_name=user_data['first_name'],
+            last_name=user_data['last_name'],
+            email=user_data['email'],
+            birth_date=user_data.get('birth_date'),
+            height=user_data['height'],
+            weight=user_data['weight'],
+            gender=user_data['gender'],
+            activity_multiplier=user_data['activity_multiplier']
+        )
+        print("Controller message",user)
+        response = user_service.register_user(user)
+        return jsonify(response), 201
 
-        return jsonify({"message": "User created successfully"}), 201
+    except ValueError as ve:
+        return jsonify({"error": str(ve)}), 400
+    except Exception as e:
+        print(e)
+        return jsonify({"error": "An unexpected error occurred"}), 500
