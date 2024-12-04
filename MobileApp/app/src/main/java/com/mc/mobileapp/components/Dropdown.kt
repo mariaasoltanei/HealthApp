@@ -7,13 +7,14 @@ import androidx.compose.ui.Modifier
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun GenderDropdown(
-    selectedGender: String,
-    onGenderChange: (String) -> Unit,
+fun Dropdown(
+    dropdownItems: Map<String, Float>,
+    label: String,
+    selectedItem: String,
+    onSelectedItemChange: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
     var expanded by remember { mutableStateOf(false) }
-    val genderOptions = listOf("Male", "Female") // Dropdown options
 
     ExposedDropdownMenuBox(
         expanded = expanded,
@@ -21,10 +22,10 @@ fun GenderDropdown(
         modifier = modifier.fillMaxWidth()
     ) {
         OutlinedTextField(
-            value = selectedGender,
+            value = selectedItem,
             onValueChange = {},
             readOnly = true,
-            label = { Text("Gender") },
+            label = { Text(label) },
             trailingIcon = {
                 ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded)
             },
@@ -35,11 +36,11 @@ fun GenderDropdown(
             expanded = expanded,
             onDismissRequest = { expanded = false }
         ) {
-            genderOptions.forEach { option ->
+            dropdownItems.forEach { (displayText, _) ->
                 DropdownMenuItem(
-                    text = { Text(option) },
+                    text = { Text(displayText) },
                     onClick = {
-                        onGenderChange(option) // Update the selected gender
+                        onSelectedItemChange(displayText)
                         expanded = false
                     }
                 )

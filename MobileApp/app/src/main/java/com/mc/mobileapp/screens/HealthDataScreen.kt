@@ -13,7 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import com.mc.mobileapp.components.DatePickerField
-import com.mc.mobileapp.components.GenderDropdown
+import com.mc.mobileapp.components.Dropdown
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -32,6 +32,11 @@ fun HealthDataScreen(
     onBack: () -> Unit,
     errorMessage: String
 ) {
+    val activityLevels = mapOf(
+        "Sedentary" to 1.2f,
+        "Active" to 1.55f,
+        "Very Active" to 1.9f
+    )
 
     Column(
         modifier = Modifier
@@ -48,9 +53,24 @@ fun HealthDataScreen(
             onDateChange = onBirthDateChange,
             modifier = Modifier.fillMaxWidth()
         )
-        GenderDropdown(
-            selectedGender = gender,
-            onGenderChange = onGenderChange,
+        // Gender Dropdown
+        Dropdown(
+            dropdownItems = mapOf("Male" to 0f, "Female" to 0f),
+            label = "Gender",
+            selectedItem = gender,
+            onSelectedItemChange = onGenderChange,
+            modifier = Modifier.fillMaxWidth()
+        )
+
+        // Activity Multiplier Dropdown
+        Dropdown(
+            dropdownItems = activityLevels,
+            label = "Activity Multiplier",
+            selectedItem = activityMultiplier,
+            onSelectedItemChange = { selectedLabel ->
+                val numericValue = activityLevels[selectedLabel] ?: 1.0f
+                onActivityMultiplierChange(numericValue.toString())
+            },
             modifier = Modifier.fillMaxWidth()
         )
         TextField(
@@ -64,13 +84,6 @@ fun HealthDataScreen(
             value = weight,
             onValueChange = onWeightChange,
             label = { Text("Weight (kg)") },
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-            modifier = Modifier.fillMaxWidth()
-        )
-        TextField(
-            value = activityMultiplier,
-            onValueChange = onActivityMultiplierChange,
-            label = { Text("Activity Multiplier") },
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
             modifier = Modifier.fillMaxWidth()
         )

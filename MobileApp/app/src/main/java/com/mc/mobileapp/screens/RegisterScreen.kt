@@ -1,5 +1,6 @@
 package com.mc.mobileapp.screens
 
+import android.util.Log
 import androidx.compose.runtime.*
 import com.mc.mobileapp.User
 import com.mc.mobileapp.UserViewModel
@@ -77,6 +78,7 @@ fun RegisterScreen(
                     )
                     userViewModel.registerUser(user, onSuccess = {
                         onRegisterSuccess()
+                        Log.d("RegisterScreen", "User registered successfully.")
                     }, onError = {
                         errorMessage = it
                     })

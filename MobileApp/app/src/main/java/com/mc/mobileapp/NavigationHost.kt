@@ -3,6 +3,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.mc.mobileapp.UserViewModel
+import com.mc.mobileapp.screens.LandingScreen
 import com.mc.mobileapp.screens.LoginScreen
 import com.mc.mobileapp.screens.RegisterScreen
 import com.mc.mobileapp.screens.WelcomeScreen
@@ -23,7 +24,7 @@ fun AppNavGraph(navController: NavHostController, userViewModel: UserViewModel) 
             LoginScreen(
                 userViewModel = userViewModel,
                 onLoginSuccess = {
-                    // Handle successful login (e.g., navigate to home screen or show toast)
+                    navController.navigate("landing")
                 },
                 onBackClick = { navController.popBackStack() } // Navigate back to welcome
             )
@@ -34,10 +35,21 @@ fun AppNavGraph(navController: NavHostController, userViewModel: UserViewModel) 
             RegisterScreen(
                 userViewModel = userViewModel,
                 onRegisterSuccess = {
-                    navController.navigate("login") { popUpTo("welcome") }
+                    navController.navigate("landing")
                 },
 
                 onBackClick = { navController.popBackStack() } // Navigate back to welcome
+            )
+        }
+
+        //Landing Screen
+        composable("landing") {
+            LandingScreen(
+                onSucessful = {
+                    navController.navigate("welcome") {
+                        popUpTo("welcome") { inclusive = true }
+                    }
+                }
             )
         }
     }

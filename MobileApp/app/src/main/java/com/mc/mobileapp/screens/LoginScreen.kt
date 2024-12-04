@@ -1,5 +1,6 @@
 package com.mc.mobileapp.screens
 
+import android.util.Log
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.material.icons.Icons
@@ -65,6 +66,7 @@ fun LoginScreen(
                         password = password,
                         onSuccess = { user ->
                             onLoginSuccess(user)
+                            Log.d("LoginScreen", "User: $user")
                         },
                         onError = { error ->
                             errorMessage = error

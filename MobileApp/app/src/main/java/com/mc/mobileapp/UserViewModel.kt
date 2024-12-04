@@ -10,7 +10,6 @@ class UserViewModel(private val repository: UserRepository) : ViewModel() {
     fun registerUser(user: User, onSuccess: () -> Unit, onError: (String) -> Unit) {
         viewModelScope.launch {
             try {
-                // Check if user with the same email exists
                 val existingUser = repository.loginUser(user.email, user.password)
                 if (existingUser == null) {
                     repository.insertUser(user)
