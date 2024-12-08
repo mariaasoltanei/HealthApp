@@ -19,7 +19,7 @@ import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 
 import com.healthapp.clientmobile.R;
-import com.healthapp.clientmobile.domain.sensors.SensorData;
+import com.healthapp.clientmobile.sensors.SensorData;
 
 import java.util.ArrayList;
 import java.util.Date;
