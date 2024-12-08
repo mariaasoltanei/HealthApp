@@ -22,7 +22,7 @@ class UserViewModelTest {
     private lateinit var userRepository: UserRepository
     private lateinit var userViewModel: UserViewModel
 
-    private val testDispatcher = StandardTestDispatcher()
+    private val testDispatcher = UnconfinedTestDispatcher()
 
     @Before
     fun setup() {
