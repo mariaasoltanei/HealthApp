@@ -1,0 +1,174 @@
+2024-11-17 12:19:45,662 [pool-28-IoTDB-ClientRPC-Processor-1] WARN  o.a.i.d.u.ErrorHandlingUtils:101 - Status code: 700, Query Statement: "CREATE STORAGE GROUP IF NOT EXISTS root.users". executeStatement failed 
+2024-11-17 12:19:45,674 [pool-28-IoTDB-ClientRPC-Processor-1] WARN  o.a.i.d.u.ErrorHandlingUtils:101 - Status code: 700, Query Statement: "
+            CREATE TIMESERIES IF NOT EXISTS root.users.profile WITH DATATYPE=TEXT, ENCODING=PLAIN
+        ". executeStatement failed 
+2024-11-17 12:20:02,715 [pool-28-IoTDB-ClientRPC-Processor-2] WARN  o.a.i.d.u.ErrorHandlingUtils:101 - Status code: 700, Query Statement: "CREATE STORAGE GROUP IF NOT EXISTS root.users". executeStatement failed 
+2024-11-17 12:20:02,719 [pool-28-IoTDB-ClientRPC-Processor-2] WARN  o.a.i.d.u.ErrorHandlingUtils:101 - Status code: 700, Query Statement: "
+            CREATE TIMESERIES IF NOT EXISTS root.users.profile WITH DATATYPE=TEXT, ENCODING=PLAIN
+        ". executeStatement failed 
+2024-11-17 12:20:03,089 [pool-28-IoTDB-ClientRPC-Processor-3] WARN  o.a.i.d.u.ErrorHandlingUtils:101 - Status code: 700, Query Statement: "CREATE STORAGE GROUP IF NOT EXISTS root.users". executeStatement failed 
+2024-11-17 12:20:03,092 [pool-28-IoTDB-ClientRPC-Processor-3] WARN  o.a.i.d.u.ErrorHandlingUtils:101 - Status code: 700, Query Statement: "
+            CREATE TIMESERIES IF NOT EXISTS root.users.profile WITH DATATYPE=TEXT, ENCODING=PLAIN
+        ". executeStatement failed 
+2024-11-17 12:21:59,299 [pool-28-IoTDB-ClientRPC-Processor-4] WARN  o.a.i.d.u.ErrorHandlingUtils:101 - Status code: 700, Query Statement: "CREATE STORAGE GROUP IF NOT EXISTS root.users". executeStatement failed 
+2024-11-17 12:21:59,302 [pool-28-IoTDB-ClientRPC-Processor-4] WARN  o.a.i.d.u.ErrorHandlingUtils:101 - Status code: 700, Query Statement: "
+            CREATE TIMESERIES IF NOT EXISTS root.users.profile WITH DATATYPE=TEXT, ENCODING=PLAIN
+        ". executeStatement failed 
+2024-11-17 12:40:55,042 [pool-28-IoTDB-ClientRPC-Processor-5] WARN  o.a.i.d.u.ErrorHandlingUtils:101 - Status code: 700, Query Statement: "CREATE STORAGE GROUP IF NOT EXISTS root.users". executeStatement failed 
+2024-11-17 12:40:55,046 [pool-28-IoTDB-ClientRPC-Processor-5] WARN  o.a.i.d.u.ErrorHandlingUtils:101 - Status code: 700, Query Statement: "
+            CREATE TIMESERIES IF NOT EXISTS root.users.profile WITH DATATYPE=TEXT, ENCODING=PLAIN
+        ". executeStatement failed 
+2024-11-17 12:40:55,409 [pool-28-IoTDB-ClientRPC-Processor-6] WARN  o.a.i.d.u.ErrorHandlingUtils:101 - Status code: 700, Query Statement: "CREATE STORAGE GROUP IF NOT EXISTS root.users". executeStatement failed 
+2024-11-17 12:40:55,411 [pool-28-IoTDB-ClientRPC-Processor-6] WARN  o.a.i.d.u.ErrorHandlingUtils:101 - Status code: 700, Query Statement: "
+            CREATE TIMESERIES IF NOT EXISTS root.users.profile WITH DATATYPE=TEXT, ENCODING=PLAIN
+        ". executeStatement failed 
+2024-11-17 12:43:40,258 [pool-28-IoTDB-ClientRPC-Processor-7] WARN  o.a.i.d.u.ErrorHandlingUtils:101 - Status code: 700, Query Statement: "CREATE STORAGE GROUP IF NOT EXISTS root.users". executeStatement failed 
+2024-11-17 12:43:40,260 [pool-28-IoTDB-ClientRPC-Processor-7] WARN  o.a.i.d.u.ErrorHandlingUtils:101 - Status code: 700, Query Statement: "
+            CREATE TIMESERIES IF NOT EXISTS root.users.profile WITH DATATYPE=TEXT, ENCODING=PLAIN
+        ". executeStatement failed 
+2024-11-17 12:44:50,949 [pool-28-IoTDB-ClientRPC-Processor-8] WARN  o.a.i.d.u.ErrorHandlingUtils:101 - Status code: 700, Query Statement: "CREATE STORAGE GROUP IF NOT EXISTS root.users". executeStatement failed 
+2024-11-17 12:44:50,951 [pool-28-IoTDB-ClientRPC-Processor-8] WARN  o.a.i.d.u.ErrorHandlingUtils:101 - Status code: 700, Query Statement: "
+            CREATE TIMESERIES IF NOT EXISTS root.users.profile WITH DATATYPE=TEXT, ENCODING=PLAIN
+        ". executeStatement failed 
+2024-11-17 12:45:00,777 [pool-28-IoTDB-ClientRPC-Processor-9] WARN  o.a.i.d.u.ErrorHandlingUtils:101 - Status code: 700, Query Statement: "CREATE STORAGE GROUP IF NOT EXISTS root.users". executeStatement failed 
+2024-11-17 12:45:00,780 [pool-28-IoTDB-ClientRPC-Processor-9] WARN  o.a.i.d.u.ErrorHandlingUtils:101 - Status code: 700, Query Statement: "
+            CREATE TIMESERIES IF NOT EXISTS root.users.profile WITH DATATYPE=TEXT, ENCODING=PLAIN
+        ". executeStatement failed 
+2024-11-17 12:49:01,514 [pool-28-IoTDB-ClientRPC-Processor-12$20241117_124558_00007_1] WARN  o.a.i.d.q.p.e.c.e.ClusterConfigTaskExecutor:297 - Failed to execute create database root.users in config node, status is TSStatus(code:501, message:root.users has already been created as database). 
+2024-11-17 12:49:01,516 [pool-23-IoTDB-MPP-Coordinator-Executor-19] WARN  o.a.i.d.q.p.e.c.ConfigExecution:122 - Failures happened during running ConfigExecution. 
+org.apache.iotdb.commons.exception.IoTDBException: root.users has already been created as database
+	at org.apache.iotdb.db.queryengine.plan.execution.config.executor.ClusterConfigTaskExecutor.setDatabase(ClusterConfigTaskExecutor.java:301)
+	at org.apache.iotdb.db.queryengine.plan.execution.config.metadata.DatabaseSchemaTask.execute(DatabaseSchemaTask.java:44)
+	at org.apache.iotdb.db.queryengine.plan.execution.config.ConfigExecution.start(ConfigExecution.java:97)
+	at org.apache.iotdb.db.queryengine.plan.Coordinator.execution(Coordinator.java:134)
+	at org.apache.iotdb.db.queryengine.plan.Coordinator.executeForTreeModel(Coordinator.java:170)
+	at org.apache.iotdb.db.protocol.thrift.impl.ClientRPCServiceImpl.executeStatementInternal(ClientRPCServiceImpl.java:307)
+	at org.apache.iotdb.db.protocol.thrift.impl.ClientRPCServiceImpl.executeStatement(ClientRPCServiceImpl.java:1496)
+	at org.apache.iotdb.db.protocol.thrift.impl.ClientRPCServiceImpl.executeUpdateStatement(ClientRPCServiceImpl.java:1582)
+	at org.apache.iotdb.service.rpc.thrift.IClientRPCService$Processor$executeUpdateStatement.getResult(IClientRPCService.java:4229)
+	at org.apache.iotdb.service.rpc.thrift.IClientRPCService$Processor$executeUpdateStatement.getResult(IClientRPCService.java:4209)
+	at org.apache.thrift.ProcessFunction.process(ProcessFunction.java:38)
+	at org.apache.iotdb.db.protocol.thrift.ProcessorWithMetrics.process(ProcessorWithMetrics.java:64)
+	at org.apache.thrift.server.TThreadPoolServer$WorkerProcess.run(TThreadPoolServer.java:248)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(Unknown Source)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(Unknown Source)
+	at java.base/java.lang.Thread.run(Unknown Source)
+2024-11-17 12:50:00,754 [pool-28-IoTDB-ClientRPC-Processor-12$20241117_124657_00010_1] WARN  o.a.i.d.q.p.e.c.e.ClusterConfigTaskExecutor:297 - Failed to execute create database root.users in config node, status is TSStatus(code:501, message:root.users has already been created as database). 
+2024-11-17 12:50:00,755 [pool-23-IoTDB-MPP-Coordinator-Executor-9] WARN  o.a.i.d.q.p.e.c.ConfigExecution:122 - Failures happened during running ConfigExecution. 
+org.apache.iotdb.commons.exception.IoTDBException: root.users has already been created as database
+	at org.apache.iotdb.db.queryengine.plan.execution.config.executor.ClusterConfigTaskExecutor.setDatabase(ClusterConfigTaskExecutor.java:301)
+	at org.apache.iotdb.db.queryengine.plan.execution.config.metadata.DatabaseSchemaTask.execute(DatabaseSchemaTask.java:44)
+	at org.apache.iotdb.db.queryengine.plan.execution.config.ConfigExecution.start(ConfigExecution.java:97)
+	at org.apache.iotdb.db.queryengine.plan.Coordinator.execution(Coordinator.java:134)
+	at org.apache.iotdb.db.queryengine.plan.Coordinator.executeForTreeModel(Coordinator.java:170)
+	at org.apache.iotdb.db.protocol.thrift.impl.ClientRPCServiceImpl.executeStatementInternal(ClientRPCServiceImpl.java:307)
+	at org.apache.iotdb.db.protocol.thrift.impl.ClientRPCServiceImpl.executeStatement(ClientRPCServiceImpl.java:1496)
+	at org.apache.iotdb.db.protocol.thrift.impl.ClientRPCServiceImpl.executeUpdateStatement(ClientRPCServiceImpl.java:1582)
+	at org.apache.iotdb.service.rpc.thrift.IClientRPCService$Processor$executeUpdateStatement.getResult(IClientRPCService.java:4229)
+	at org.apache.iotdb.service.rpc.thrift.IClientRPCService$Processor$executeUpdateStatement.getResult(IClientRPCService.java:4209)
+	at org.apache.thrift.ProcessFunction.process(ProcessFunction.java:38)
+	at org.apache.iotdb.db.protocol.thrift.ProcessorWithMetrics.process(ProcessorWithMetrics.java:64)
+	at org.apache.thrift.server.TThreadPoolServer$WorkerProcess.run(TThreadPoolServer.java:248)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(Unknown Source)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(Unknown Source)
+	at java.base/java.lang.Thread.run(Unknown Source)
+2024-11-17 12:50:01,152 [pool-28-IoTDB-ClientRPC-Processor-12$20241117_124657_00013_1] WARN  o.a.i.d.q.p.e.c.e.ClusterConfigTaskExecutor:297 - Failed to execute create database root.users in config node, status is TSStatus(code:501, message:root.users has already been created as database). 
+2024-11-17 12:50:01,153 [pool-23-IoTDB-MPP-Coordinator-Executor-19] WARN  o.a.i.d.q.p.e.c.ConfigExecution:122 - Failures happened during running ConfigExecution. 
+org.apache.iotdb.commons.exception.IoTDBException: root.users has already been created as database
+	at org.apache.iotdb.db.queryengine.plan.execution.config.executor.ClusterConfigTaskExecutor.setDatabase(ClusterConfigTaskExecutor.java:301)
+	at org.apache.iotdb.db.queryengine.plan.execution.config.metadata.DatabaseSchemaTask.execute(DatabaseSchemaTask.java:44)
+	at org.apache.iotdb.db.queryengine.plan.execution.config.ConfigExecution.start(ConfigExecution.java:97)
+	at org.apache.iotdb.db.queryengine.plan.Coordinator.execution(Coordinator.java:134)
+	at org.apache.iotdb.db.queryengine.plan.Coordinator.executeForTreeModel(Coordinator.java:170)
+	at org.apache.iotdb.db.protocol.thrift.impl.ClientRPCServiceImpl.executeStatementInternal(ClientRPCServiceImpl.java:307)
+	at org.apache.iotdb.db.protocol.thrift.impl.ClientRPCServiceImpl.executeStatement(ClientRPCServiceImpl.java:1496)
+	at org.apache.iotdb.db.protocol.thrift.impl.ClientRPCServiceImpl.executeUpdateStatement(ClientRPCServiceImpl.java:1582)
+	at org.apache.iotdb.service.rpc.thrift.IClientRPCService$Processor$executeUpdateStatement.getResult(IClientRPCService.java:4229)
+	at org.apache.iotdb.service.rpc.thrift.IClientRPCService$Processor$executeUpdateStatement.getResult(IClientRPCService.java:4209)
+	at org.apache.thrift.ProcessFunction.process(ProcessFunction.java:38)
+	at org.apache.iotdb.db.protocol.thrift.ProcessorWithMetrics.process(ProcessorWithMetrics.java:64)
+	at org.apache.thrift.server.TThreadPoolServer$WorkerProcess.run(TThreadPoolServer.java:248)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(Unknown Source)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(Unknown Source)
+	at java.base/java.lang.Thread.run(Unknown Source)
+2024-11-17 12:50:50,229 [pool-28-IoTDB-ClientRPC-Processor-12$20241117_124746_00016_1] WARN  o.a.i.d.q.p.e.c.e.ClusterConfigTaskExecutor:297 - Failed to execute create database root.users in config node, status is TSStatus(code:501, message:root.users has already been created as database). 
+2024-11-17 12:50:50,230 [pool-23-IoTDB-MPP-Coordinator-Executor-9] WARN  o.a.i.d.q.p.e.c.ConfigExecution:122 - Failures happened during running ConfigExecution. 
+org.apache.iotdb.commons.exception.IoTDBException: root.users has already been created as database
+	at org.apache.iotdb.db.queryengine.plan.execution.config.executor.ClusterConfigTaskExecutor.setDatabase(ClusterConfigTaskExecutor.java:301)
+	at org.apache.iotdb.db.queryengine.plan.execution.config.metadata.DatabaseSchemaTask.execute(DatabaseSchemaTask.java:44)
+	at org.apache.iotdb.db.queryengine.plan.execution.config.ConfigExecution.start(ConfigExecution.java:97)
+	at org.apache.iotdb.db.queryengine.plan.Coordinator.execution(Coordinator.java:134)
+	at org.apache.iotdb.db.queryengine.plan.Coordinator.executeForTreeModel(Coordinator.java:170)
+	at org.apache.iotdb.db.protocol.thrift.impl.ClientRPCServiceImpl.executeStatementInternal(ClientRPCServiceImpl.java:307)
+	at org.apache.iotdb.db.protocol.thrift.impl.ClientRPCServiceImpl.executeStatement(ClientRPCServiceImpl.java:1496)
+	at org.apache.iotdb.db.protocol.thrift.impl.ClientRPCServiceImpl.executeUpdateStatement(ClientRPCServiceImpl.java:1582)
+	at org.apache.iotdb.service.rpc.thrift.IClientRPCService$Processor$executeUpdateStatement.getResult(IClientRPCService.java:4229)
+	at org.apache.iotdb.service.rpc.thrift.IClientRPCService$Processor$executeUpdateStatement.getResult(IClientRPCService.java:4209)
+	at org.apache.thrift.ProcessFunction.process(ProcessFunction.java:38)
+	at org.apache.iotdb.db.protocol.thrift.ProcessorWithMetrics.process(ProcessorWithMetrics.java:64)
+	at org.apache.thrift.server.TThreadPoolServer$WorkerProcess.run(TThreadPoolServer.java:248)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(Unknown Source)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(Unknown Source)
+	at java.base/java.lang.Thread.run(Unknown Source)
+2024-11-17 12:51:49,726 [pool-28-IoTDB-ClientRPC-Processor-12$20241117_124846_00019_1] WARN  o.a.i.d.q.p.e.c.e.ClusterConfigTaskExecutor:297 - Failed to execute create database root.users in config node, status is TSStatus(code:501, message:root.users has already been created as database). 
+2024-11-17 12:51:49,728 [pool-23-IoTDB-MPP-Coordinator-Executor-19] WARN  o.a.i.d.q.p.e.c.ConfigExecution:122 - Failures happened during running ConfigExecution. 
+org.apache.iotdb.commons.exception.IoTDBException: root.users has already been created as database
+	at org.apache.iotdb.db.queryengine.plan.execution.config.executor.ClusterConfigTaskExecutor.setDatabase(ClusterConfigTaskExecutor.java:301)
+	at org.apache.iotdb.db.queryengine.plan.execution.config.metadata.DatabaseSchemaTask.execute(DatabaseSchemaTask.java:44)
+	at org.apache.iotdb.db.queryengine.plan.execution.config.ConfigExecution.start(ConfigExecution.java:97)
+	at org.apache.iotdb.db.queryengine.plan.Coordinator.execution(Coordinator.java:134)
+	at org.apache.iotdb.db.queryengine.plan.Coordinator.executeForTreeModel(Coordinator.java:170)
+	at org.apache.iotdb.db.protocol.thrift.impl.ClientRPCServiceImpl.executeStatementInternal(ClientRPCServiceImpl.java:307)
+	at org.apache.iotdb.db.protocol.thrift.impl.ClientRPCServiceImpl.executeStatement(ClientRPCServiceImpl.java:1496)
+	at org.apache.iotdb.db.protocol.thrift.impl.ClientRPCServiceImpl.executeUpdateStatement(ClientRPCServiceImpl.java:1582)
+	at org.apache.iotdb.service.rpc.thrift.IClientRPCService$Processor$executeUpdateStatement.getResult(IClientRPCService.java:4229)
+	at org.apache.iotdb.service.rpc.thrift.IClientRPCService$Processor$executeUpdateStatement.getResult(IClientRPCService.java:4209)
+	at org.apache.thrift.ProcessFunction.process(ProcessFunction.java:38)
+	at org.apache.iotdb.db.protocol.thrift.ProcessorWithMetrics.process(ProcessorWithMetrics.java:64)
+	at org.apache.thrift.server.TThreadPoolServer$WorkerProcess.run(TThreadPoolServer.java:248)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(Unknown Source)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(Unknown Source)
+	at java.base/java.lang.Thread.run(Unknown Source)
+2024-11-17 13:00:38,805 [IoTDB-Shutdown-Hook] WARN  o.a.i.c.conf.CommonConfig:489 - Change system status to ReadOnly! Only query statements are permitted! 
+2024-11-17 13:00:39,624 [IoTDB-Shutdown-Hook] WARN  o.a.i.d.p.c.ConfigNodeClient:238 - The current node may have been down TEndPoint(ip:iotdb, port:10710),try next node 
+2024-11-17 13:00:39,625 [IoTDB-Shutdown-Hook] WARN  o.a.i.d.p.c.ConfigNodeClient:263 - The current node may have been down TEndPoint(ip:iotdb, port:10710),try next node 
+2024-11-17 13:00:41,634 [IoTDB-Shutdown-Hook] WARN  o.a.i.d.p.c.ConfigNodeClient:263 - The current node may have been down TEndPoint(ip:iotdb, port:10710),try next node 
+2024-11-17 13:01:07,939 [pool-32-IoTDB-ClientRPC-Processor-1$20241117_130107_00001_1] WARN  o.a.i.d.q.p.e.c.e.ClusterConfigTaskExecutor:297 - Failed to execute create database root.users in config node, status is TSStatus(code:501, message:root.users has already been created as database). 
+2024-11-17 13:01:07,940 [pool-27-IoTDB-MPP-Coordinator-Executor-3] WARN  o.a.i.d.q.p.e.c.ConfigExecution:122 - Failures happened during running ConfigExecution. 
+org.apache.iotdb.commons.exception.IoTDBException: root.users has already been created as database
+	at org.apache.iotdb.db.queryengine.plan.execution.config.executor.ClusterConfigTaskExecutor.setDatabase(ClusterConfigTaskExecutor.java:301)
+	at org.apache.iotdb.db.queryengine.plan.execution.config.metadata.DatabaseSchemaTask.execute(DatabaseSchemaTask.java:44)
+	at org.apache.iotdb.db.queryengine.plan.execution.config.ConfigExecution.start(ConfigExecution.java:97)
+	at org.apache.iotdb.db.queryengine.plan.Coordinator.execution(Coordinator.java:134)
+	at org.apache.iotdb.db.queryengine.plan.Coordinator.executeForTreeModel(Coordinator.java:170)
+	at org.apache.iotdb.db.protocol.thrift.impl.ClientRPCServiceImpl.executeStatementInternal(ClientRPCServiceImpl.java:307)
+	at org.apache.iotdb.db.protocol.thrift.impl.ClientRPCServiceImpl.executeStatement(ClientRPCServiceImpl.java:1496)
+	at org.apache.iotdb.db.protocol.thrift.impl.ClientRPCServiceImpl.executeUpdateStatement(ClientRPCServiceImpl.java:1582)
+	at org.apache.iotdb.service.rpc.thrift.IClientRPCService$Processor$executeUpdateStatement.getResult(IClientRPCService.java:4229)
+	at org.apache.iotdb.service.rpc.thrift.IClientRPCService$Processor$executeUpdateStatement.getResult(IClientRPCService.java:4209)
+	at org.apache.thrift.ProcessFunction.process(ProcessFunction.java:38)
+	at org.apache.iotdb.db.protocol.thrift.ProcessorWithMetrics.process(ProcessorWithMetrics.java:64)
+	at org.apache.thrift.server.TThreadPoolServer$WorkerProcess.run(TThreadPoolServer.java:248)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(Unknown Source)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(Unknown Source)
+	at java.base/java.lang.Thread.run(Unknown Source)
+2024-11-17 13:01:08,480 [pool-32-IoTDB-ClientRPC-Processor-2$20241117_130108_00004_1] WARN  o.a.i.d.q.p.e.c.e.ClusterConfigTaskExecutor:297 - Failed to execute create database root.users in config node, status is TSStatus(code:501, message:root.users has already been created as database). 
+2024-11-17 13:01:08,481 [pool-27-IoTDB-MPP-Coordinator-Executor-13] WARN  o.a.i.d.q.p.e.c.ConfigExecution:122 - Failures happened during running ConfigExecution. 
+org.apache.iotdb.commons.exception.IoTDBException: root.users has already been created as database
+	at org.apache.iotdb.db.queryengine.plan.execution.config.executor.ClusterConfigTaskExecutor.setDatabase(ClusterConfigTaskExecutor.java:301)
+	at org.apache.iotdb.db.queryengine.plan.execution.config.metadata.DatabaseSchemaTask.execute(DatabaseSchemaTask.java:44)
+	at org.apache.iotdb.db.queryengine.plan.execution.config.ConfigExecution.start(ConfigExecution.java:97)
+	at org.apache.iotdb.db.queryengine.plan.Coordinator.execution(Coordinator.java:134)
+	at org.apache.iotdb.db.queryengine.plan.Coordinator.executeForTreeModel(Coordinator.java:170)
+	at org.apache.iotdb.db.protocol.thrift.impl.ClientRPCServiceImpl.executeStatementInternal(ClientRPCServiceImpl.java:307)
+	at org.apache.iotdb.db.protocol.thrift.impl.ClientRPCServiceImpl.executeStatement(ClientRPCServiceImpl.java:1496)
+	at org.apache.iotdb.db.protocol.thrift.impl.ClientRPCServiceImpl.executeUpdateStatement(ClientRPCServiceImpl.java:1582)
+	at org.apache.iotdb.service.rpc.thrift.IClientRPCService$Processor$executeUpdateStatement.getResult(IClientRPCService.java:4229)
+	at org.apache.iotdb.service.rpc.thrift.IClientRPCService$Processor$executeUpdateStatement.getResult(IClientRPCService.java:4209)
+	at org.apache.thrift.ProcessFunction.process(ProcessFunction.java:38)
+	at org.apache.iotdb.db.protocol.thrift.ProcessorWithMetrics.process(ProcessorWithMetrics.java:64)
+	at org.apache.thrift.server.TThreadPoolServer$WorkerProcess.run(TThreadPoolServer.java:248)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(Unknown Source)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(Unknown Source)
+	at java.base/java.lang.Thread.run(Unknown Source)
+2024-11-17 13:45:15,692 [pool-32-IoTDB-ClientRPC-Processor-12] WARN  o.a.i.d.u.ErrorHandlingUtils:101 - Status code: 700, Query Statement: "SELECT profile FROM root.users.1;". executeStatement failed 

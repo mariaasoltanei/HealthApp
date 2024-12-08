@@ -1,0 +1,124 @@
+2024-11-17 11:31:34,706 [main] INFO  o.a.i.d.p.a.r.PipePeriodicalJobExecutor:75 - Pipe periodical job LoadTsFileManager#cleanupTasks is registered successfully. Interval: 440 seconds. 
+2024-11-17 11:31:34,753 [main] INFO  o.a.i.c.p.r.IoTDBReceiverAgent:118 - Clean pipe receiver dir /iotdb/data/datanode/system/pipe/receiver successfully. 
+2024-11-17 11:31:34,753 [main] INFO  o.a.i.c.p.r.IoTDBReceiverAgent:125 - Create pipe receiver dir /iotdb/data/datanode/system/pipe/receiver successfully. 
+2024-11-17 11:31:34,756 [main] INFO  o.a.i.d.p.p.SimpleConsensusProgressIndexAssigner:62 - Start SimpleConsensusProgressIndexAssigner ... 
+2024-11-17 11:31:35,412 [main] INFO  o.a.i.c.p.c.PipeConfig:271 - PipeHardlinkBaseDirName: pipe 
+2024-11-17 11:31:35,412 [main] INFO  o.a.i.c.p.c.PipeConfig:272 - PipeHardlinkTsFileDirName: tsfile 
+2024-11-17 11:31:35,412 [main] INFO  o.a.i.c.p.c.PipeConfig:273 - PipeHardlinkWALDirName: wal 
+2024-11-17 11:31:35,412 [main] INFO  o.a.i.c.p.c.PipeConfig:274 - PipeHardLinkWALEnabled: false 
+2024-11-17 11:31:35,413 [main] INFO  o.a.i.c.p.c.PipeConfig:276 - PipeDataStructureTabletRowSize: 2048 
+2024-11-17 11:31:35,413 [main] INFO  o.a.i.c.p.c.PipeConfig:277 - PipeDataStructureTabletMemoryBlockAllocationRejectThreshold: 0.4 
+2024-11-17 11:31:35,413 [main] INFO  o.a.i.c.p.c.PipeConfig:281 - PipeSubtaskExecutorMaxThreadNum: 5 
+2024-11-17 11:31:35,414 [main] INFO  o.a.i.c.p.c.PipeConfig:282 - PipeSubtaskExecutorBasicCheckPointIntervalByConsumedEventCount: 10000 
+2024-11-17 11:31:35,414 [main] INFO  o.a.i.c.p.c.PipeConfig:285 - PipeSubtaskExecutorBasicCheckPointIntervalByTimeDuration: 10000 
+2024-11-17 11:31:35,414 [main] INFO  o.a.i.c.p.c.PipeConfig:288 - PipeSubtaskExecutorPendingQueueMaxBlockingTimeMs: 1000 
+2024-11-17 11:31:35,415 [main] INFO  o.a.i.c.p.c.PipeConfig:291 - PipeSubtaskExecutorCronHeartbeatEventIntervalSeconds: 20 
+2024-11-17 11:31:35,415 [main] INFO  o.a.i.c.p.c.PipeConfig:295 - PipeExtractorAssignerDisruptorRingBufferSize: 65536 
+2024-11-17 11:31:35,415 [main] INFO  o.a.i.c.p.c.PipeConfig:298 - PipeExtractorAssignerDisruptorRingBufferEntrySizeInBytes: 50 
+2024-11-17 11:31:35,415 [main] INFO  o.a.i.c.p.c.PipeConfig:301 - PipeExtractorMatcherCacheSize: 1024 
+2024-11-17 11:31:35,416 [main] INFO  o.a.i.c.p.c.PipeConfig:303 - PipeConnectorHandshakeTimeoutMs: 10000 
+2024-11-17 11:31:35,416 [main] INFO  o.a.i.c.p.c.PipeConfig:304 - PipeConnectorTransferTimeoutMs: 900000 
+2024-11-17 11:31:35,416 [main] INFO  o.a.i.c.p.c.PipeConfig:305 - PipeConnectorReadFileBufferSize: 8388608 
+2024-11-17 11:31:35,416 [main] INFO  o.a.i.c.p.c.PipeConfig:306 - PipeConnectorRetryIntervalMs: 1000 
+2024-11-17 11:31:35,417 [main] INFO  o.a.i.c.p.c.PipeConfig:307 - PipeConnectorPendingQueueSize: 256 
+2024-11-17 11:31:35,417 [main] INFO  o.a.i.c.p.c.PipeConfig:308 - PipeConnectorRPCThriftCompressionEnabled: false 
+2024-11-17 11:31:35,417 [main] INFO  o.a.i.c.p.c.PipeConfig:311 - PipeLeaderCacheMemoryUsagePercentage: 0.1 
+2024-11-17 11:31:35,417 [main] INFO  o.a.i.c.p.c.PipeConfig:313 - PipeListeningQueueTransferSnapshotThreshold: 1000 
+2024-11-17 11:31:35,418 [main] INFO  o.a.i.c.p.c.PipeConfig:316 - PipeSnapshotExecutionMaxBatchSize: 1000 
+2024-11-17 11:31:35,418 [main] INFO  o.a.i.c.p.c.PipeConfig:318 - PipeAsyncConnectorSelectorNumber: 4 
+2024-11-17 11:31:35,418 [main] INFO  o.a.i.c.p.c.PipeConfig:319 - PipeAsyncConnectorMaxClientNumber: 16 
+2024-11-17 11:31:35,418 [main] INFO  o.a.i.c.p.c.PipeConfig:321 - SeperatedPipeHeartbeatEnabled: true 
+2024-11-17 11:31:35,419 [main] INFO  o.a.i.c.p.c.PipeConfig:322 - PipeHeartbeatIntervalSecondsForCollectingPipeMeta: 100 
+2024-11-17 11:31:35,419 [main] INFO  o.a.i.c.p.c.PipeConfig:325 - PipeMetaSyncerInitialSyncDelayMinutes: 3 
+2024-11-17 11:31:35,419 [main] INFO  o.a.i.c.p.c.PipeConfig:327 - PipeMetaSyncerSyncIntervalMinutes: 3 
+2024-11-17 11:31:35,420 [main] INFO  o.a.i.c.p.c.PipeConfig:328 - PipeMetaSyncerAutoRestartPipeCheckIntervalRound: 1 
+2024-11-17 11:31:35,420 [main] INFO  o.a.i.c.p.c.PipeConfig:331 - PipeAutoRestartEnabled: true 
+2024-11-17 11:31:35,420 [main] INFO  o.a.i.c.p.c.PipeConfig:333 - PipeAirGapReceiverEnabled: false 
+2024-11-17 11:31:35,421 [main] INFO  o.a.i.c.p.c.PipeConfig:334 - PipeAirGapReceiverPort: 9780 
+2024-11-17 11:31:35,421 [main] INFO  o.a.i.c.p.c.PipeConfig:336 - PipeMaxAllowedHistoricalTsFilePerDataRegion: 100 
+2024-11-17 11:31:35,421 [main] INFO  o.a.i.c.p.c.PipeConfig:339 - PipeMaxAllowedPendingTsFileEpochPerDataRegion: 2 
+2024-11-17 11:31:35,422 [main] INFO  o.a.i.c.p.c.PipeConfig:342 - PipeMaxAllowedPinnedMemTableCount: 50 
+2024-11-17 11:31:35,422 [main] INFO  o.a.i.c.p.c.PipeConfig:343 - PipeMaxAllowedLinkedTsFileCount: 100 
+2024-11-17 11:31:35,422 [main] INFO  o.a.i.c.p.c.PipeConfig:344 - PipeStuckRestartIntervalSeconds: 120 
+2024-11-17 11:31:35,423 [main] INFO  o.a.i.c.p.c.PipeConfig:346 - PipeMetaReportMaxLogNumPerRound: 10 
+2024-11-17 11:31:35,423 [main] INFO  o.a.i.c.p.c.PipeConfig:347 - PipeMetaReportMaxLogIntervalRounds: 36 
+2024-11-17 11:31:35,423 [main] INFO  o.a.i.c.p.c.PipeConfig:348 - PipeTsFilePinMaxLogNumPerRound: 10 
+2024-11-17 11:31:35,424 [main] INFO  o.a.i.c.p.c.PipeConfig:349 - PipeTsFilePinMaxLogIntervalRounds: 90 
+2024-11-17 11:31:35,424 [main] INFO  o.a.i.c.p.c.PipeConfig:350 - PipeWalPinMaxLogNumPerRound: 10 
+2024-11-17 11:31:35,424 [main] INFO  o.a.i.c.p.c.PipeConfig:351 - PipeWalPinMaxLogIntervalRounds: 90 
+2024-11-17 11:31:35,424 [main] INFO  o.a.i.c.p.c.PipeConfig:353 - PipeMemoryManagementEnabled: true 
+2024-11-17 11:31:35,425 [main] INFO  o.a.i.c.p.c.PipeConfig:354 - PipeMemoryAllocateMaxRetries: 10 
+2024-11-17 11:31:35,425 [main] INFO  o.a.i.c.p.c.PipeConfig:355 - PipeMemoryAllocateRetryIntervalInMs: 1000 
+2024-11-17 11:31:35,425 [main] INFO  o.a.i.c.p.c.PipeConfig:357 - PipeMemoryAllocateMinSizeInBytes: 32 
+2024-11-17 11:31:35,426 [main] INFO  o.a.i.c.p.c.PipeConfig:358 - PipeMemoryAllocateForTsFileSequenceReaderInBytes: 2097152 
+2024-11-17 11:31:35,426 [main] INFO  o.a.i.c.p.c.PipeConfig:361 - PipeMemoryExpanderIntervalSeconds: 180 
+2024-11-17 11:31:35,426 [main] INFO  o.a.i.c.p.c.PipeConfig:363 - TwoStageAggregateMaxCombinerLiveTimeInMs: 480000 
+2024-11-17 11:31:35,427 [main] INFO  o.a.i.c.p.c.PipeConfig:366 - TwoStageAggregateDataRegionInfoCacheTimeInMs: 180000 
+2024-11-17 11:31:35,427 [main] INFO  o.a.i.c.p.c.PipeConfig:369 - TwoStageAggregateSenderEndPointsCacheInMs: 180000 
+2024-11-17 11:31:35,434 [main] INFO  o.a.i.d.p.a.r.PipePeriodicalJobExecutor:75 - Pipe periodical job PipeTaskAgent#restartAllStuckPipes is registered successfully. Interval: 120 seconds. 
+2024-11-17 11:31:35,434 [main] INFO  o.a.i.d.p.a.r.PipePeriodicalJobExecutor:92 - Pipe periodical job executor is started successfully. 
+2024-11-17 11:31:35,901 [main] INFO  o.a.i.d.p.a.r.PipePeriodicalJobExecutor:75 - Pipe periodical job PipeTsFileResourceManager#ttlCheck() is registered successfully. Interval: 20 seconds. 
+2024-11-17 11:31:35,906 [main] INFO  o.a.i.d.p.a.r.PipePeriodicalJobExecutor:75 - Pipe periodical job PipeMemoryManager#tryExpandAll() is registered successfully. Interval: 180 seconds. 
+2024-11-17 11:31:35,909 [main] INFO  o.a.i.d.p.a.r.PipePeriodicalJobExecutor:75 - Pipe periodical job PipeWALResourceManager#ttlCheck() is registered successfully. Interval: 20 seconds. 
+2024-11-17 13:00:52,317 [main] INFO  o.a.i.d.p.a.r.PipePeriodicalJobExecutor:75 - Pipe periodical job LoadTsFileManager#cleanupTasks is registered successfully. Interval: 440 seconds. 
+2024-11-17 13:00:52,362 [main] INFO  o.a.i.c.p.r.IoTDBReceiverAgent:118 - Clean pipe receiver dir /iotdb/data/datanode/system/pipe/receiver successfully. 
+2024-11-17 13:00:52,363 [main] INFO  o.a.i.c.p.r.IoTDBReceiverAgent:125 - Create pipe receiver dir /iotdb/data/datanode/system/pipe/receiver successfully. 
+2024-11-17 13:00:52,365 [main] INFO  o.a.i.d.p.p.SimpleConsensusProgressIndexAssigner:62 - Start SimpleConsensusProgressIndexAssigner ... 
+2024-11-17 13:00:53,096 [main] INFO  o.a.i.c.p.c.PipeConfig:271 - PipeHardlinkBaseDirName: pipe 
+2024-11-17 13:00:53,097 [main] INFO  o.a.i.c.p.c.PipeConfig:272 - PipeHardlinkTsFileDirName: tsfile 
+2024-11-17 13:00:53,098 [main] INFO  o.a.i.c.p.c.PipeConfig:273 - PipeHardlinkWALDirName: wal 
+2024-11-17 13:00:53,098 [main] INFO  o.a.i.c.p.c.PipeConfig:274 - PipeHardLinkWALEnabled: false 
+2024-11-17 13:00:53,099 [main] INFO  o.a.i.c.p.c.PipeConfig:276 - PipeDataStructureTabletRowSize: 2048 
+2024-11-17 13:00:53,099 [main] INFO  o.a.i.c.p.c.PipeConfig:277 - PipeDataStructureTabletMemoryBlockAllocationRejectThreshold: 0.4 
+2024-11-17 13:00:53,100 [main] INFO  o.a.i.c.p.c.PipeConfig:281 - PipeSubtaskExecutorMaxThreadNum: 5 
+2024-11-17 13:00:53,100 [main] INFO  o.a.i.c.p.c.PipeConfig:282 - PipeSubtaskExecutorBasicCheckPointIntervalByConsumedEventCount: 10000 
+2024-11-17 13:00:53,101 [main] INFO  o.a.i.c.p.c.PipeConfig:285 - PipeSubtaskExecutorBasicCheckPointIntervalByTimeDuration: 10000 
+2024-11-17 13:00:53,101 [main] INFO  o.a.i.c.p.c.PipeConfig:288 - PipeSubtaskExecutorPendingQueueMaxBlockingTimeMs: 1000 
+2024-11-17 13:00:53,102 [main] INFO  o.a.i.c.p.c.PipeConfig:291 - PipeSubtaskExecutorCronHeartbeatEventIntervalSeconds: 20 
+2024-11-17 13:00:53,102 [main] INFO  o.a.i.c.p.c.PipeConfig:295 - PipeExtractorAssignerDisruptorRingBufferSize: 65536 
+2024-11-17 13:00:53,102 [main] INFO  o.a.i.c.p.c.PipeConfig:298 - PipeExtractorAssignerDisruptorRingBufferEntrySizeInBytes: 50 
+2024-11-17 13:00:53,103 [main] INFO  o.a.i.c.p.c.PipeConfig:301 - PipeExtractorMatcherCacheSize: 1024 
+2024-11-17 13:00:53,103 [main] INFO  o.a.i.c.p.c.PipeConfig:303 - PipeConnectorHandshakeTimeoutMs: 10000 
+2024-11-17 13:00:53,104 [main] INFO  o.a.i.c.p.c.PipeConfig:304 - PipeConnectorTransferTimeoutMs: 900000 
+2024-11-17 13:00:53,104 [main] INFO  o.a.i.c.p.c.PipeConfig:305 - PipeConnectorReadFileBufferSize: 8388608 
+2024-11-17 13:00:53,104 [main] INFO  o.a.i.c.p.c.PipeConfig:306 - PipeConnectorRetryIntervalMs: 1000 
+2024-11-17 13:00:53,105 [main] INFO  o.a.i.c.p.c.PipeConfig:307 - PipeConnectorPendingQueueSize: 256 
+2024-11-17 13:00:53,105 [main] INFO  o.a.i.c.p.c.PipeConfig:308 - PipeConnectorRPCThriftCompressionEnabled: false 
+2024-11-17 13:00:53,105 [main] INFO  o.a.i.c.p.c.PipeConfig:311 - PipeLeaderCacheMemoryUsagePercentage: 0.1 
+2024-11-17 13:00:53,106 [main] INFO  o.a.i.c.p.c.PipeConfig:313 - PipeListeningQueueTransferSnapshotThreshold: 1000 
+2024-11-17 13:00:53,106 [main] INFO  o.a.i.c.p.c.PipeConfig:316 - PipeSnapshotExecutionMaxBatchSize: 1000 
+2024-11-17 13:00:53,107 [main] INFO  o.a.i.c.p.c.PipeConfig:318 - PipeAsyncConnectorSelectorNumber: 4 
+2024-11-17 13:00:53,107 [main] INFO  o.a.i.c.p.c.PipeConfig:319 - PipeAsyncConnectorMaxClientNumber: 16 
+2024-11-17 13:00:53,108 [main] INFO  o.a.i.c.p.c.PipeConfig:321 - SeperatedPipeHeartbeatEnabled: true 
+2024-11-17 13:00:53,108 [main] INFO  o.a.i.c.p.c.PipeConfig:322 - PipeHeartbeatIntervalSecondsForCollectingPipeMeta: 100 
+2024-11-17 13:00:53,108 [main] INFO  o.a.i.c.p.c.PipeConfig:325 - PipeMetaSyncerInitialSyncDelayMinutes: 3 
+2024-11-17 13:00:53,109 [main] INFO  o.a.i.c.p.c.PipeConfig:327 - PipeMetaSyncerSyncIntervalMinutes: 3 
+2024-11-17 13:00:53,109 [main] INFO  o.a.i.c.p.c.PipeConfig:328 - PipeMetaSyncerAutoRestartPipeCheckIntervalRound: 1 
+2024-11-17 13:00:53,109 [main] INFO  o.a.i.c.p.c.PipeConfig:331 - PipeAutoRestartEnabled: true 
+2024-11-17 13:00:53,110 [main] INFO  o.a.i.c.p.c.PipeConfig:333 - PipeAirGapReceiverEnabled: false 
+2024-11-17 13:00:53,110 [main] INFO  o.a.i.c.p.c.PipeConfig:334 - PipeAirGapReceiverPort: 9780 
+2024-11-17 13:00:53,110 [main] INFO  o.a.i.c.p.c.PipeConfig:336 - PipeMaxAllowedHistoricalTsFilePerDataRegion: 100 
+2024-11-17 13:00:53,111 [main] INFO  o.a.i.c.p.c.PipeConfig:339 - PipeMaxAllowedPendingTsFileEpochPerDataRegion: 2 
+2024-11-17 13:00:53,111 [main] INFO  o.a.i.c.p.c.PipeConfig:342 - PipeMaxAllowedPinnedMemTableCount: 50 
+2024-11-17 13:00:53,111 [main] INFO  o.a.i.c.p.c.PipeConfig:343 - PipeMaxAllowedLinkedTsFileCount: 100 
+2024-11-17 13:00:53,112 [main] INFO  o.a.i.c.p.c.PipeConfig:344 - PipeStuckRestartIntervalSeconds: 120 
+2024-11-17 13:00:53,112 [main] INFO  o.a.i.c.p.c.PipeConfig:346 - PipeMetaReportMaxLogNumPerRound: 10 
+2024-11-17 13:00:53,113 [main] INFO  o.a.i.c.p.c.PipeConfig:347 - PipeMetaReportMaxLogIntervalRounds: 36 
+2024-11-17 13:00:53,113 [main] INFO  o.a.i.c.p.c.PipeConfig:348 - PipeTsFilePinMaxLogNumPerRound: 10 
+2024-11-17 13:00:53,113 [main] INFO  o.a.i.c.p.c.PipeConfig:349 - PipeTsFilePinMaxLogIntervalRounds: 90 
+2024-11-17 13:00:53,114 [main] INFO  o.a.i.c.p.c.PipeConfig:350 - PipeWalPinMaxLogNumPerRound: 10 
+2024-11-17 13:00:53,114 [main] INFO  o.a.i.c.p.c.PipeConfig:351 - PipeWalPinMaxLogIntervalRounds: 90 
+2024-11-17 13:00:53,115 [main] INFO  o.a.i.c.p.c.PipeConfig:353 - PipeMemoryManagementEnabled: true 
+2024-11-17 13:00:53,115 [main] INFO  o.a.i.c.p.c.PipeConfig:354 - PipeMemoryAllocateMaxRetries: 10 
+2024-11-17 13:00:53,115 [main] INFO  o.a.i.c.p.c.PipeConfig:355 - PipeMemoryAllocateRetryIntervalInMs: 1000 
+2024-11-17 13:00:53,116 [main] INFO  o.a.i.c.p.c.PipeConfig:357 - PipeMemoryAllocateMinSizeInBytes: 32 
+2024-11-17 13:00:53,116 [main] INFO  o.a.i.c.p.c.PipeConfig:358 - PipeMemoryAllocateForTsFileSequenceReaderInBytes: 2097152 
+2024-11-17 13:00:53,116 [main] INFO  o.a.i.c.p.c.PipeConfig:361 - PipeMemoryExpanderIntervalSeconds: 180 
+2024-11-17 13:00:53,117 [main] INFO  o.a.i.c.p.c.PipeConfig:363 - TwoStageAggregateMaxCombinerLiveTimeInMs: 480000 
+2024-11-17 13:00:53,117 [main] INFO  o.a.i.c.p.c.PipeConfig:366 - TwoStageAggregateDataRegionInfoCacheTimeInMs: 180000 
+2024-11-17 13:00:53,117 [main] INFO  o.a.i.c.p.c.PipeConfig:369 - TwoStageAggregateSenderEndPointsCacheInMs: 180000 
+2024-11-17 13:00:53,125 [main] INFO  o.a.i.d.p.a.r.PipePeriodicalJobExecutor:75 - Pipe periodical job PipeTaskAgent#restartAllStuckPipes is registered successfully. Interval: 120 seconds. 
+2024-11-17 13:00:53,126 [main] INFO  o.a.i.d.p.a.r.PipePeriodicalJobExecutor:92 - Pipe periodical job executor is started successfully. 
+2024-11-17 13:00:53,465 [1-impl-thread1] INFO  o.a.i.d.p.a.r.PipePeriodicalJobExecutor:75 - Pipe periodical job PipeTsFileResourceManager#ttlCheck() is registered successfully. Interval: 20 seconds. 
+2024-11-17 13:00:53,467 [1-impl-thread1] INFO  o.a.i.d.p.a.r.PipePeriodicalJobExecutor:75 - Pipe periodical job PipeMemoryManager#tryExpandAll() is registered successfully. Interval: 180 seconds. 
+2024-11-17 13:00:53,743 [main] INFO  o.a.i.d.p.a.r.PipePeriodicalJobExecutor:75 - Pipe periodical job PipeWALResourceManager#ttlCheck() is registered successfully. Interval: 20 seconds. 
