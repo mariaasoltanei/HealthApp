@@ -45,7 +45,7 @@ fun AppNavGraph(navController: NavHostController, userViewModel: UserViewModel) 
         //Landing Screen
         composable("landing") {
             LandingScreen(
-                onSucessful = {
+                onLogout = {
                     navController.navigate("welcome") {
                         popUpTo("welcome") { inclusive = true }
                     }
