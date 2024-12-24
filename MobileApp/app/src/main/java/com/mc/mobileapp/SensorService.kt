@@ -13,14 +13,13 @@ import android.os.Build
 import android.os.IBinder
 import android.util.Log
 import androidx.core.app.NotificationCompat
+import com.mc.mobileapp.domains.SensorData
+import com.mc.mobileapp.retrofit.ISensorApiService
+import com.mc.mobileapp.retrofit.RetrofitClient
 import kotlinx.coroutines.*
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 
 const val CHANNEL_ID = "SensorServiceChannel"
 const val NOTIFICATION_ID = 1
-//TODO: improve requests
-const val SERVER_URL = "http://192.168.0.100:5000/"
 
 class SensorService : Service(), SensorEventListener {
 
@@ -28,11 +27,7 @@ class SensorService : Service(), SensorEventListener {
     private var accelerometer: Sensor? = null
     private var gyroscope: Sensor? = null
     private val coroutineScope = CoroutineScope(Dispatchers.IO)
-    private val retrofit = Retrofit.Builder()
-        .baseUrl(SERVER_URL)
-        .addConverterFactory(GsonConverterFactory.create())
-        .build()
-    private val apiService = retrofit.create(ApiService::class.java)
+    private val sensorApiService = RetrofitClient.create(ISensorApiService::class.java)
 
     override fun onCreate() {
         super.onCreate()
@@ -132,7 +127,7 @@ class SensorService : Service(), SensorEventListener {
         val unuploadedData = MainActivity.database.sensorDataDao().getUnuploadedData()
         if (unuploadedData.isNotEmpty()) {
             try {
-                apiService.uploadSensorData(unuploadedData)
+                sensorApiService.uploadSensorData(unuploadedData)
                 unuploadedData.forEach { data ->
                     data.status = "uploaded"
                     MainActivity.database.sensorDataDao()

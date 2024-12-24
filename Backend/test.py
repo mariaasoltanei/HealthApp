@@ -7,7 +7,7 @@ app = Flask(__name__)
 # Replace with a database in production (e.g., SQLite, PostgreSQL)
 sensor_data_store = []
 
-@app.route('/upload', methods=['POST'])
+@app.route('/sensorData/upload', methods=['POST'])
 def upload_sensor_data():
     """
     Endpoint to receive sensor data from the Android app.
@@ -35,6 +35,30 @@ def get_all_data():
     Endpoint to fetch all uploaded sensor data.
     """
     return jsonify(sensor_data_store), 200
+
+@app.route('/activities', methods=['GET'])
+def get_activities():
+    activities = [
+        {
+            "activityName": "Running",
+            "caloriesBurned": 120,
+            "duration": "30 minutes",
+            "averageHeartRate": 130,
+            "stepsTaken": 4500,
+            "activityDateTime": "2024-01-01T07:00:00Z",
+            "notes": "Morning jog around the lake."
+        },
+        {
+            "activityName": "Cycling",
+            "caloriesBurned": 200,
+            "duration": "45 minutes",
+            "averageHeartRate": 140,
+            "stepsTaken": 0,  # Not applicable for cycling
+            "activityDateTime": "2024-01-02T09:00:00Z",
+            "notes": "Cycling on mountain trails."
+        }
+    ]
+    return jsonify(activities)
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=5000)

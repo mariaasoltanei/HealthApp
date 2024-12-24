@@ -2,7 +2,7 @@ package com.mc.mobileapp.screens
 
 import android.util.Log
 import androidx.compose.runtime.*
-import com.mc.mobileapp.User
+import com.mc.mobileapp.domains.User
 import com.mc.mobileapp.UserViewModel
 
 @Composable

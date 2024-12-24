@@ -19,7 +19,7 @@ import androidx.compose.ui.unit.sp
 import com.mc.mobileapp.SensorService
 
 @Composable
-fun LandingScreen(onLogout: () -> Unit) {
+fun LandingScreen(onLogout: () -> Unit, onViewActivities: () -> Unit) {
     val context = LocalContext.current
     LaunchedEffect(Unit) {
         Log.d("LandingScreen", "AccelerometerService started")
@@ -42,22 +42,6 @@ fun LandingScreen(onLogout: () -> Unit) {
             ),
             modifier = Modifier.padding(bottom = 24.dp)
         )
-
-        Button(
-            onClick = onLogout,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(vertical = 8.dp),
-            shape = RoundedCornerShape(8.dp),
-            colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary)
-        ) {
-            Text(
-                text = "Log Out",
-                style = MaterialTheme.typography.bodyMedium.copy(fontSize = 18.sp, color = Color.White)
-            )
-        }
-
-        Spacer(modifier = Modifier.height(16.dp))
 
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -92,6 +76,34 @@ fun LandingScreen(onLogout: () -> Unit) {
                     textAlign = TextAlign.Center
                 )
             }
+        }
+        Spacer(modifier = Modifier.height(16.dp))
+        Button(
+            onClick = onViewActivities,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = 8.dp),
+            shape = RoundedCornerShape(8.dp),
+            colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary)
+        ) {
+            Text(
+                text = "View Activities",
+                style = MaterialTheme.typography.bodyMedium.copy(fontSize = 18.sp, color = Color.White)
+            )
+        }
+
+        Button(
+            onClick = onLogout,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = 8.dp),
+            shape = RoundedCornerShape(8.dp),
+            colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary)
+        ) {
+            Text(
+                text = "Log Out",
+                style = MaterialTheme.typography.bodyMedium.copy(fontSize = 18.sp, color = Color.White)
+            )
         }
     }
 }
