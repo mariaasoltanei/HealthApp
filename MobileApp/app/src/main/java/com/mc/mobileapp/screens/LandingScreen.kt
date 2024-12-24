@@ -42,23 +42,6 @@ fun LandingScreen(onLogout: () -> Unit) {
             ),
             modifier = Modifier.padding(bottom = 24.dp)
         )
-
-        Button(
-            onClick = onLogout,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(vertical = 8.dp),
-            shape = RoundedCornerShape(8.dp),
-            colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary)
-        ) {
-            Text(
-                text = "Log Out",
-                style = MaterialTheme.typography.bodyMedium.copy(fontSize = 18.sp, color = Color.White)
-            )
-        }
-
-        Spacer(modifier = Modifier.height(16.dp))
-
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceEvenly
@@ -93,6 +76,23 @@ fun LandingScreen(onLogout: () -> Unit) {
                 )
             }
         }
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        Button(
+            onClick = onLogout,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = 8.dp),
+            shape = RoundedCornerShape(8.dp),
+            colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary)
+        ) {
+            Text(
+                text = "Log Out",
+                style = MaterialTheme.typography.bodyMedium.copy(fontSize = 18.sp, color = Color.White)
+            )
+        }
+
     }
 }
 
