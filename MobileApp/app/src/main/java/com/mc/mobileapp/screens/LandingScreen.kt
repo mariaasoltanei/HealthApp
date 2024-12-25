@@ -21,9 +21,6 @@ import com.mc.mobileapp.SensorService
 @Composable
 fun LandingScreen(onLogout: () -> Unit, onViewActivities: () -> Unit) {
     val context = LocalContext.current
-    LaunchedEffect(Unit) {
-        Log.d("LandingScreen", "AccelerometerService started")
-    }
 
     Column(
         modifier = Modifier

@@ -2,15 +2,19 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.mc.mobileapp.ActivityViewModel
 import com.mc.mobileapp.UserViewModel
+import com.mc.mobileapp.screens.ActivityDetailsScreen
 import com.mc.mobileapp.screens.ActivityListScreen
 import com.mc.mobileapp.screens.LandingScreen
 import com.mc.mobileapp.screens.LoginScreen
 import com.mc.mobileapp.screens.RegisterScreen
 import com.mc.mobileapp.screens.WelcomeScreen
+import androidx.navigation.NavType
+import androidx.navigation.navArgument
 
 @Composable
-fun AppNavGraph(navController: NavHostController, userViewModel: UserViewModel) {
+fun AppNavGraph(navController: NavHostController, userViewModel: UserViewModel, activityViewModel: ActivityViewModel) {
     NavHost(navController = navController, startDestination = "welcome") {
         // Welcome Screen
         composable("welcome") {
@@ -42,12 +46,6 @@ fun AppNavGraph(navController: NavHostController, userViewModel: UserViewModel) 
                 onBackClick = { navController.popBackStack() } // Navigate back to welcome
             )
         }
-        //Activities Screen
-        composable("activities") {
-            ActivityListScreen(
-                onBack = { navController.popBackStack() }
-            )
-        }
 
         //Landing Screen
         composable("landing") {
@@ -58,6 +56,30 @@ fun AppNavGraph(navController: NavHostController, userViewModel: UserViewModel) 
                     }
                 },
                 onViewActivities = { navController.navigate("activities") }
+            )
+        }
+        // Activities Screen
+        composable("activities") {
+            ActivityListScreen(
+                onBack = { navController.popBackStack() },
+                onActivityClick = { activityId ->
+                    navController.navigate("activityDetails/$activityId")
+                },
+                viewModel = activityViewModel
+            )
+        }
+
+        // Activity Details Screen
+        composable(
+            route = "activityDetails/{activityId}",
+            arguments = listOf(navArgument("activityId") { type = NavType.StringType })
+        ) { backStackEntry ->
+            val activityId = backStackEntry.arguments?.getString("activityId") ?: ""
+
+            ActivityDetailsScreen(
+                activityId = activityId,
+                viewModel = activityViewModel,
+                onBack = { navController.popBackStack() }
             )
         }
     }

@@ -1,43 +1,38 @@
 package com.mc.mobileapp.screens
-
-import androidx.compose.runtime.Composable
-import android.util.Log
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.ui.*
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.mc.mobileapp.ActivityViewModel
 import com.mc.mobileapp.domains.ActivityData
-import com.mc.mobileapp.retrofit.ActivityApiService
-import com.mc.mobileapp.retrofit.RetrofitClient
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+import androidx.compose.runtime.getValue
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 
 @Composable
-fun ActivityListScreen(onBack: () -> Unit) {
-    val activityList = remember { mutableStateListOf<ActivityData>() }
-    val coroutineScope = rememberCoroutineScope()
-
-    LaunchedEffect(Unit) {
-        coroutineScope.launch(Dispatchers.IO) {
-            val apiService = RetrofitClient.create(ActivityApiService::class.java)
-
-            try {
-                val activities = apiService.getActivities()
-                activityList.addAll(activities)
-            } catch (e: Exception) {
-                Log.e("ActivityListScreen", "Failed to fetch activities: ${e.message}")
-            }
-        }
-    }
+fun ActivityListScreen(
+    onBack: () -> Unit,
+    onActivityClick: (String) -> Unit,
+    viewModel: ActivityViewModel = viewModel()
+) {
+    val activityList by viewModel.activityList.collectAsState()
+    val isLoading by viewModel.isLoading.collectAsState()
 
     Column(
         modifier = Modifier
@@ -56,7 +51,7 @@ fun ActivityListScreen(onBack: () -> Unit) {
             modifier = Modifier.padding(bottom = 16.dp)
         )
 
-        if (activityList.isEmpty()) {
+        if (isLoading) {
             Box(
                 modifier = Modifier.fillMaxSize(),
                 contentAlignment = Alignment.Center
@@ -74,7 +69,8 @@ fun ActivityListScreen(onBack: () -> Unit) {
                     Card(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(vertical = 8.dp),
+                            .padding(vertical = 8.dp)
+                            .clickable { onActivityClick(activity.id) },
                         shape = RoundedCornerShape(8.dp),
                         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
                     ) {
@@ -112,3 +108,4 @@ fun ActivityListScreen(onBack: () -> Unit) {
         }
     }
 }
+

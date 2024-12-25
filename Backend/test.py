@@ -40,6 +40,7 @@ def get_all_data():
 def get_activities():
     activities = [
         {
+            "id": 1,
             "activityName": "Running",
             "caloriesBurned": 120,
             "duration": "30 minutes",
@@ -49,6 +50,7 @@ def get_activities():
             "notes": "Morning jog around the lake."
         },
         {
+            "id": 2,
             "activityName": "Cycling",
             "caloriesBurned": 200,
             "duration": "45 minutes",

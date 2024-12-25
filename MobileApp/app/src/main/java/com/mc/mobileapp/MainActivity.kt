@@ -7,6 +7,9 @@ import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.navigation.compose.rememberNavController
 import androidx.room.Room
+import com.mc.mobileapp.retrofit.IActivityApiService
+import com.mc.mobileapp.retrofit.ISensorApiService
+import com.mc.mobileapp.retrofit.RetrofitClient
 import com.mc.mobileapp.ui.theme.MobileAppTheme
 
 class MainActivity : ComponentActivity() {
@@ -23,17 +26,24 @@ class MainActivity : ComponentActivity() {
         ).build()
 
         val userRepository = UserRepository(database.userDao())
+        val activityRepository = ActivityRepository(database.activityDataDao(), apiService = RetrofitClient.create(
+            IActivityApiService::class.java))
 
         val userViewModel: UserViewModel by viewModels {
             UserViewModelFactory(userRepository)
         }
+        val activityViewModel: ActivityViewModel by viewModels {
+            ActivityViewModelFactory(activityRepository)
+        }
+
         setContent {
             MobileAppTheme {
                 val navController = rememberNavController()
 
                 AppNavGraph(
                     navController = navController,
-                    userViewModel = userViewModel
+                    userViewModel = userViewModel,
+                    activityViewModel = activityViewModel
                 )
             }
         }
