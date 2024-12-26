@@ -10,16 +10,10 @@ class ExerciseRepository(
 ) {
     suspend fun getAllExercises(): List<ExerciseData> {
         return try {
-            // Fetch from API
             val remoteExercises = apiService.getExercises()
-
-            // Insert into database
-            exerciseDataDao.insert(remoteExercises)
-
-            // Return updated database data
+            exerciseDataDao.insertExercises(remoteExercises)
             exerciseDataDao.getExercises()
         } catch (e: Exception) {
-            // If API fails, return cached data
             exerciseDataDao.getExercises()
         }
     }

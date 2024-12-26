@@ -62,7 +62,6 @@ fun HealthDataScreen(
             modifier = Modifier.fillMaxWidth()
         )
 
-        // Activity Multiplier Dropdown
         Dropdown(
             dropdownItems = activityLevels,
             label = "Activity Multiplier",

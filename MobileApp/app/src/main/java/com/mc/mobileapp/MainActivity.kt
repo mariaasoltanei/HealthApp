@@ -8,7 +8,6 @@ import androidx.activity.viewModels
 import androidx.navigation.compose.rememberNavController
 import androidx.room.Room
 import com.mc.mobileapp.ui.theme.MobileAppTheme
-import kotlinx.coroutines.coroutineScope
 
 class MainActivity : ComponentActivity() {
     companion object {

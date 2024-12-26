@@ -1,7 +1,7 @@
 package com.mc.mobileapp
 
-import com.mc.mobileapp.domains.User
 import com.mc.mobileapp.daos.UserDao
+import com.mc.mobileapp.domains.User
 
 class UserRepository(private val userDao: UserDao) {
 

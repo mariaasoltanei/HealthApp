@@ -2,7 +2,6 @@ package com.mc.mobileapp.screens
 
 import android.content.Context
 import android.content.Intent
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -16,13 +15,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.mc.mobileapp.MainActivity
 import com.mc.mobileapp.SensorService
-import com.mc.mobileapp.retrofit.IExerciseApiService
-import com.mc.mobileapp.retrofit.RetrofitClient
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.launch
 
 @Composable
 fun LandingScreen(onLogout: () -> Unit, onViewActivities: () -> Unit) {
@@ -60,7 +53,10 @@ fun LandingScreen(onLogout: () -> Unit, onViewActivities: () -> Unit) {
             ) {
                 Text(
                     text = "Start Sensors",
-                    style = MaterialTheme.typography.bodyMedium.copy(fontSize = 16.sp, color = Color.White),
+                    style = MaterialTheme.typography.bodyMedium.copy(
+                        fontSize = 16.sp,
+                        color = Color.White
+                    ),
                     textAlign = TextAlign.Center
                 )
             }
@@ -75,7 +71,10 @@ fun LandingScreen(onLogout: () -> Unit, onViewActivities: () -> Unit) {
             ) {
                 Text(
                     text = "Stop Sensors",
-                    style = MaterialTheme.typography.bodyMedium.copy(fontSize = 16.sp, color = Color.White),
+                    style = MaterialTheme.typography.bodyMedium.copy(
+                        fontSize = 16.sp,
+                        color = Color.White
+                    ),
                     textAlign = TextAlign.Center
                 )
             }
@@ -91,7 +90,10 @@ fun LandingScreen(onLogout: () -> Unit, onViewActivities: () -> Unit) {
         ) {
             Text(
                 text = "View Activities",
-                style = MaterialTheme.typography.bodyMedium.copy(fontSize = 18.sp, color = Color.White)
+                style = MaterialTheme.typography.bodyMedium.copy(
+                    fontSize = 18.sp,
+                    color = Color.White
+                )
             )
         }
 
@@ -105,7 +107,10 @@ fun LandingScreen(onLogout: () -> Unit, onViewActivities: () -> Unit) {
         ) {
             Text(
                 text = "Log Out",
-                style = MaterialTheme.typography.bodyMedium.copy(fontSize = 18.sp, color = Color.White)
+                style = MaterialTheme.typography.bodyMedium.copy(
+                    fontSize = 18.sp,
+                    color = Color.White
+                )
             )
         }
     }
