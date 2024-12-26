@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "eb6cfca76f75c0375b06bd5b34153f3b",
+    "identityHash": "69c6d65ab9a2d9de2ad70df01f01872d",
     "entities": [
       {
         "tableName": "users",
@@ -133,12 +133,80 @@
         },
         "indices": [],
         "foreignKeys": []
+      },
+      {
+        "tableName": "exercise_data",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `activityName` TEXT NOT NULL, `caloriesBurned` INTEGER NOT NULL, `duration` TEXT NOT NULL, `averageHeartRate` INTEGER NOT NULL, `stepsTaken` INTEGER NOT NULL, `activityDateTime` TEXT NOT NULL, `notes` TEXT NOT NULL, `activityIcon` TEXT NOT NULL, PRIMARY KEY(`id`))",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "activityName",
+            "columnName": "activityName",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "caloriesBurned",
+            "columnName": "caloriesBurned",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "duration",
+            "columnName": "duration",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "averageHeartRate",
+            "columnName": "averageHeartRate",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "stepsTaken",
+            "columnName": "stepsTaken",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "activityDateTime",
+            "columnName": "activityDateTime",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "notes",
+            "columnName": "notes",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "activityIcon",
+            "columnName": "activityIcon",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": []
       }
     ],
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'eb6cfca76f75c0375b06bd5b34153f3b')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '69c6d65ab9a2d9de2ad70df01f01872d')"
     ]
   }
 }

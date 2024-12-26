@@ -77,6 +77,7 @@ dependencies {
     implementation("androidx.compose.ui:ui:1.5.0")
     implementation("androidx.compose.ui:ui-graphics:1.5.0")
     implementation("androidx.compose.ui:ui-tooling-preview:1.5.0")
+    implementation("io.coil-kt:coil-compose:2.0.0-rc01")
 
     // --- Room Database ---
     implementation("androidx.room:room-runtime:2.6.1")

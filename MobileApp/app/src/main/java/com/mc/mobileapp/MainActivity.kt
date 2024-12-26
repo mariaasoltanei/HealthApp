@@ -7,8 +7,7 @@ import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.navigation.compose.rememberNavController
 import androidx.room.Room
-import com.mc.mobileapp.retrofit.IActivityApiService
-import com.mc.mobileapp.retrofit.ISensorApiService
+import com.mc.mobileapp.retrofit.IExerciseApiService
 import com.mc.mobileapp.retrofit.RetrofitClient
 import com.mc.mobileapp.ui.theme.MobileAppTheme
 
@@ -22,18 +21,20 @@ class MainActivity : ComponentActivity() {
         database = Room.databaseBuilder(
             this.applicationContext,
             AppDatabase::class.java,
-            "health_app_db"
-        ).build()
+            "health_app_database"
+        )
+            .build()
+
 
         val userRepository = UserRepository(database.userDao())
-        val activityRepository = ActivityRepository(database.activityDataDao(), apiService = RetrofitClient.create(
-            IActivityApiService::class.java))
+        val exerciseRepository = ExerciseRepository(database.exerciseDataDao(), apiService = RetrofitClient.create(
+            IExerciseApiService::class.java))
 
         val userViewModel: UserViewModel by viewModels {
             UserViewModelFactory(userRepository)
         }
-        val activityViewModel: ActivityViewModel by viewModels {
-            ActivityViewModelFactory(activityRepository)
+        val exerciseViewModel: ExerciseViewModel by viewModels {
+            ExerciseViewModelFactory(exerciseRepository)
         }
 
         setContent {
@@ -43,7 +44,7 @@ class MainActivity : ComponentActivity() {
                 AppNavGraph(
                     navController = navController,
                     userViewModel = userViewModel,
-                    activityViewModel = activityViewModel
+                    exerciseViewModel = exerciseViewModel
                 )
             }
         }

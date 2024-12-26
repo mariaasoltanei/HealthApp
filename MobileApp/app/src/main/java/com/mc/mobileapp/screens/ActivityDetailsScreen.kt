@@ -20,8 +20,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.mc.mobileapp.ActivityViewModel
-import com.mc.mobileapp.domains.ActivityData
 import androidx.compose.runtime.getValue
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -29,17 +27,20 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import coil.compose.AsyncImage
+import com.mc.mobileapp.ExerciseViewModel
+import com.mc.mobileapp.domains.ExerciseData
 
 @Composable
 fun ActivityDetailsScreen(
     activityId: String,
-    viewModel: ActivityViewModel = viewModel(),
+    viewModel: ExerciseViewModel = viewModel(),
     onBack: () -> Unit
 ) {
-    var activity by remember { mutableStateOf<ActivityData?>(null) }
+    var activity by remember { mutableStateOf<ExerciseData?>(null) }
 
     LaunchedEffect(activityId) {
-        viewModel.getActivityById(activityId) { fetchedActivity ->
+        viewModel.getExerciseById(activityId) { fetchedActivity ->
             activity = fetchedActivity
         }
     }
@@ -53,6 +54,11 @@ fun ActivityDetailsScreen(
             verticalArrangement = Arrangement.Top,
             horizontalAlignment = Alignment.Start
         ) {
+//            AsyncImage(
+//                model = it.activityImage,
+//                contentDescription = "Activity Image",
+//                modifier = Modifier.fillMaxWidth().height(200.dp).padding(bottom = 16.dp)
+//            )
             Text(
                 text = "Activity Details",
                 style = MaterialTheme.typography.titleLarge.copy(

@@ -2,7 +2,6 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.mc.mobileapp.ActivityViewModel
 import com.mc.mobileapp.UserViewModel
 import com.mc.mobileapp.screens.ActivityDetailsScreen
 import com.mc.mobileapp.screens.ActivityListScreen
@@ -12,9 +11,10 @@ import com.mc.mobileapp.screens.RegisterScreen
 import com.mc.mobileapp.screens.WelcomeScreen
 import androidx.navigation.NavType
 import androidx.navigation.navArgument
+import com.mc.mobileapp.ExerciseViewModel
 
 @Composable
-fun AppNavGraph(navController: NavHostController, userViewModel: UserViewModel, activityViewModel: ActivityViewModel) {
+fun AppNavGraph(navController: NavHostController, userViewModel: UserViewModel, exerciseViewModel: ExerciseViewModel) {
     NavHost(navController = navController, startDestination = "welcome") {
         // Welcome Screen
         composable("welcome") {
@@ -65,7 +65,7 @@ fun AppNavGraph(navController: NavHostController, userViewModel: UserViewModel, 
                 onActivityClick = { activityId ->
                     navController.navigate("activityDetails/$activityId")
                 },
-                viewModel = activityViewModel
+                viewModel = exerciseViewModel
             )
         }
 
@@ -78,7 +78,7 @@ fun AppNavGraph(navController: NavHostController, userViewModel: UserViewModel, 
 
             ActivityDetailsScreen(
                 activityId = activityId,
-                viewModel = activityViewModel,
+                viewModel = exerciseViewModel,
                 onBack = { navController.popBackStack() }
             )
         }
