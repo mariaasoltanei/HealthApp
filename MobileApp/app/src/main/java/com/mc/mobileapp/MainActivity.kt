@@ -20,7 +20,7 @@ class MainActivity : ComponentActivity() {
         database = Room.databaseBuilder(
             this.applicationContext,
             AppDatabase::class.java,
-            "calaid_db"
+            "calaid_app_db"
         ).build()
 
         val userRepository = UserRepository(database.userDao())

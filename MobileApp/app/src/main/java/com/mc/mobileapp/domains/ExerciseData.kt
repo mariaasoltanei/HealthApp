@@ -1,9 +1,11 @@
 package com.mc.mobileapp.domains
 
 import androidx.room.Entity
+import androidx.room.PrimaryKey
 
-//@Entity(tableName = "exercise_data")
+@Entity(tableName = "exercise_data")
 class ExerciseData(
+    @PrimaryKey val id: Int = 0,
     val activityName: String,
     val caloriesBurned: Int,
     val duration: String,
