@@ -7,7 +7,7 @@ import com.mc.mobileapp.daos.UserDao
 import com.mc.mobileapp.domains.SensorData
 import com.mc.mobileapp.domains.User
 
-@Database(entities = [User::class, SensorData::class], version = 1, exportSchema = false)
+@Database(entities = [User::class, SensorData::class], version = 1, exportSchema = true)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun userDao(): UserDao
     abstract fun sensorDataDao(): SensorDataDao

@@ -15,23 +15,24 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.mc.mobileapp.domains.ActivityData
-import com.mc.mobileapp.retrofit.ActivityApiService
+import coil3.compose.AsyncImage
+import com.mc.mobileapp.domains.ExerciseData
+import com.mc.mobileapp.retrofit.IExerciseApiService
 import com.mc.mobileapp.retrofit.RetrofitClient
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 @Composable
 fun ActivityListScreen(onBack: () -> Unit) {
-    val activityList = remember { mutableStateListOf<ActivityData>() }
+    val activityList = remember { mutableStateListOf<ExerciseData>() }
     val coroutineScope = rememberCoroutineScope()
 
     LaunchedEffect(Unit) {
         coroutineScope.launch(Dispatchers.IO) {
-            val apiService = RetrofitClient.create(ActivityApiService::class.java)
+            val apiService = RetrofitClient.create(IExerciseApiService::class.java)
 
             try {
-                val activities = apiService.getActivities()
+                val activities = apiService.getExercises()
                 activityList.addAll(activities)
             } catch (e: Exception) {
                 Log.e("ActivityListScreen", "Failed to fetch activities: ${e.message}")
@@ -78,16 +79,29 @@ fun ActivityListScreen(onBack: () -> Unit) {
                         shape = RoundedCornerShape(8.dp),
                         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
                     ) {
-                        Column(
-                            modifier = Modifier.padding(16.dp)
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(16.dp),
+                            verticalAlignment = Alignment.CenterVertically
                         ) {
-                            Text(
-                                text = "Activity: ${activity.activityName}",
-                                style = MaterialTheme.typography.bodyMedium.copy(fontSize = 18.sp)
-                            )
-                            Text(
-                                text = "Calories Burned: ${activity.caloriesBurned}",
-                                style = MaterialTheme.typography.bodySmall.copy(fontSize = 16.sp, color = Color.Gray)
+                            // Text details on the left
+                            Column(
+                                modifier = Modifier.weight(1f)
+                            ) {
+                                Text(
+                                    text = "Activity: ${activity.activityName}",
+                                    style = MaterialTheme.typography.bodyMedium.copy(fontSize = 18.sp)
+                                )
+                                Text(
+                                    text = "Calories Burned: ${activity.caloriesBurned}",
+                                    style = MaterialTheme.typography.bodySmall.copy(fontSize = 16.sp, color = Color.Gray)
+                                )
+                            }
+                            AsyncImage(
+                                model = activity.activityIcon,
+                                contentDescription = "Activity Icon",
+                                modifier = Modifier.size(48.dp)
                             )
                         }
                     }

@@ -8,6 +8,7 @@ import androidx.activity.viewModels
 import androidx.navigation.compose.rememberNavController
 import androidx.room.Room
 import com.mc.mobileapp.ui.theme.MobileAppTheme
+import kotlinx.coroutines.coroutineScope
 
 class MainActivity : ComponentActivity() {
     companion object {
@@ -19,7 +20,7 @@ class MainActivity : ComponentActivity() {
         database = Room.databaseBuilder(
             this.applicationContext,
             AppDatabase::class.java,
-            "health_app_db"
+            "calaid_db"
         ).build()
 
         val userRepository = UserRepository(database.userDao())

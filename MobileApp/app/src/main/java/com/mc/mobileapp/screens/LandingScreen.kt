@@ -16,14 +16,17 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.mc.mobileapp.MainActivity
 import com.mc.mobileapp.SensorService
+import com.mc.mobileapp.retrofit.IExerciseApiService
+import com.mc.mobileapp.retrofit.RetrofitClient
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.launch
 
 @Composable
 fun LandingScreen(onLogout: () -> Unit, onViewActivities: () -> Unit) {
     val context = LocalContext.current
-    LaunchedEffect(Unit) {
-        Log.d("LandingScreen", "AccelerometerService started")
-    }
 
     Column(
         modifier = Modifier
