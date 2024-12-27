@@ -1,0 +1,21 @@
+version: '3.8'
+
+services:
+  flask-app:
+    image: flask-sensor-app:latest
+    build:
+      context: .
+    deploy:
+      replicas: 2
+      restart_policy:
+        condition: on-failure
+    ports:
+      - "5000:5000"
+    networks:
+      - app-network
+    environment:
+      - FLASK_ENV=production
+
+networks:
+  app-network:
+    driver: overlay
