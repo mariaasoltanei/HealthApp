@@ -4,6 +4,7 @@ import datetime
 app = Flask(__name__)
 
 sensor_data_store = []
+VALID_API_KEY = "IGtluHxC6SSVQJleAnwvrq0CM5ZuxdXdXfeqojdA3U7"
 
 @app.route('/sensorData/upload', methods=['POST'])
 def upload_sensor_data():
@@ -34,6 +35,22 @@ def get_all_data():
     """
     return jsonify(sensor_data_store), 200
 
+@app.route('/validate', methods=['POST'])
+def validate_api_key():
+    try:
+        data = request.get_json()
+        if not data or 'apiKey' not in data:
+            return jsonify({"error": "API key is required"}), 400
+
+        api_key = data['apiKey']
+        if api_key == VALID_API_KEY:
+            return jsonify({"valid": True}), 200
+        else:
+            return jsonify({"valid": False}), 403
+
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+    
 @app.route('/activities', methods=['GET'])
 def get_activities():
     activities = [
