@@ -65,6 +65,7 @@ fun RegisterScreen(
                     errorMessage = "Please fill in all fields."
                 } else {
                     errorMessage = ""
+                    val apiKey = "IGtluHxC6SSVQJleAnwvrq0CM5ZuxdXdXfeqojdA3U7" // this is a mock API key
                     val user = User(
                         firstName = firstName,
                         lastName = lastName,
@@ -76,7 +77,7 @@ fun RegisterScreen(
                         gender = gender,
                         activityMultiplier = activityMultiplier.toFloatOrNull() ?: 1.0f
                     )
-                    userViewModel.registerUser(user, onSuccess = {
+                    userViewModel.registerUser(user, apiKey, onSuccess = {
                         onRegisterSuccess()
                         Log.d("RegisterScreen", "User registered successfully.")
                     }, onError = {
