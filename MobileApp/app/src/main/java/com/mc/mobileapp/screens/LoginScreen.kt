@@ -15,8 +15,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
-import com.mc.mobileapp.User
 import com.mc.mobileapp.UserViewModel
+import com.mc.mobileapp.domains.User
 
 @Composable
 fun LoginScreen(
@@ -64,6 +64,7 @@ fun LoginScreen(
                     userViewModel.loginUser(
                         email = email,
                         password = password,
+                        apiKey = "IGtluHxC6SSVQJleAnwvrq0CM5ZuxdXdXfeqojdA3U7",
                         onSuccess = { user ->
                             onLoginSuccess(user)
                             Log.d("LoginScreen", "User: $user")

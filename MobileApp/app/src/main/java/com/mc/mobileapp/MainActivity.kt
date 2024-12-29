@@ -7,6 +7,8 @@ import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.navigation.compose.rememberNavController
 import androidx.room.Room
+import com.mc.mobileapp.retrofit.IUserApiService
+import com.mc.mobileapp.retrofit.RetrofitClient
 import com.mc.mobileapp.ui.theme.MobileAppTheme
 
 class MainActivity : ComponentActivity() {
@@ -19,10 +21,10 @@ class MainActivity : ComponentActivity() {
         database = Room.databaseBuilder(
             this.applicationContext,
             AppDatabase::class.java,
-            "health_app_db"
+            "calaid_app_db"
         ).build()
-
-        val userRepository = UserRepository(database.userDao())
+        val userApiService = RetrofitClient.create(IUserApiService::class.java)
+        val userRepository = UserRepository(database.userDao(), userApiService)
 
         val userViewModel: UserViewModel by viewModels {
             UserViewModelFactory(userRepository)

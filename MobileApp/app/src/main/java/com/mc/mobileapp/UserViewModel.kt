@@ -3,16 +3,17 @@ package com.mc.mobileapp
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import com.mc.mobileapp.domains.User
 import kotlinx.coroutines.launch
 
 class UserViewModel(private val repository: UserRepository) : ViewModel() {
 
-    fun registerUser(user: User, onSuccess: () -> Unit, onError: (String) -> Unit) {
+    fun registerUser(user: User, apiKey: String, onSuccess: () -> Unit, onError: (String) -> Unit) {
         viewModelScope.launch {
             try {
-                val existingUser = repository.loginUser(user.email, user.password)
+                val existingUser = repository.loginUser(user.email, user.password, apiKey)
                 if (existingUser == null) {
-                    repository.insertUser(user)
+                    repository.insertUser(user, apiKey)
                     onSuccess()
                 } else {
                     onError("Email already exists.")
@@ -26,12 +27,13 @@ class UserViewModel(private val repository: UserRepository) : ViewModel() {
     fun loginUser(
         email: String,
         password: String,
+        apiKey: String,
         onSuccess: (User) -> Unit,
         onError: (String) -> Unit
     ) {
         viewModelScope.launch {
             try {
-                val user = repository.loginUser(email, password)
+                val user = repository.loginUser(email, password, apiKey)
                 if (user != null) {
                     onSuccess(user)
                 } else {
