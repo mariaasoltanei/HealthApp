@@ -1,7 +1,10 @@
 package com.mc.mobileapp.screens
 
+import android.content.Context
+import android.content.SharedPreferences
 import android.util.Log
 import androidx.compose.runtime.*
+import androidx.compose.ui.platform.LocalContext
 import com.mc.mobileapp.UserViewModel
 import com.mc.mobileapp.domains.User
 
@@ -13,7 +16,9 @@ fun RegisterScreen(
 ) {
     var currentStep by remember { mutableStateOf(1) }
 
-    // Shared states for user information
+    var context = LocalContext.current
+    var sharedPreferences: SharedPreferences = context.getSharedPreferences("SHARED_PREFS", Context.MODE_PRIVATE)
+    
     var firstName by remember { mutableStateOf("") }
     var lastName by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("") }
@@ -75,11 +80,13 @@ fun RegisterScreen(
                         height = height.toFloatOrNull() ?: 0f,
                         weight = weight.toFloatOrNull() ?: 0f,
                         gender = gender,
-                        activityMultiplier = activityMultiplier.toFloatOrNull() ?: 1.0f
+                        activityMultiplier = activityMultiplier.toFloatOrNull() ?: 1.0f,
+                        trustScore = 100
                     )
                     userViewModel.registerUser(user, apiKey, onSuccess = {
                         onRegisterSuccess()
                         Log.d("RegisterScreen", "User registered successfully.")
+                        sharedPreferences.edit().putString("email", email).apply()
                     }, onError = {
                         errorMessage = it
                     })

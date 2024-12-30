@@ -1,5 +1,7 @@
 package com.mc.mobileapp.screens
 
+import android.content.Context
+import android.content.SharedPreferences
 import android.util.Log
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.layout.Arrangement
@@ -12,6 +14,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
@@ -24,6 +27,9 @@ fun LoginScreen(
     onLoginSuccess: (User) -> Unit,
     onBackClick: () -> Unit
 ) {
+
+    var context = LocalContext.current
+    var sharedPreferences: SharedPreferences = context.getSharedPreferences("SHARED_PREFS", Context.MODE_PRIVATE)
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var errorMessage by remember { mutableStateOf("") }
@@ -73,6 +79,7 @@ fun LoginScreen(
                             errorMessage = error
                         }
                     )
+                    sharedPreferences.edit().putString("email", email).apply()
                 } else {
                     errorMessage = "Please enter both email and password."
                 }

@@ -98,7 +98,10 @@ fun LandingScreen(onLogout: () -> Unit, onViewActivities: () -> Unit) {
         }
 
         Button(
-            onClick = onLogout,
+            onClick = {
+                clearUserSession(context)
+                onLogout()
+            },
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(vertical = 8.dp),
@@ -114,6 +117,11 @@ fun LandingScreen(onLogout: () -> Unit, onViewActivities: () -> Unit) {
             )
         }
     }
+
+}
+fun clearUserSession(context: Context) {
+    val sharedPreferences = context.getSharedPreferences("SHARED_PREFS", Context.MODE_PRIVATE)
+    sharedPreferences.edit().clear().apply()
 }
 
 fun startSensorService(context: Context) {

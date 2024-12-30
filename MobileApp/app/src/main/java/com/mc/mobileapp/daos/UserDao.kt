@@ -18,6 +18,15 @@ interface UserDao {
     @Query("SELECT * FROM users")
     suspend fun getAllUsers(): List<User>
 
+    @Query("SELECT id FROM users WHERE email = :email LIMIT 1")
+    suspend fun getUserId(email: String): Int?
+
+    @Query("SELECT trustScore FROM users WHERE email = :email LIMIT 1")
+    suspend fun getUserTrustScore(email: String): Int?
+
+    @Query("UPDATE users SET trustScore = :trustScore WHERE id = :id")
+    suspend fun updateTrustScore(id: Int, trustScore: Int)
+
     @Delete
     suspend fun deleteUser(user: User)
 }

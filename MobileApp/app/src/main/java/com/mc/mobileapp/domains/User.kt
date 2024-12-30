@@ -14,5 +14,7 @@ data class User(
     val height: Float,
     val weight: Float,
     val gender: String,
-    val activityMultiplier: Float
+    val activityMultiplier: Float,
+    val trustScore: Int
+
 )
