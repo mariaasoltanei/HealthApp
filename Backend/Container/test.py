@@ -144,6 +144,10 @@ def update_trust_score(trust_score, deduction):
 def check_user_banned(trust_score):
     return trust_score == 0
 
+@app.route('/health', methods=['GET'])
+def health_check():
+    return "OK", 200
+
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=5000)
 
