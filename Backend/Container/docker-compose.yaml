@@ -6,7 +6,7 @@ services:
     build:
       context: .
     deploy:
-      replicas: 2
+      replicas: 3
       restart_policy:
         condition: on-failure
       update_config:
