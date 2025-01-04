@@ -29,7 +29,8 @@ fun LoginScreen(
 ) {
 
     var context = LocalContext.current
-    var sharedPreferences: SharedPreferences = context.getSharedPreferences("SHARED_PREFS", Context.MODE_PRIVATE)
+    var sharedPreferences: SharedPreferences =
+        context.getSharedPreferences("SHARED_PREFS", Context.MODE_PRIVATE)
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var errorMessage by remember { mutableStateOf("") }

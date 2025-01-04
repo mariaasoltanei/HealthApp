@@ -119,6 +119,7 @@ fun LandingScreen(onLogout: () -> Unit, onViewActivities: () -> Unit) {
     }
 
 }
+
 fun clearUserSession(context: Context) {
     val sharedPreferences = context.getSharedPreferences("SHARED_PREFS", Context.MODE_PRIVATE)
     sharedPreferences.edit().clear().apply()

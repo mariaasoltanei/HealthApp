@@ -1,7 +1,7 @@
 from iotdb.SessionPool import SessionPool, PoolConfig
 import atexit
 
-IOTDB_HOST = "192.168.0.106"  
+IOTDB_HOST = "192.168.0.107"  
 IOTDB_PORT = 6667  
 USERNAME = "root"   
 PASSWORD = "root"

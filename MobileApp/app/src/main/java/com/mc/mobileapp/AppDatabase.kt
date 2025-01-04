@@ -1,17 +1,15 @@
 package com.mc.mobileapp
 
-import androidx.room.AutoMigration
+//import com.mc.mobileapp.daos.SensorDataDao
 import androidx.room.Database
 import androidx.room.RoomDatabase
 import com.mc.mobileapp.daos.ExerciseDataDao
-import com.mc.mobileapp.daos.SensorDataDao
 import com.mc.mobileapp.daos.UserDao
 import com.mc.mobileapp.domains.ExerciseData
-import com.mc.mobileapp.domains.SensorData
 import com.mc.mobileapp.domains.User
 
 @Database(
-    entities = [User::class, SensorData::class, ExerciseData::class],
+    entities = [User::class, ExerciseData::class],
     version = 1,
     exportSchema = true,
 //    autoMigrations = [
@@ -20,6 +18,7 @@ import com.mc.mobileapp.domains.User
 )
 abstract class AppDatabase : RoomDatabase() {
     abstract fun userDao(): UserDao
-    abstract fun sensorDataDao(): SensorDataDao
+
+    //abstract fun sensorDataDao(): SensorDataDao
     abstract fun exerciseDataDao(): ExerciseDataDao
 }

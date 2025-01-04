@@ -17,8 +17,9 @@ fun RegisterScreen(
     var currentStep by remember { mutableStateOf(1) }
 
     var context = LocalContext.current
-    var sharedPreferences: SharedPreferences = context.getSharedPreferences("SHARED_PREFS", Context.MODE_PRIVATE)
-    
+    var sharedPreferences: SharedPreferences =
+        context.getSharedPreferences("SHARED_PREFS", Context.MODE_PRIVATE)
+
     var firstName by remember { mutableStateOf("") }
     var lastName by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("") }
@@ -70,7 +71,8 @@ fun RegisterScreen(
                     errorMessage = "Please fill in all fields."
                 } else {
                     errorMessage = ""
-                    val apiKey = "IGtluHxC6SSVQJleAnwvrq0CM5ZuxdXdXfeqojdA3U7" // this is a mock API key
+                    val apiKey =
+                        "IGtluHxC6SSVQJleAnwvrq0CM5ZuxdXdXfeqojdA3U7" // this is a mock API key
                     val user = User(
                         firstName = firstName,
                         lastName = lastName,
