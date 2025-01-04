@@ -1,0 +1,21 @@
+global:
+  scrape_interval: 15s
+
+scrape_configs:
+  - job_name: 'prometheus'
+    static_configs:
+      - targets: ['prometheus:9090']
+
+  - job_name: 'node-exporter'
+    static_configs:
+      - targets:
+          - '192.168.0.106:9100'
+          - '192.168.0.108:9100'
+          - '192.168.0.109:9100'
+
+  - job_name: 'cadvisor'
+    static_configs:
+      - targets:
+          - '192.168.0.106:8080'
+          - '192.168.0.108:8080'
+          - '192.168.0.109:8080'
