@@ -2,7 +2,6 @@ package com.mc.mobileapp.screens
 
 import android.content.Context
 import android.content.Intent
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -19,11 +18,8 @@ import androidx.compose.ui.unit.sp
 import com.mc.mobileapp.SensorService
 
 @Composable
-fun LandingScreen(onLogout: () -> Unit) {
+fun LandingScreen(onLogout: () -> Unit, onViewActivities: () -> Unit) {
     val context = LocalContext.current
-    LaunchedEffect(Unit) {
-        Log.d("LandingScreen", "AccelerometerService started")
-    }
 
     Column(
         modifier = Modifier
@@ -43,22 +39,6 @@ fun LandingScreen(onLogout: () -> Unit) {
             modifier = Modifier.padding(bottom = 24.dp)
         )
 
-        Button(
-            onClick = onLogout,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(vertical = 8.dp),
-            shape = RoundedCornerShape(8.dp),
-            colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary)
-        ) {
-            Text(
-                text = "Log Out",
-                style = MaterialTheme.typography.bodyMedium.copy(fontSize = 18.sp, color = Color.White)
-            )
-        }
-
-        Spacer(modifier = Modifier.height(16.dp))
-
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceEvenly
@@ -73,7 +53,10 @@ fun LandingScreen(onLogout: () -> Unit) {
             ) {
                 Text(
                     text = "Start Sensors",
-                    style = MaterialTheme.typography.bodyMedium.copy(fontSize = 16.sp, color = Color.White),
+                    style = MaterialTheme.typography.bodyMedium.copy(
+                        fontSize = 16.sp,
+                        color = Color.White
+                    ),
                     textAlign = TextAlign.Center
                 )
             }
@@ -88,12 +71,58 @@ fun LandingScreen(onLogout: () -> Unit) {
             ) {
                 Text(
                     text = "Stop Sensors",
-                    style = MaterialTheme.typography.bodyMedium.copy(fontSize = 16.sp, color = Color.White),
+                    style = MaterialTheme.typography.bodyMedium.copy(
+                        fontSize = 16.sp,
+                        color = Color.White
+                    ),
                     textAlign = TextAlign.Center
                 )
             }
         }
+        Spacer(modifier = Modifier.height(16.dp))
+        Button(
+            onClick = onViewActivities,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = 8.dp),
+            shape = RoundedCornerShape(8.dp),
+            colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary)
+        ) {
+            Text(
+                text = "View Activities",
+                style = MaterialTheme.typography.bodyMedium.copy(
+                    fontSize = 18.sp,
+                    color = Color.White
+                )
+            )
+        }
+
+        Button(
+            onClick = {
+                clearUserSession(context)
+                onLogout()
+            },
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = 8.dp),
+            shape = RoundedCornerShape(8.dp),
+            colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary)
+        ) {
+            Text(
+                text = "Log Out",
+                style = MaterialTheme.typography.bodyMedium.copy(
+                    fontSize = 18.sp,
+                    color = Color.White
+                )
+            )
+        }
     }
+
+}
+
+fun clearUserSession(context: Context) {
+    val sharedPreferences = context.getSharedPreferences("SHARED_PREFS", Context.MODE_PRIVATE)
+    sharedPreferences.edit().clear().apply()
 }
 
 fun startSensorService(context: Context) {

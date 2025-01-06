@@ -3,6 +3,7 @@ package com.mc.mobileapp
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import com.mc.mobileapp.domains.User
 import kotlinx.coroutines.launch
 
 class UserViewModel(private val repository: UserRepository) : ViewModel() {

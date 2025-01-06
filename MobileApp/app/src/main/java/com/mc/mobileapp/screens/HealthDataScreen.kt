@@ -34,7 +34,8 @@ fun HealthDataScreen(
 ) {
     val activityLevels = mapOf(
         "Sedentary" to 1.2f,
-        "Active" to 1.55f,
+        "Lightly Active" to 1.375f,
+        "Moderately Active" to 1.55f,
         "Very Active" to 1.9f
     )
 
@@ -53,7 +54,7 @@ fun HealthDataScreen(
             onDateChange = onBirthDateChange,
             modifier = Modifier.fillMaxWidth()
         )
-        // Gender Dropdown
+
         Dropdown(
             dropdownItems = mapOf("Male" to 0f, "Female" to 0f),
             label = "Gender",
@@ -62,11 +63,11 @@ fun HealthDataScreen(
             modifier = Modifier.fillMaxWidth()
         )
 
-        // Activity Multiplier Dropdown
         Dropdown(
             dropdownItems = activityLevels,
             label = "Activity Multiplier",
-            selectedItem = activityMultiplier,
+            selectedItem = activityLevels.entries.find { it.value.toString() == activityMultiplier }?.key
+                ?: "",
             onSelectedItemChange = { selectedLabel ->
                 val numericValue = activityLevels[selectedLabel] ?: 1.0f
                 onActivityMultiplierChange(numericValue.toString())

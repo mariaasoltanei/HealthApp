@@ -16,17 +16,27 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        //TODO: maybe delete this
+        val sharedPreferences = getSharedPreferences("SHARED_PREFS", MODE_PRIVATE)
+        sharedPreferences.edit().clear().apply()
         database = Room.databaseBuilder(
             this.applicationContext,
             AppDatabase::class.java,
-            "health_app_db"
+            "calaid_app_db"
         ).build()
+//        val isDeleted = deleteDatabaseByName("calaid_app_db")
+//        if (isDeleted) {
+//            println("Database deleted successfully")
+//        } else {
+//            println("Database deletion failed or database does not exist")
+//        }
 
         val userRepository = UserRepository(database.userDao())
 
         val userViewModel: UserViewModel by viewModels {
             UserViewModelFactory(userRepository)
         }
+
         setContent {
             MobileAppTheme {
                 val navController = rememberNavController()
@@ -37,5 +47,9 @@ class MainActivity : ComponentActivity() {
                 )
             }
         }
+    }
+
+    private fun deleteDatabaseByName(dbName: String): Boolean {
+        return this.applicationContext.deleteDatabase(dbName)
     }
 }

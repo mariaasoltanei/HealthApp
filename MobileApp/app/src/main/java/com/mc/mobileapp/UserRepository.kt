@@ -1,7 +1,9 @@
 package com.mc.mobileapp
 
-class UserRepository(private val userDao: UserDao) {
+import com.mc.mobileapp.daos.UserDao
+import com.mc.mobileapp.domains.User
 
+class UserRepository(private val userDao: UserDao) {
     suspend fun insertUser(user: User) {
         userDao.insertUser(user)
     }

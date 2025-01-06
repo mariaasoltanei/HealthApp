@@ -15,7 +15,9 @@ android {
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
-
+        ksp {
+            arg("room.schemaLocation", "$projectDir/schemas")
+        }
         // Specifies the test runner for Android instrumented tests
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -64,6 +66,7 @@ dependencies {
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
     implementation(platform(libs.androidx.compose.bom))
+    implementation("io.github.cdimascio:dotenv-kotlin:6.5.0")
 
     // --- Compose UI Libraries ---
     implementation(libs.androidx.ui)
@@ -74,6 +77,8 @@ dependencies {
     implementation("androidx.compose.ui:ui:1.5.0")
     implementation("androidx.compose.ui:ui-graphics:1.5.0")
     implementation("androidx.compose.ui:ui-tooling-preview:1.5.0")
+    implementation("io.coil-kt.coil3:coil-compose:3.0.4")
+    implementation("io.coil-kt.coil3:coil-network-okhttp:3.0.4")
 
     // --- Room Database ---
     implementation("androidx.room:room-runtime:2.6.1")

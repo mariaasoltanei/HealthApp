@@ -7,7 +7,7 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.mockito.kotlin.*
-import com.mc.mobileapp.User
+import com.mc.mobileapp.domains.User
 import com.mc.mobileapp.UserDao
 import com.mc.mobileapp.UserRepository
 import com.mc.mobileapp.UserViewModel

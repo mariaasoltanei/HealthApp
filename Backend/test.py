@@ -3,11 +3,10 @@ import datetime
 
 app = Flask(__name__)
 
-# In-memory storage for demonstration purposes
-# Replace with a database in production (e.g., SQLite, PostgreSQL)
 sensor_data_store = []
+VALID_API_KEY = "IGtluHxC6SSVQJleAnwvrq0CM5ZuxdXdXfeqojdA3U7"
 
-@app.route('/upload', methods=['POST'])
+@app.route('/sensorData/upload', methods=['POST'])
 def upload_sensor_data():
     """
     Endpoint to receive sensor data from the Android app.
@@ -35,6 +34,72 @@ def get_all_data():
     Endpoint to fetch all uploaded sensor data.
     """
     return jsonify(sensor_data_store), 200
+
+@app.route('/validate', methods=['POST'])
+def validate_api_key():
+    try:
+        data = request.get_json()
+        if not data or 'apiKey' not in data:
+            return jsonify({"error": "API key is required"}), 400
+
+        api_key = data['apiKey']
+        if api_key == VALID_API_KEY:
+            return jsonify({"valid": True}), 200
+        else:
+            return jsonify({"valid": False}), 403
+
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+    
+@app.route('/activities', methods=['GET'])
+def get_activities():
+    activities = [
+        {
+            "id": 1,
+            "activityName": "Running",
+            "caloriesBurned": 120,
+            "duration": "30 minutes",
+            "averageHeartRate": 130,
+            "stepsTaken": 4500,
+            "activityDateTime": "2024-01-01T07:00:00Z",
+            "notes": "Morning jog around the lake.",
+            "activityIcon": "https://cdn2.iconfinder.com/data/icons/people-80/96/Picture13-1024.png"
+        },
+        {
+            "id": 2,
+            "activityName": "Cycling",
+            "caloriesBurned": 200,
+            "duration": "45 minutes",
+            "averageHeartRate": 140,
+            "stepsTaken": 0,  # Not applicable for cycling
+            "activityDateTime": "2024-01-02T09:00:00Z",
+            "notes": "Cycling on mountain trails.",
+            "activityIcon": "https://cdn0.iconfinder.com/data/icons/font-awesome-solid-vol-1/640/bicycle-1024.png"
+        },
+        {
+            "id": 3,
+            "activityName": "Swimming",
+            "caloriesBurned": 150,
+            "duration": "1 hour",
+            "averageHeartRate": 120,
+            "stepsTaken": 0,  # Not applicable for swimming
+            "activityDateTime": "2024-01-03T14:00:00Z",
+            "notes": "Swimming in the community pool.",
+            "activityIcon": "https://cdn2.iconfinder.com/data/icons/ios-7-icons/50/swimming-1024.png"
+        },
+        {
+            "id": 4,
+            "activityName": "Yoga",
+            "caloriesBurned": 80,
+            "duration": "1 hour",
+            "averageHeartRate": 100,
+            "stepsTaken": 0,  # Not applicable for yoga
+            "activityDateTime": "2024-01-04T08:00:00Z",
+            "notes": "Morning yoga session in the park.",
+            "activityIcon": "https://cdn0.iconfinder.com/data/icons/sport-2-android-l-lollipop-icon-pack/24/yoga-1024.png"
+        }
+    ]
+    return jsonify(activities)
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=5000)

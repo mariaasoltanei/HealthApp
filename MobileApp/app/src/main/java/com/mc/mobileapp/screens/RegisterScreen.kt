@@ -1,9 +1,16 @@
 package com.mc.mobileapp.screens
 
+import android.content.Context
+import android.content.SharedPreferences
+import android.util.Base64
 import android.util.Log
 import androidx.compose.runtime.*
-import com.mc.mobileapp.User
+import androidx.compose.ui.platform.LocalContext
 import com.mc.mobileapp.UserViewModel
+import com.mc.mobileapp.domains.User
+import java.util.UUID
+import javax.crypto.Mac
+import javax.crypto.spec.SecretKeySpec
 
 @Composable
 fun RegisterScreen(
@@ -13,7 +20,10 @@ fun RegisterScreen(
 ) {
     var currentStep by remember { mutableStateOf(1) }
 
-    // Shared states for user information
+    var context = LocalContext.current
+    var sharedPreferences: SharedPreferences =
+        context.getSharedPreferences("SHARED_PREFS", Context.MODE_PRIVATE)
+
     var firstName by remember { mutableStateOf("") }
     var lastName by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("") }
@@ -24,7 +34,6 @@ fun RegisterScreen(
     var weight by remember { mutableStateOf("") }
     var activityMultiplier by remember { mutableStateOf("") }
 
-    // Shared error message
     var errorMessage by remember { mutableStateOf("") }
 
     when (currentStep) {
@@ -65,6 +74,7 @@ fun RegisterScreen(
                     errorMessage = "Please fill in all fields."
                 } else {
                     errorMessage = ""
+                    val apiKey = generateApiKey()
                     val user = User(
                         firstName = firstName,
                         lastName = lastName,
@@ -74,11 +84,14 @@ fun RegisterScreen(
                         height = height.toFloatOrNull() ?: 0f,
                         weight = weight.toFloatOrNull() ?: 0f,
                         gender = gender,
-                        activityMultiplier = activityMultiplier.toFloatOrNull() ?: 1.0f
+                        activityMultiplier = activityMultiplier.toFloatOrNull() ?: 1.0f,
+                        trustScore = 100,
+                        apiKey = apiKey
                     )
                     userViewModel.registerUser(user, onSuccess = {
                         onRegisterSuccess()
                         Log.d("RegisterScreen", "User registered successfully.")
+                        sharedPreferences.edit().putString("email", email).apply()
                     }, onError = {
                         errorMessage = it
                     })
@@ -88,4 +101,18 @@ fun RegisterScreen(
             errorMessage = errorMessage
         )
     }
+}
+
+fun generateApiKey(): String {
+    val uuid = UUID.randomUUID().toString()
+//    val dotenv = Dotenv.load()
+//    val secret = dotenv["apiKey"]
+    val secret = "IGtluHxC6SSVQJleAnwvrq0CM5ZuxdXdXfeqojdA3U7"
+
+    val mac = Mac.getInstance("HmacSHA256")
+    val keySpec = SecretKeySpec(secret.toByteArray(), "HmacSHA256")
+    mac.init(keySpec)
+    val hmacBytes = mac.doFinal(uuid.toByteArray())
+
+    return Base64.encodeToString(hmacBytes, Base64.NO_WRAP)
 }

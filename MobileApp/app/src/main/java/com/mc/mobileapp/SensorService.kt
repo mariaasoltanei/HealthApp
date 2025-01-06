@@ -13,14 +13,14 @@ import android.os.Build
 import android.os.IBinder
 import android.util.Log
 import androidx.core.app.NotificationCompat
+import com.mc.mobileapp.domains.SensorData
+import com.mc.mobileapp.domains.UserUpdateResponse
+import com.mc.mobileapp.retrofit.ISensorApiService
+import com.mc.mobileapp.retrofit.RetrofitClient
 import kotlinx.coroutines.*
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 
 const val CHANNEL_ID = "SensorServiceChannel"
 const val NOTIFICATION_ID = 1
-//TODO: improve requests
-const val SERVER_URL = "http://192.168.0.100:5000/"
 
 class SensorService : Service(), SensorEventListener {
 
@@ -28,11 +28,10 @@ class SensorService : Service(), SensorEventListener {
     private var accelerometer: Sensor? = null
     private var gyroscope: Sensor? = null
     private val coroutineScope = CoroutineScope(Dispatchers.IO)
-    private val retrofit = Retrofit.Builder()
-        .baseUrl(SERVER_URL)
-        .addConverterFactory(GsonConverterFactory.create())
-        .build()
-    private val apiService = retrofit.create(ApiService::class.java)
+    private val sensorApiService = RetrofitClient.create(ISensorApiService::class.java)
+    private var userId: Int = -1
+    private var userTrustScore: Int = -1
+    private val sensorDataBuffer = mutableListOf<SensorData>()
 
     override fun onCreate() {
         super.onCreate()
@@ -68,9 +67,12 @@ class SensorService : Service(), SensorEventListener {
         }
 
         coroutineScope.launch {
+            userId = getUserId()
+            userTrustScore = getUserTrustScore()
             while (true) {
                 delay(10000)
-                uploadUnuploadedData()
+                sendSensorDataBatch()
+                userTrustScore = getUserTrustScore()
             }
         }
     }
@@ -99,7 +101,8 @@ class SensorService : Service(), SensorEventListener {
                     z = event.values[2],
                     timestamp = timestamp,
                     sensorType = "accelerometer",
-                    status = "added"
+                    userId = userId,
+                    userTrustScore = userTrustScore
                 )
 
                 Sensor.TYPE_GYROSCOPE -> SensorData(
@@ -108,19 +111,15 @@ class SensorService : Service(), SensorEventListener {
                     z = event.values[2],
                     timestamp = timestamp,
                     sensorType = "gyroscope",
-                    status = "added"
+                    userId = userId,
+                    userTrustScore = userTrustScore
                 )
 
                 else -> null
             }
             sensorData?.let { data ->
-                coroutineScope.launch {
-                    try {
-                        MainActivity.database.sensorDataDao().insert(data)
-                        Log.d("SensorService", "Data inserted: $data")
-                    } catch (e: Exception) {
-                        Log.e("SensorService", "Failed to insert data: ${e.message}")
-                    }
+                synchronized(sensorDataBuffer) {
+                    sensorDataBuffer.add(data)
                 }
             }
         }
@@ -128,28 +127,73 @@ class SensorService : Service(), SensorEventListener {
 
     override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {}
 
-    private suspend fun uploadUnuploadedData() {
-        val unuploadedData = MainActivity.database.sensorDataDao().getUnuploadedData()
-        if (unuploadedData.isNotEmpty()) {
+    private fun sendSensorDataBatch() {
+        val dataToSend: List<SensorData>
+        synchronized(sensorDataBuffer) {
+            dataToSend = ArrayList(sensorDataBuffer)
+            sensorDataBuffer.clear()
+        }
+
+        if (dataToSend.isNotEmpty()) {
             try {
-                apiService.uploadSensorData(unuploadedData)
-                unuploadedData.forEach { data ->
-                    data.status = "uploaded"
-                    MainActivity.database.sensorDataDao()
-                        .update(data)
-                }
+                val call = sensorApiService.uploadSensorData(dataToSend)
+                call.enqueue(object : retrofit2.Callback<UserUpdateResponse> {
+                    override fun onResponse(
+                        call: retrofit2.Call<UserUpdateResponse>,
+                        response: retrofit2.Response<UserUpdateResponse>
+                    ) {
+                        if (response.isSuccessful) {
+                            val trustScore = response.body()?.trustScore
+                            if (trustScore != null) {
+                                coroutineScope.launch {
+                                    updateTrustScoreInRoom(trustScore)
+                                }
+                                Log.d(
+                                    "SensorService",
+                                    "Batch uploaded successfully. Updated trust score: $trustScore"
+                                )
+                            } else {
+                                Log.e("SensorService", "Batch upload failed: Trust score is null")
+                            }
+                        } else {
+                            Log.e(
+                                "SensorService",
+                                "Failed to upload data: ${response.message()}, ${response.code()}"
+                            )
+                        }
+                    }
 
-                val updatedData = MainActivity.database.sensorDataDao().getUnuploadedData()
-                if (updatedData.isEmpty()) {
-                    Log.d("SensorService", "All data has been uploaded successfully")
-                } else {
-                    Log.e("SensorService", "Some data was not updated to 'uploaded': $updatedData")
-                }
-
-                Log.d("SensorService", "Uploaded ${unuploadedData.size} records")
+                    override fun onFailure(call: retrofit2.Call<UserUpdateResponse>, t: Throwable) {
+                        Log.e("SensorService", "Failed to upload data: ${t.message}")
+                    }
+                })
             } catch (e: Exception) {
-                Log.e("SensorService", "Failed to upload data: ${e.message}")
+                Log.e("SensorService", "Error uploading batch: ${e.message}")
             }
         }
     }
+
+    private suspend fun updateTrustScoreInRoom(newTrustScore: Int) {
+        MainActivity.database.userDao().updateTrustScore(userId, newTrustScore)
+        Log.d("SensorService", "Trust score updated in Room database: $newTrustScore")
+    }
+
+    private suspend fun getUserId(): Int {
+        val sharedPreferences = getSharedPreferences("SHARED_PREFS", MODE_PRIVATE)
+        val email = sharedPreferences.getString("email", null)
+
+        return email?.let {
+            MainActivity.database.userDao().getUserId(it) ?: -1
+        } ?: -1
+    }
+
+    private suspend fun getUserTrustScore(): Int {
+        val sharedPreferences = getSharedPreferences("SHARED_PREFS", MODE_PRIVATE)
+        val email = sharedPreferences.getString("email", null)
+
+        return email?.let {
+            MainActivity.database.userDao().getUserTrustScore(it) ?: -1
+        } ?: -1
+    }
+
 }
