@@ -15,6 +15,6 @@ data class User(
     val weight: Float,
     val gender: String,
     val activityMultiplier: Float,
-    val trustScore: Int
-
+    val trustScore: Int,
+    val apiKey: String
 )

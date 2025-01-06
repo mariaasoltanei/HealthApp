@@ -8,12 +8,12 @@ import kotlinx.coroutines.launch
 
 class UserViewModel(private val repository: UserRepository) : ViewModel() {
 
-    fun registerUser(user: User, apiKey: String, onSuccess: () -> Unit, onError: (String) -> Unit) {
+    fun registerUser(user: User, onSuccess: () -> Unit, onError: (String) -> Unit) {
         viewModelScope.launch {
             try {
-                val existingUser = repository.loginUser(user.email, user.password, apiKey)
+                val existingUser = repository.loginUser(user.email, user.password)
                 if (existingUser == null) {
-                    repository.insertUser(user, apiKey)
+                    repository.insertUser(user)
                     onSuccess()
                 } else {
                     onError("Email already exists.")
@@ -27,13 +27,12 @@ class UserViewModel(private val repository: UserRepository) : ViewModel() {
     fun loginUser(
         email: String,
         password: String,
-        apiKey: String,
         onSuccess: (User) -> Unit,
         onError: (String) -> Unit
     ) {
         viewModelScope.launch {
             try {
-                val user = repository.loginUser(email, password, apiKey)
+                val user = repository.loginUser(email, password)
                 if (user != null) {
                     onSuccess(user)
                 } else {

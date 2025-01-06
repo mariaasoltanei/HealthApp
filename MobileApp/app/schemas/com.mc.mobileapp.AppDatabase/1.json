@@ -2,11 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "cda5d80f77ef81a3c725185df64b79ff",
+    "identityHash": "fccda8a7ff127d516e44a5cafab1c40e",
     "entities": [
       {
         "tableName": "users",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `firstName` TEXT NOT NULL, `lastName` TEXT NOT NULL, `email` TEXT NOT NULL, `password` TEXT NOT NULL, `birthDate` TEXT NOT NULL, `height` REAL NOT NULL, `weight` REAL NOT NULL, `gender` TEXT NOT NULL, `activityMultiplier` REAL NOT NULL, `trustScore` INTEGER NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `firstName` TEXT NOT NULL, `lastName` TEXT NOT NULL, `email` TEXT NOT NULL, `password` TEXT NOT NULL, `birthDate` TEXT NOT NULL, `height` REAL NOT NULL, `weight` REAL NOT NULL, `gender` TEXT NOT NULL, `activityMultiplier` REAL NOT NULL, `trustScore` INTEGER NOT NULL, `apiKey` TEXT NOT NULL)",
         "fields": [
           {
             "fieldPath": "id",
@@ -72,6 +72,12 @@
             "fieldPath": "trustScore",
             "columnName": "trustScore",
             "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "apiKey",
+            "columnName": "apiKey",
+            "affinity": "TEXT",
             "notNull": true
           }
         ],
@@ -156,7 +162,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'cda5d80f77ef81a3c725185df64b79ff')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'fccda8a7ff127d516e44a5cafab1c40e')"
     ]
   }
 }

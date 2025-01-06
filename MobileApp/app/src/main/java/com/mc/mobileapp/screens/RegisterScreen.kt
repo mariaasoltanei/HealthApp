@@ -7,6 +7,11 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.platform.LocalContext
 import com.mc.mobileapp.UserViewModel
 import com.mc.mobileapp.domains.User
+import java.util.UUID
+import javax.crypto.Mac
+import javax.crypto.spec.SecretKeySpec
+import android.util.Base64
+import io.github.cdimascio.dotenv.Dotenv
 
 @Composable
 fun RegisterScreen(
@@ -30,7 +35,6 @@ fun RegisterScreen(
     var weight by remember { mutableStateOf("") }
     var activityMultiplier by remember { mutableStateOf("") }
 
-    // Shared error message
     var errorMessage by remember { mutableStateOf("") }
 
     when (currentStep) {
@@ -71,8 +75,7 @@ fun RegisterScreen(
                     errorMessage = "Please fill in all fields."
                 } else {
                     errorMessage = ""
-                    val apiKey =
-                        "IGtluHxC6SSVQJleAnwvrq0CM5ZuxdXdXfeqojdA3U7" // this is a mock API key
+                    val apiKey = generateApiKey()
                     val user = User(
                         firstName = firstName,
                         lastName = lastName,
@@ -83,9 +86,10 @@ fun RegisterScreen(
                         weight = weight.toFloatOrNull() ?: 0f,
                         gender = gender,
                         activityMultiplier = activityMultiplier.toFloatOrNull() ?: 1.0f,
-                        trustScore = 100
+                        trustScore = 100,
+                        apiKey = apiKey
                     )
-                    userViewModel.registerUser(user, apiKey, onSuccess = {
+                    userViewModel.registerUser(user, onSuccess = {
                         onRegisterSuccess()
                         Log.d("RegisterScreen", "User registered successfully.")
                         sharedPreferences.edit().putString("email", email).apply()
@@ -98,4 +102,18 @@ fun RegisterScreen(
             errorMessage = errorMessage
         )
     }
+}
+
+fun generateApiKey(): String {
+    val uuid = UUID.randomUUID().toString()
+//    val dotenv = Dotenv.load()
+//    val secret = dotenv["apiKey"]
+    val secret = "IGtluHxC6SSVQJleAnwvrq0CM5ZuxdXdXfeqojdA3U7"
+
+    val mac = Mac.getInstance("HmacSHA256")
+    val keySpec = SecretKeySpec(secret.toByteArray(), "HmacSHA256")
+    mac.init(keySpec)
+    val hmacBytes = mac.doFinal(uuid.toByteArray())
+
+    return Base64.encodeToString(hmacBytes, Base64.NO_WRAP)
 }

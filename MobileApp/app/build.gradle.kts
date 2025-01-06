@@ -66,6 +66,7 @@ dependencies {
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
     implementation(platform(libs.androidx.compose.bom))
+    implementation("io.github.cdimascio:dotenv-kotlin:6.5.0")
 
     // --- Compose UI Libraries ---
     implementation(libs.androidx.ui)

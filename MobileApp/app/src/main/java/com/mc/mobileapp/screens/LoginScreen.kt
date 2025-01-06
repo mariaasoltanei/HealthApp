@@ -71,7 +71,6 @@ fun LoginScreen(
                     userViewModel.loginUser(
                         email = email,
                         password = password,
-                        apiKey = "IGtluHxC6SSVQJleAnwvrq0CM5ZuxdXdXfeqojdA3U7",
                         onSuccess = { user ->
                             onLoginSuccess(user)
                             Log.d("LoginScreen", "User: $user")
