@@ -1,6 +1,5 @@
 #!/bin/bash
 
-# List all VMs
 vms=$(VBoxManage list vms | awk -F\" '{print $2}')
 
 # Start each VM

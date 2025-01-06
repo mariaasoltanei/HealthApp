@@ -1,7 +1,6 @@
 package com.mc.mobileapp
 
 import AppNavGraph
-import android.content.Context
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent

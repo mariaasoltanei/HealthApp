@@ -69,7 +69,6 @@ fun HealthDataScreen(
             selectedItem = activityLevels.entries.find { it.value.toString() == activityMultiplier }?.key
                 ?: "",
             onSelectedItemChange = { selectedLabel ->
-                // Update the numeric value in the database
                 val numericValue = activityLevels[selectedLabel] ?: 1.0f
                 onActivityMultiplierChange(numericValue.toString())
             },

@@ -156,7 +156,10 @@ class SensorService : Service(), SensorEventListener {
                                 Log.e("SensorService", "Batch upload failed: Trust score is null")
                             }
                         } else {
-                            Log.e("SensorService", "Failed to upload data: ${response.message()}, ${response.code()}")
+                            Log.e(
+                                "SensorService",
+                                "Failed to upload data: ${response.message()}, ${response.code()}"
+                            )
                         }
                     }
 

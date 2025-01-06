@@ -2,6 +2,7 @@ package com.mc.mobileapp.screens
 
 import android.content.Context
 import android.content.SharedPreferences
+import android.util.Base64
 import android.util.Log
 import androidx.compose.runtime.*
 import androidx.compose.ui.platform.LocalContext
@@ -10,8 +11,6 @@ import com.mc.mobileapp.domains.User
 import java.util.UUID
 import javax.crypto.Mac
 import javax.crypto.spec.SecretKeySpec
-import android.util.Base64
-import io.github.cdimascio.dotenv.Dotenv
 
 @Composable
 fun RegisterScreen(

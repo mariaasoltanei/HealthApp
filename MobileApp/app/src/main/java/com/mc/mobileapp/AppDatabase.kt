@@ -1,6 +1,5 @@
 package com.mc.mobileapp
 
-//import com.mc.mobileapp.daos.SensorDataDao
 import androidx.room.Database
 import androidx.room.RoomDatabase
 import com.mc.mobileapp.daos.ExerciseDataDao

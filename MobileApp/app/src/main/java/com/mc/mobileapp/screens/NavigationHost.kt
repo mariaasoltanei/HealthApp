@@ -38,7 +38,7 @@ fun AppNavGraph(navController: NavHostController, userViewModel: UserViewModel) 
                 onLoginSuccess = {
                     navController.navigate("landing")
                 },
-                onBackClick = { navController.popBackStack() } // Navigate back to welcome
+                onBackClick = { navController.popBackStack() }
             )
         }
 
@@ -53,6 +53,8 @@ fun AppNavGraph(navController: NavHostController, userViewModel: UserViewModel) 
                 onBackClick = { navController.popBackStack() } // Navigate back to welcome
             )
         }
+
+        //Activities Screen
         composable("activities") {
             val repository = ExerciseRepository(MainActivity.database.exerciseDataDao(), apiService)
             val viewModel: ExerciseViewModel =
@@ -63,6 +65,8 @@ fun AppNavGraph(navController: NavHostController, userViewModel: UserViewModel) 
                 viewModel = viewModel
             )
         }
+
+        //Activity Details Screen
         composable(
             route = "activity_details/{exerciseId}",
             arguments = listOf(navArgument("exerciseId") { type = NavType.IntType })

@@ -29,7 +29,6 @@ fun ActivityListScreen(
     val exerciseList by viewModel.exerciseList.collectAsState()
     val isLoading by viewModel.isLoading.collectAsState()
 
-    // Trigger data fetching
     LaunchedEffect(Unit) {
         viewModel.fetchExercises()
     }
@@ -91,7 +90,6 @@ fun ActivityListScreen(
                                     .padding(16.dp),
                                 verticalAlignment = Alignment.CenterVertically
                             ) {
-                                // Text details on the left
                                 Column(
                                     modifier = Modifier.weight(1f)
                                 ) {
@@ -111,7 +109,7 @@ fun ActivityListScreen(
                                 AsyncImage(
                                     model = activity.activityIcon,
                                     contentDescription = "Activity Icon",
-                                    modifier = Modifier.size(48.dp) // Set appropriate size for the icon
+                                    modifier = Modifier.size(48.dp)
                                 )
                             }
                         }
