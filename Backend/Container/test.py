@@ -6,7 +6,6 @@ from database_operations import check_user_model_exists, insert_sensor_data
 app = Flask(__name__)
 
 sensor_data_store = []
-VALID_API_KEY = "IGtluHxC6SSVQJleAnwvrq0CM5ZuxdXdXfeqojdA3U7"
 
 @app.route('/upload', methods=['POST'])
 def upload_sensor_data():
@@ -24,9 +23,9 @@ def upload_sensor_data():
         
         records_valid, error_message = validate_records(data)
         if not records_valid:
-            trust_score = update_trust_score(user_id, 15)
+            trust_score = update_trust_score(user_id, 1)
             print(f"Timestamps are invalid: {error_message}")
-            return jsonify({"error": error_message, "userId": user_id, "trustScore": trust_score}), 200
+            return jsonify({"error": error_message, "userId": user_id, "trustScore": trust_score}), 400
         
         if check_user_banned(user_id):
             return jsonify({"error": "User banned"}), 403
@@ -34,28 +33,28 @@ def upload_sensor_data():
         g_force_sum = calculate_batch_magnitude_sum(data)
         g_force_threshold = 1501  
         if g_force_sum > g_force_threshold:
-            trust_score = update_trust_score(user_id, 10)
+            trust_score = update_trust_score(user_id, 1)
             print(f"Abnormal G-force detected: {g_force_sum}")
             return jsonify({
                 "error": "Abnormal G-force detected",
                 "userId": user_id,
                 "trustScore": trust_score
-            }), 200
+            }), 400
 
         max_rotation = check_gyroscope_rotation(data)
         gyroscope_threshold = 500 
         if max_rotation > gyroscope_threshold:
-            trust_score = update_trust_score(user_id, 10)
+            trust_score = update_trust_score(user_id, 1)
             print(f"Abnormal gyroscope rotation detected: {max_rotation}")
             return jsonify({
                 "error": "Abnormal gyroscope rotation detected",
                 "userId": user_id,
                 "trustScore": trust_score
-            }), 200
+            }), 400
         
 
-        check_user_model_exists(user_id)
-        insert_sensor_data(data)
+        # check_user_model_exists(user_id)
+        # insert_sensor_data(data)
 
         return jsonify({
             "message": "Data uploaded successfully" ,
@@ -66,22 +65,6 @@ def upload_sensor_data():
     except Exception as e:
         print(f"Error processing request: {e}")
         return jsonify({"error": "An error occurred"}), 500
-
-@app.route('/validate', methods=['POST'])
-def validate_api_key():
-    try:
-        data = request.get_json()
-        if not data or 'apiKey' not in data:
-            return jsonify({"error": "API key is required"}), 400
-
-        api_key = data['apiKey']
-        if api_key == VALID_API_KEY:
-            return jsonify({"valid": True}), 200
-        else:
-            return jsonify({"valid": False}), 403
-
-    except Exception as e:
-        return jsonify({"error": str(e)}), 500
 
 @app.route('/data', methods=['GET'])
 def get_all_data():
