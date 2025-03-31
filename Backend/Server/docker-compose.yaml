@@ -1,0 +1,29 @@
+version: '3.8'
+
+services:
+  flask-app:
+    image: 192.168.56.11:5000/flask-sensor-app:latest
+    deploy:
+      replicas: 3
+      labels:
+        - "traefik.enable=true"
+        - "traefik.http.routers.flask.rule=Host(`health-app.duckdns.org`)"
+        - "traefik.http.routers.flask.entrypoints=websecure"
+        - "traefik.http.routers.flask.tls.certresolver=letsencrypt"
+      restart_policy:
+        condition: on-failure
+      update_config:
+        parallelism: 1
+        delay: 10s
+      rollback_config:
+        parallelism: 1
+    ports:
+      - "5000:5000"
+    networks:
+      - app-network
+    environment:
+      - FLASK_ENV=production
+
+networks:
+  app-network:
+    driver: overlay

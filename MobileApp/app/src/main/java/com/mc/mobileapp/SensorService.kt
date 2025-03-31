@@ -13,10 +13,15 @@ import android.os.Build
 import android.os.IBinder
 import android.util.Log
 import androidx.core.app.NotificationCompat
+
 import com.mc.mobileapp.domains.SensorData
+import com.mc.mobileapp.retrofit.ContextInfo
+import com.mc.mobileapp.retrofit.EncryptedSensorBatchPayload
 
 import com.mc.mobileapp.retrofit.ISensorApiService
 import com.mc.mobileapp.retrofit.RetrofitClient
+import com.mc.mobileapp.retrofit.SensorDataEncrypted
+import com.mc.mobileapp.utilities.AesEncryption
 import kotlinx.coroutines.*
 
 const val CHANNEL_ID = "SensorServiceChannel"
@@ -131,9 +136,40 @@ class SensorService : Service(), SensorEventListener {
 
         if (dataToSend.isNotEmpty()) {
             try {
-                sensorApiService.uploadSensorData(dataToSend)
+                AesEncryption.loadKeyFromAssets(this.applicationContext)
+
+                val encryptedDataList = dataToSend.map { entry ->
+                    val (xEnc, ivX) = AesEncryption.encrypt(entry.x.toString())
+                    val (yEnc, ivY) = AesEncryption.encrypt(entry.y.toString())
+                    val (zEnc, ivZ) = AesEncryption.encrypt(entry.z.toString())
+
+                    SensorDataEncrypted(
+                        sensorType = entry.sensorType,
+                        timestamp = entry.timestamp,
+                        userId = entry.userId,
+                        x = xEnc,
+                        y = yEnc,
+                        z = zEnc,
+                        ivX = ivX,
+                        ivY = ivY,
+                        ivZ = ivZ
+                    )
+                }
+
+                val payload = EncryptedSensorBatchPayload(
+                    data = encryptedDataList,
+                    timestamp = System.currentTimeMillis(),
+                    context = ContextInfo(
+                        user_id = userId.toString(),
+                        encryption = "aes"
+                    )
+                )
+
+                sensorApiService.uploadSensorData(payload)
+
             } catch (e: Exception) {
-                Log.e("SensorService", "Error uploading batch: ${e.message}")
+                Log.e("SensorService", "Encryption or upload failed: ${e.localizedMessage}")
+                e.printStackTrace()
             }
         }
     }

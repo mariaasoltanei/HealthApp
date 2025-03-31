@@ -1,0 +1,6 @@
+Backend/Server/aes_key.txt
+MobileApp/app/src/main/assets/aes_key.txt
+DockerSwarm/.vagrant/
+DockerSwarm/Setup/.vagrant/
+.DS_Store
+

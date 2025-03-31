@@ -1,39 +1,40 @@
 package com.mc.mobileapp.utilities
-import android.security.keystore.KeyGenParameterSpec
-import android.security.keystore.KeyProperties
-import java.security.KeyStore
+
+import android.content.Context
+import android.util.Base64
+import android.util.Log
+import java.io.IOException
 import javax.crypto.Cipher
-import javax.crypto.KeyGenerator
 import javax.crypto.SecretKey
 import javax.crypto.spec.GCMParameterSpec
-import android.util.Base64
 import javax.crypto.spec.SecretKeySpec
 
 object AesEncryption {
 
-    private const val ANDROID_KEYSTORE = "AndroidKeyStore"
-    private const val KEY_ALIAS = "SensorDataKey"
     private const val AES_MODE = "AES/GCM/NoPadding"
+    private const val KEY_FILE_NAME = "aes_key.txt" // Must be in assets folder
+    private var secretKey: SecretKey? = null
 
-    fun generateKeyIfNecessary() {
-        val keyStore = KeyStore.getInstance(ANDROID_KEYSTORE).apply { load(null) }
-        if (!keyStore.containsAlias(KEY_ALIAS)) {
-            val keyGenerator = KeyGenerator.getInstance(KeyProperties.KEY_ALGORITHM_AES, ANDROID_KEYSTORE)
-            val keyGenParameterSpec = KeyGenParameterSpec.Builder(
-                KEY_ALIAS,
-                KeyProperties.PURPOSE_ENCRYPT or KeyProperties.PURPOSE_DECRYPT
-            )
-                .setBlockModes(KeyProperties.BLOCK_MODE_GCM)
-                .setEncryptionPaddings(KeyProperties.ENCRYPTION_PADDING_NONE)
-                .build()
-            keyGenerator.init(keyGenParameterSpec)
-            keyGenerator.generateKey()
+    fun loadKeyFromAssets(context: Context) {
+        if (secretKey != null) return
+
+        try {
+            val inputStream = context.assets.open(KEY_FILE_NAME)
+            val base64Key = inputStream.bufferedReader().use { it.readText().trim() }
+            val keyBytes = Base64.decode(base64Key, Base64.DEFAULT)
+            secretKey = SecretKeySpec(keyBytes, 0, keyBytes.size, "AES")
+            Log.d("AesEncryption", "AES key loaded from assets.")
+        } catch (e: IOException) {
+            Log.e("AesEncryption", "Error loading AES key: ${e.message}")
+        } catch (e: Exception) {
+            Log.e("AesEncryption", "Unexpected error: ${e.message}")
         }
     }
 
     fun encrypt(data: String): Pair<String, String> {
-        val keyStore = KeyStore.getInstance(ANDROID_KEYSTORE).apply { load(null) }
-        val secretKey = (keyStore.getEntry(KEY_ALIAS, null) as KeyStore.SecretKeyEntry).secretKey
+        if (secretKey == null) {
+            throw IllegalStateException("AES key not loaded. Call loadKeyFromAssets() first.")
+        }
 
         val cipher = Cipher.getInstance(AES_MODE)
         cipher.init(Cipher.ENCRYPT_MODE, secretKey)

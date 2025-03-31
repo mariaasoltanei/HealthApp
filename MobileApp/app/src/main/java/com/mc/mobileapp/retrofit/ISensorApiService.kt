@@ -6,5 +6,5 @@ import retrofit2.http.POST
 
 interface ISensorApiService {
     @POST("sensorData")
-    suspend fun uploadSensorData(@Body data: List<SensorData>)
+    suspend fun uploadSensorData(@Body data: EncryptedSensorBatchPayload)
 }
