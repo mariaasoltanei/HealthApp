@@ -85,7 +85,6 @@ fun RegisterScreen(
                         weight = weight.toFloatOrNull() ?: 0f,
                         gender = gender,
                         activityMultiplier = activityMultiplier.toFloatOrNull() ?: 1.0f,
-                        trustScore = 100,
                         apiKey = apiKey
                     )
                     userViewModel.registerUser(user, onSuccess = {
