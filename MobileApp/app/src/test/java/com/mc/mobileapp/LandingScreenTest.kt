@@ -1,9 +1,8 @@
 import android.content.Context
-import android.content.Intent
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.*
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.mc.mobileapp.SensorService
+import com.mc.mobileapp.services.SensorService
 import com.mc.mobileapp.screens.LandingScreen
 import org.junit.After
 import org.junit.Before

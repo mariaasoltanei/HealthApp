@@ -1,5 +1,6 @@
-package com.mc.mobileapp
+package com.mc.mobileapp.services
 
+import android.R
 import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
@@ -13,10 +14,13 @@ import android.os.Build
 import android.os.IBinder
 import android.util.Log
 import androidx.core.app.NotificationCompat
+import com.mc.mobileapp.MainActivity
 
 import com.mc.mobileapp.domains.SensorData
 import com.mc.mobileapp.retrofit.ContextInfo
 import com.mc.mobileapp.retrofit.EncryptedSensorBatchPayload
+import com.mc.mobileapp.retrofit.HeartRateBatchPayload
+import com.mc.mobileapp.retrofit.HeartRateData
 
 import com.mc.mobileapp.retrofit.ISensorApiService
 import com.mc.mobileapp.retrofit.RetrofitClient
@@ -35,6 +39,7 @@ class SensorService : Service(), SensorEventListener {
     private val coroutineScope = CoroutineScope(Dispatchers.IO)
     private val sensorApiService = RetrofitClient.create(ISensorApiService::class.java)
     private val sensorDataBuffer = mutableListOf<SensorData>()
+    private val heartRateBuffer = mutableListOf<HeartRateData>()
     private var userId: Int = -1
 
     override fun onCreate() {
@@ -53,7 +58,7 @@ class SensorService : Service(), SensorEventListener {
         val notification: Notification = NotificationCompat.Builder(this, CHANNEL_ID)
             .setContentTitle("Sensor Service")
             .setContentText("Logging accelerometer and gyroscope data.")
-            .setSmallIcon(android.R.drawable.ic_menu_compass)
+            .setSmallIcon(R.drawable.ic_menu_compass)
             .build()
 
         startForeground(NOTIFICATION_ID, notification)
@@ -75,6 +80,9 @@ class SensorService : Service(), SensorEventListener {
             while (true) {
                 delay(5000)
                 sendSensorDataBatch()
+                delay(5000)
+                simulateHeartRateReading()
+                sendHeartRateBatch()
             }
         }
     }
@@ -174,13 +182,56 @@ class SensorService : Service(), SensorEventListener {
         }
     }
 
+    private fun simulateHeartRateReading() {
+        val timestamp = System.currentTimeMillis()
+        val heartRate = (60..100).random()
+
+        val data = HeartRateData(
+            heartRate = heartRate,
+            timestamp = timestamp,
+            userId = userId
+        )
+
+        synchronized(heartRateBuffer) {
+            heartRateBuffer.add(data)
+        }
+    }
+
+    private suspend fun sendHeartRateBatch() {
+        val dataToSend: List<HeartRateData>
+        synchronized(heartRateBuffer) {
+            dataToSend = ArrayList(heartRateBuffer)
+            heartRateBuffer.clear()
+        }
+
+        if (dataToSend.isNotEmpty()) {
+            try {
+                val payload = HeartRateBatchPayload(
+                    data = dataToSend,
+                    timestamp = System.currentTimeMillis(),
+                    context = ContextInfo(
+                        user_id = userId.toString(),
+                        encryption = "he"
+                    )
+                )
+
+                sensorApiService.uploadHeartRateData(payload)
+
+            } catch (e: Exception) {
+                Log.e("HeartRateService", "Upload failed: ${e.localizedMessage}")
+                e.printStackTrace()
+            }
+        }
+    }
+
     private suspend fun getUserId(): Int {
         val sharedPreferences = getSharedPreferences("SHARED_PREFS", MODE_PRIVATE)
         val email = sharedPreferences.getString("email", null)
 
         return email?.let {
-            MainActivity.database.userDao().getUserId(it) ?: -1
+            MainActivity.Companion.database.userDao().getUserId(it) ?: -1
         } ?: -1
     }
+
 
 }

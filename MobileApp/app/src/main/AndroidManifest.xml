@@ -33,7 +33,7 @@
 
         </activity>
         <service
-            android:name="SensorService"
+            android:name=".services.SensorService"
             android:enabled="true"
             android:exported="false"
             android:foregroundServiceType="health" />

@@ -2,6 +2,7 @@ package com.mc.mobileapp.screens
 
 import android.content.Context
 import android.content.Intent
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -15,7 +16,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.mc.mobileapp.SensorService
+import com.mc.mobileapp.services.SensorService
+import com.mc.mobileapp.utilities.BatteryUtils
 
 @Composable
 fun LandingScreen(onLogout: () -> Unit, onViewActivities: () -> Unit) {
@@ -116,6 +118,7 @@ fun LandingScreen(onLogout: () -> Unit, onViewActivities: () -> Unit) {
                 )
             )
         }
+
     }
 
 }
@@ -126,8 +129,8 @@ fun clearUserSession(context: Context) {
 }
 
 fun startSensorService(context: Context) {
-    val intent = Intent(context, SensorService::class.java)
-    context.startService(intent)
+    val sensorIntent = Intent(context, SensorService::class.java)
+    context.startService(sensorIntent)
 }
 
 fun stopSensorService(context: Context) {
