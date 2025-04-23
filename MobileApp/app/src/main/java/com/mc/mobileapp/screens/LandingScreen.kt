@@ -17,7 +17,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.mc.mobileapp.services.SensorService
-import com.mc.mobileapp.utilities.BatteryUtils
 
 @Composable
 fun LandingScreen(onLogout: () -> Unit, onViewActivities: () -> Unit) {

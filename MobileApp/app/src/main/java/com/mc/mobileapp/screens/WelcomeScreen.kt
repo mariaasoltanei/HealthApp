@@ -1,7 +1,12 @@
 package com.mc.mobileapp.screens
 
+import android.Manifest
 import android.content.Context
+import android.content.pm.PackageManager
+import android.location.Location
+import android.os.Looper
 import android.util.Log
+import com.google.android.gms.location.*
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.Button
@@ -16,12 +21,19 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.content.ContextCompat
+import com.google.android.gms.location.LocationCallback
+import com.google.android.gms.location.LocationResult
+import com.google.android.gms.location.LocationServices
+
 import com.mc.mobileapp.R
-import com.mc.mobileapp.utilities.BatteryUtils
-import com.mc.mobileapp.utilities.CpuUtils
+import com.mc.mobileapp.utilities.LocationUtils
+import com.mc.mobileapp.utilities.ScoreUtils
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.suspendCancellableCoroutine
+import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
 
 @Composable
@@ -60,18 +72,6 @@ fun WelcomeScreen(onLoginClick: () -> Unit, onRegisterClick: () -> Unit) {
                     )
                 )
             }
-            Spacer(modifier = Modifier.height(16.dp))
-            Button(
-                onClick = {CpuUtils.stressAllCores(10)}
-            ) {
-                Text(
-                    text = "Stress CPU",
-                    style = MaterialTheme.typography.bodyMedium.copy(
-                        fontSize = 18.sp,
-                        color = Color.White
-                    )
-                )
-            }
         }
 
         Row(
@@ -102,16 +102,57 @@ fun WelcomeScreen(onLoginClick: () -> Unit, onRegisterClick: () -> Unit) {
     }
 }
 suspend fun testScore(context: Context) {
-    val batteryLevel = BatteryUtils.getBatteryLevel(context)
-    val batteryTemperature = BatteryUtils.getBatteryTemperature(context)
-
-    val cpuInfo = withContext(Dispatchers.IO) {
-        CpuUtils.getCpuUsageFromTop()
-    }
-
-    val cpuLine = CpuUtils.parseCpuLine(cpuInfo) ?: "N/A"
+    val batteryLevel = ScoreUtils.getBatteryLevel(context)
+    val batteryTemperature = ScoreUtils.getBatteryTemperature(context)
 
     Log.d("TestScore", "Battery level: $batteryLevel%")
     Log.d("TestScore", "Battery temperature: $batteryTemperature°C")
-    Log.d("TestScore", "CPU Load: $cpuInfo")
+
+    // ✅ Check location permission
+    val hasPermission = ContextCompat.checkSelfPermission(
+        context,
+        Manifest.permission.ACCESS_FINE_LOCATION
+    ) == PackageManager.PERMISSION_GRANTED
+
+    if (!hasPermission) {
+        Log.w("TestScore", "Location permission not granted.")
+        return
+    }
+
+    val fusedLocationClient = LocationServices.getFusedLocationProviderClient(context)
+
+    val location = suspendCancellableCoroutine<Location?> { continuation ->
+        val request = LocationRequest.Builder(
+            Priority.PRIORITY_HIGH_ACCURACY,
+            0L // immediate
+        ).setMaxUpdates(1)
+            .setMinUpdateIntervalMillis(0)
+            .build()
+
+        val callback = object : LocationCallback() {
+            override fun onLocationResult(result: LocationResult) {
+                fusedLocationClient.removeLocationUpdates(this)
+                continuation.resume(result.lastLocation, null)
+            }
+
+            override fun onLocationAvailability(availability: LocationAvailability) {
+                if (!availability.isLocationAvailable) {
+                    Log.w("TestScore", "Live location not available")
+                }
+            }
+        }
+
+        fusedLocationClient.requestLocationUpdates(
+            request,
+            callback,
+            Looper.getMainLooper()
+        )
+    }
+
+    val isMoving = LocationUtils.isUserMoving(location)
+    val movementLevel = LocationUtils.getMovementLevel(location)
+
+    Log.d("TestScore", "Live Location: $location")
+    Log.d("TestScore", "Is user moving? $isMoving")
+    Log.d("TestScore", "Movement level: $movementLevel")
 }

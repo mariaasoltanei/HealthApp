@@ -87,6 +87,8 @@ dependencies {
 
     // --- Navigation ---
     implementation("androidx.navigation:navigation-compose:2.8.4")
+    implementation("com.google.android.gms:play-services-location:21.3.0")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.6.4")
 
     // --- Network (Retrofit, Gson) ---
     implementation("com.squareup.retrofit2:retrofit:2.11.0")

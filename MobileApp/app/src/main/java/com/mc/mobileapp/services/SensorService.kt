@@ -17,6 +17,7 @@ import androidx.core.app.NotificationCompat
 import com.mc.mobileapp.MainActivity
 
 import com.mc.mobileapp.domains.SensorData
+import com.mc.mobileapp.domains.SensorDataPayload
 import com.mc.mobileapp.retrofit.ContextInfo
 import com.mc.mobileapp.retrofit.EncryptedSensorBatchPayload
 import com.mc.mobileapp.retrofit.HeartRateBatchPayload
@@ -26,6 +27,7 @@ import com.mc.mobileapp.retrofit.ISensorApiService
 import com.mc.mobileapp.retrofit.RetrofitClient
 import com.mc.mobileapp.retrofit.SensorDataEncrypted
 import com.mc.mobileapp.utilities.AesEncryption
+import com.mc.mobileapp.utilities.ContextScoreComputerMock
 import kotlinx.coroutines.*
 
 const val CHANNEL_ID = "SensorServiceChannel"
@@ -142,8 +144,18 @@ class SensorService : Service(), SensorEventListener {
             sensorDataBuffer.clear()
         }
 
-        if (dataToSend.isNotEmpty()) {
-            try {
+        if (dataToSend.isEmpty()) return
+
+        try {
+            val encryptionLevel = ContextScoreComputerMock.decideEncryptionType()
+            val timestamp = System.currentTimeMillis()
+
+            val contextInfo = ContextInfo(
+                user_id = userId.toString(),
+                encryption = encryptionLevel
+            )
+
+            if (encryptionLevel == "aes") {
                 AesEncryption.loadKeyFromAssets(this.applicationContext)
 
                 val encryptedDataList = dataToSend.map { entry ->
@@ -155,32 +167,36 @@ class SensorService : Service(), SensorEventListener {
                         sensorType = entry.sensorType,
                         timestamp = entry.timestamp,
                         userId = entry.userId,
-                        x = xEnc,
-                        y = yEnc,
-                        z = zEnc,
-                        ivX = ivX,
-                        ivY = ivY,
-                        ivZ = ivZ
+                        x = xEnc, y = yEnc, z = zEnc,
+                        ivX = ivX, ivY = ivY, ivZ = ivZ
                     )
                 }
 
                 val payload = EncryptedSensorBatchPayload(
                     data = encryptedDataList,
-                    timestamp = System.currentTimeMillis(),
-                    context = ContextInfo(
-                        user_id = userId.toString(),
-                        encryption = "aes"
-                    )
+                    timestamp = timestamp,
+                    context = contextInfo
                 )
 
-                sensorApiService.uploadSensorData(payload)
+                sensorApiService.uploadSensorDataAes(payload)
 
-            } catch (e: Exception) {
-                Log.e("SensorService", "Encryption or upload failed: ${e.localizedMessage}")
-                e.printStackTrace()
+            } else if (encryptionLevel == "he") {
+
+                val payload = SensorDataPayload(
+                    data = dataToSend,
+                    timestamp = timestamp,
+                    context = contextInfo
+                )
+
+                sensorApiService.uploadSensorDataHe(payload)
             }
+
+        } catch (e: Exception) {
+            Log.e("SensorService", "Encryption or upload failed: ${e.localizedMessage}")
+            e.printStackTrace()
         }
     }
+
 
     private fun simulateHeartRateReading() {
         val timestamp = System.currentTimeMillis()
