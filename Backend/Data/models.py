@@ -37,7 +37,6 @@ def trainModel(train_x, train_y, model_name='NB', validation=None):
         acc = metrics.accuracy_score(validation[1], y_hat)
         print(f"Validation Accuracy in '{model_name}' = {acc}")
         cm = metrics.confusion_matrix(validation[1], y_hat)
-        print(cm)
         recall = cm[0][0] / (cm[0][0] + cm[0][1])
         precision = cm[0][0] / (cm[0][0] + cm[1][0])
         f1 = 2*(precision*recall)/(precision+recall)
@@ -92,8 +91,8 @@ def print_grid_search_attributes(model):
     print('|Best Score|')
     print('\n\tAverage Cross Validate scores of best estimator : \n\n\t{}\n'.format(model.best_score_))
 
-dfTrain = pd.read_csv('/mnt/c/Users/sltnm/Desktop/FACULTATE/LICENTA/data_processing_calaid/phase2/train.csv')
-dfTest = pd.read_csv('/mnt/c/Users/sltnm/Desktop/FACULTATE/LICENTA/data_processing_calaid/phase2/merged.csv')
+dfTrain = pd.read_csv('/Users/mariaasoltanei/Desktop/FACULTATE/CERCETARE/HealthApp/Backend/Data/Preprocessing/CSVs/train.csv')
+dfTest = pd.read_csv('/Users/mariaasoltanei/Desktop/FACULTATE/CERCETARE/HealthApp/Backend/Data/MockData/processedTestDF.csv')
 print(dfTrain.sample())
 print(dfTest.sample())
 X_train = dfTrain.drop(['Activity', 'ActivityName'], axis=1)

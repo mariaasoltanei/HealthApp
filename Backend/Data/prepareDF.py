@@ -131,10 +131,10 @@ def prepareDataFame(dfType):
     return dictionary
 
 
-# labelMappingDict = {}
-# with open('uci_har_dataset/activity_labels.txt') as f:
-#     for line in f.readlines():
-#         labelMappingDict[int(line.split()[0])] = line.split()[1]
+labelMappingDict = {}
+with open('uci_har_dataset/activity_labels.txt') as f:
+    for line in f.readlines():
+        labelMappingDict[int(line.split()[0])] = line.split()[1]
 
 dfTrain = pd.DataFrame(prepareDataFame("train"))
 print(dfTrain)
