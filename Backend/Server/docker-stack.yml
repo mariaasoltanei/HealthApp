@@ -1,0 +1,52 @@
+version: "3.8"
+
+services:
+  manager:
+    image: 192.168.56.11:5001/manager-test
+    ports:
+      - "5000:5000"
+    environment:
+      - WORKER1_SERVICE=worker1
+      - WORKER2_SERVICE=worker2
+      - WORKER3_SERVICE=worker3
+    networks:
+      - test-net
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - node.labels.role == manager
+
+  worker1:
+    image: 192.168.56.11:5001/worker1-test
+    networks:
+      - test-net
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - node.labels.role == worker1
+
+  worker2:
+    image: 192.168.56.11:5001/worker2-test
+    networks:
+      - test-net
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - node.labels.role == worker2
+
+  worker3:
+    image: 192.168.56.11:5001/worker3-test
+    networks:
+      - test-net
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - node.labels.role == worker3
+
+networks:
+  test-net:
+    driver: overlay
