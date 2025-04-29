@@ -9,7 +9,7 @@ notebook_dir = os.getcwd()
 data_dir = os.path.abspath(os.path.join(notebook_dir, "ML"))
 
 
-train_df = pd.read_csv(data_dir+"/UCIProcessing/CSVs/train_with_freq.csv")
+train_df = pd.read_csv(data_dir+"/TestDataProcesing/CSVs/train_with_freq.csv")
 test_df = pd.read_csv(data_dir+"/TestDataProcesing/CSVs/test_with_freq.csv")
 
 # Drop labels from test set (no Activity/ActivityName there)

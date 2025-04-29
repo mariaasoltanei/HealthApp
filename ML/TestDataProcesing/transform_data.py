@@ -10,8 +10,8 @@ data_dir = os.path.abspath(os.path.join(notebook_dir, "ML"))
 WINDOW_SIZE = 128
 OVERLAP = 0.5
 SAMPLING_RATE = 50
-RAW_TEST_FILE = data_dir+"/TestDataProcesing/CSVs/mockDataPhone.csv"
-OUTPUT_FILE = data_dir+"/TestDataProcesing/CSVs/test_with_freq.csv"
+RAW_TEST_FILE = data_dir+"/TestDataProcesing/CSVs/labeledMockDataPhone.csv"
+OUTPUT_FILE = data_dir+"/TestDataProcesing/CSVs/train_with_freq.csv"
 
 # --- TIME-DOMAIN FEATURE FUNCTIONS ---
 def findEnergy(arr):
