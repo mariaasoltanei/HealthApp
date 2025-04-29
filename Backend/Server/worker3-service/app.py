@@ -9,6 +9,7 @@ def predict():
 
     # Dummy logic: randomly decide "fall_detected" or "no_fall"
     prediction = random.choice(["walking", "standing", "sitting"])
+    print("this is worker 3")
 
     # Dummy logic: generate random confidence between 0.7 and 1.0
     confidence = round(random.uniform(0.7, 1.0), 2)

@@ -1,5 +1,6 @@
 from flask import Flask, request, jsonify
 import random
+from database_operations import pull_last_5_minutes_data
 
 app = Flask(__name__)
 
@@ -12,11 +13,23 @@ def predict():
 
     # Dummy logic: generate random confidence between 0.7 and 1.0
     confidence = round(random.uniform(0.7, 1.0), 2)
+    print("this is worker 2")
 
     return jsonify({
         "prediction": prediction,
         "confidence": confidence
     })
+
+@app.route('/trigger', methods=['POST'])
+def trigger():
+        # Pull last 5 minutes data from DB and process it
+    acc_data, gyro_data = pull_last_5_minutes_data('user_1')
+    print(acc_data.head())
+    print(gyro_data.head())
+    # Pull last 5 minutes data from DB and process it
+    print("Triggering worker 2 for last 5 minutes of data")
+    return jsonify({"status": "Worker triggered successfully"})
+
 
 if __name__ == '__main__':
     app.run(host="0.0.0.0", port=6000)

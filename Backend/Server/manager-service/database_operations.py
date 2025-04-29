@@ -2,6 +2,7 @@ from iotdb.utils.IoTDBConstants import TSDataType
 from db_session_pool import session_pool
 from collections import defaultdict
 import pandas as pd
+from datetime import datetime, timedelta
 
 def insert_sensor_data(sensor_data):
     try:
@@ -100,8 +101,57 @@ def query_data(query):
         if session:
             session_pool.put_back(session)
 
+
+def pull_last_5_minutes_data(user_id):
+    try:
+        session = session_pool.get_session()
+
+        now = datetime.utcnow()
+        
+        #test_Time= datetime(2025, 4, 29, 12, 30, 0)  # Replace with your test time
+        db_time = now + timedelta(hours=3)
+        five_minutes_ago = db_time - timedelta(minutes=5)
+        print(f"Five minutes ago: {five_minutes_ago}")
+        now_millis = int(db_time.timestamp() * 1000)
+        print(f"Current time in milliseconds: {now_millis}")
+        past_millis = int(five_minutes_ago.timestamp() * 1000)
+
+        accelerometer_path = f"root.users.{user_id}.accelerometer"
+        gyroscope_path = f"root.users.{user_id}.gyroscope"
+
+        # Pull accelerometer
+        sql_query_acc = f"""
+        SELECT * FROM {accelerometer_path}
+        WHERE time >= {past_millis} and time <= {now_millis}
+        """
+
+        # Pull gyroscope
+        sql_query_gyro = f"""
+        SELECT * FROM {gyroscope_path}
+        WHERE time >= {past_millis} and time <= {now_millis}
+        """
+        acc_result = session.execute_query_statement(sql_query_acc)
+        acc_df = acc_result.todf()
+
+        gyro_result = session.execute_query_statement(sql_query_gyro)
+        gyro_df = gyro_result.todf()
+
+        #session.close()
+
+        return acc_df, gyro_df
+
+    except Exception as e:
+        print(f"❌ Error pulling data from IoTDB: {e}")
+        return None, None
+
 # check_user_model_exists(1)
 # sensor_data = [{'sensorType': 'accelerometer', 'timestamp': 1735819501333, 'userId': 1, 'userTrustScore': 100, 'x': 0.0, 'y': 9.809989, 'z': 0.0}, {'sensorType': 'accelerometer', 'timestamp': 1735819501398, 'userId': 1, 'userTrustScore': 100, 'x': 0.0, 'y': 9.809989, 'z': 0.0}, {'sensorType': 'accelerometer', 'timestamp': 1735819501466, 'userId': 1, 'userTrustScore': 100, 'x': 0.0, 'y': 9.809989, 'z': 0.0}, {'sensorType': 'gyroscope', 'timestamp': 1735819501511, 'userId': 1, 'userTrustScore': 100, 'x': 0.0, 'y': 0.0, 'z': 0.0}, {'sensorType': 'accelerometer', 'timestamp': 1735819501532, 'userId': 1, 'userTrustScore': 100, 'x': 0.0, 'y': 9.809989, 'z': 0.0}, {'sensorType': 'accelerometer', 'timestamp': 1735819501598, 'userId': 1, 'userTrustScore': 100, 'x': 0.0, 'y': 9.809989, 'z': 0.0}, {'sensorType': 'accelerometer', 'timestamp': 1735819501665, 'userId': 1, 'userTrustScore': 100, 'x': 0.0, 'y': 9.809989, 'z': 0.0}, {'sensorType': 'gyroscope', 'timestamp': 1735819501711, 'userId': 1, 'userTrustScore': 100, 'x': 0.0, 'y': 0.0, 'z': 0.0}, {'sensorType': 'accelerometer', 'timestamp': 1735819501732, 'userId': 1, 'userTrustScore': 100, 'x': 0.0, 'y': 9.809989, 'z': 0.0}, {'sensorType': 'accelerometer', 'timestamp': 1735819501798, 'userId': 1, 'userTrustScore': 100, 'x': 0.0, 'y': 9.809989, 'z': 0.0}, {'sensorType': 'accelerometer', 'timestamp': 1735819501866, 'userId': 1, 'userTrustScore': 100, 'x': 0.0, 'y': 9.809989, 'z': 0.0}, {'sensorType': 'gyroscope', 'timestamp': 1735819501910, 'userId': 1, 'userTrustScore': 100, 'x': 0.0, 'y': 0.0, 'z': 0.0}, {'sensorType': 'accelerometer', 'timestamp': 1735819501932, 'userId': 1, 'userTrustScore': 100, 'x': 0.0, 'y': 9.809989, 'z': 0.0}]
 # insert_sensor_data(sensor_data)
 # df = query_data("SELECT * FROM root.users.user_1.accelerometer")
 # print(df)
+# acc_df, gyro_df = pull_last_5_minutes_data('user_1')
+# print("Accelerometer Data:")
+# print(acc_df)
+# print("Gyroscope Data:")
+# print(gyro_df)
+# session_pool.close()

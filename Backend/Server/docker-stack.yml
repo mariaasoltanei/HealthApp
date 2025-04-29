@@ -2,9 +2,11 @@ version: "3.8"
 
 services:
   manager:
-    image: 192.168.56.11:5001/manager-test
+    image: 192.168.56.11:5001/manager-test:latest
     ports:
       - "5000:5000"
+    volumes:
+      - /home/vagrant/Server/aes_key.txt:/app/aes-key:ro
     environment:
       - WORKER1_SERVICE=worker1
       - WORKER2_SERVICE=worker2
@@ -18,7 +20,7 @@ services:
           - node.labels.role == manager
 
   worker1:
-    image: 192.168.56.11:5001/worker1-test
+    image: 192.168.56.11:5001/worker1-test:latest
     networks:
       - test-net
     deploy:
@@ -28,7 +30,7 @@ services:
           - node.labels.role == worker1
 
   worker2:
-    image: 192.168.56.11:5001/worker2-test
+    image: 192.168.56.11:5001/worker2-test:latest
     networks:
       - test-net
     deploy:
@@ -38,7 +40,7 @@ services:
           - node.labels.role == worker2
 
   worker3:
-    image: 192.168.56.11:5001/worker3-test
+    image: 192.168.56.11:5001/worker3-test:latest
     networks:
       - test-net
     deploy:
