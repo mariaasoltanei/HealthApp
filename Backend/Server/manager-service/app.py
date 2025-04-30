@@ -27,36 +27,39 @@ WORKER1_SERVICE = os.getenv("WORKER1_SERVICE", "worker1")
 WORKER2_SERVICE = os.getenv("WORKER2_SERVICE", "worker2")
 WORKER3_SERVICE = os.getenv("WORKER3_SERVICE", "worker3")
 
+active_users = set()
+
 def periodic_trigger_workers():
     while True:
         try:
             print("⏳ Triggering workers to process last 5 minutes of data...")
-            requests.post(f"http://{WORKER1_SERVICE}:6000/trigger", timeout=5)
-            requests.post(f"http://{WORKER2_SERVICE}:6000/trigger", timeout=5)
-            print("✅ Workers triggered successfully.")
+
+            user_id = "user_1"  # make this dynamic if needed
+            url1 = f"http://{WORKER1_SERVICE}:6000/trigger/user_{1}"
+            url2 = f"http://{WORKER2_SERVICE}:6000/trigger/user_{1}"
+
+            res1 = requests.post(url1, timeout=5)
+            res2 = requests.post(url2, timeout=5)
+
+            pred1 = res1.json() if res1.ok else None
+            pred2 = res2.json() if res2.ok else None
+
+            if pred1 and pred2:
+                final = vote(pred1, pred2)
+                print(f"Final activity for {user_id}: {final}")
+            else:
+                print(f"Incomplete responses for {user_id}")
+
         except Exception as e:
             print(f"❌ Error triggering workers: {e}")
 
-        time.sleep(30)  # Wait 5 minutes (300)
-
-
-def forward_to_worker(worker_service, data):
-    try:
-        url = f"http://{worker_service}:6000/predict"
-        response = requests.post(url, json=data, timeout=5)
-        return response.json()
-    except Exception as e:
-        print(f"Error contacting worker {worker_service}: {e}")
-        return None
+        time.sleep(30)  # Wait 5 minutes
 
 def vote(pred1, pred2):
-    if not pred1 or not pred2:
-        return "Undecided"
-
     if pred1["prediction"] == pred2["prediction"]:
         return pred1["prediction"]
-
     return pred1["prediction"] if pred1["confidence"] > pred2["confidence"] else pred2["prediction"]
+
 
 @app.route('/sensorData/aes', methods=['POST'])
 def handle_aes():
@@ -64,6 +67,8 @@ def handle_aes():
     data_items = payload.get("data", [])
     context = payload.get("context", {})
     user_id = context.get("user_id")
+
+    active_users.add(user_id)
 
     decrypted_batch = []
     for item in data_items:
@@ -92,16 +97,13 @@ def handle_he_encrypted_prediction():
         context = payload.get("context", {})
         user_id = context.get("user_id")
         print("Received HE encrypted data:")
-        
+
         insert_sensor_data(data_items)
 
-        prediction = forward_to_worker(WORKER3_SERVICE, data_items)
-
-        if prediction:
-            return jsonify({"result": prediction})
-        else:
-            return jsonify({"error": "Worker3 unavailable"}), 500
-
+        return jsonify({
+            "status": "success",
+            "message": "Data inserted successfully"
+        }), 200
 
     except Exception as e:
         return jsonify({"status": "error", "message": str(e)}), 400

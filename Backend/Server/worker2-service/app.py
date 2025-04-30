@@ -1,33 +1,29 @@
 from flask import Flask, request, jsonify
 import random
 from database_operations import pull_last_5_minutes_data
+import pandas as pd
+import joblib
+from process_data import process_data, getActivity
 
 app = Flask(__name__)
+model = joblib.load("lsvc_model.pkl")
 
-@app.route('/predict', methods=['POST'])
-def predict():
-    data = request.get_json()
+@app.route('/trigger/<user_id>', methods=['POST'])
+def trigger(user_id):
+    try:
+        acc_data, gyro_data = pull_last_5_minutes_data(user_id)
 
-    # Dummy logic: randomly decide "fall_detected" or "no_fall"
-    prediction = random.choice(["walking", "standing", "sitting"])
+        acc_data = pd.DataFrame(acc_data)
+        gyro_data = pd.DataFrame(gyro_data)
 
-    # Dummy logic: generate random confidence between 0.7 and 1.0
-    confidence = round(random.uniform(0.7, 1.0), 2)
-    print("this is worker 2")
+        df = process_data(acc_data, gyro_data)
+        activity, confidence = getActivity(df, model)
+        print("Activity detected:", activity)
 
-    return jsonify({
-        "prediction": prediction,
-        "confidence": confidence
-    })
-
-@app.route('/trigger', methods=['POST'])
-def trigger():
-    # Pull last 5 minutes data from DB and process it
-    acc_data, gyro_data = pull_last_5_minutes_data('user_1')
-    print(acc_data)
-    print(gyro_data)
-    return jsonify({"status": "Worker triggered successfully"})
-
+        return jsonify({"prediction": activity, "confidence": confidence})
+    except Exception as e:
+        print(f"Worker error: {e}")
+        return jsonify({"error": str(e)}), 500
 
 if __name__ == '__main__':
     app.run(host="0.0.0.0", port=6000)

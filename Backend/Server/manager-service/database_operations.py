@@ -118,7 +118,7 @@ def query_data(query):
 
 #         now = datetime.utcnow() + timedelta(hours=3)
 #         print(f"Current UTC time: {now}")
-    
+
 #         #test_Time= datetime(2025, 4, 29, 12, 30, 0)  # Replace with your test time
 #         five_minutes_ago = now - timedelta(minutes=50)
 #         print(f"Five minutes ago: {five_minutes_ago}")
@@ -139,25 +139,25 @@ def query_data(query):
 #         sql_query_gyro = f"""
 #         SELECT * FROM {gyroscope_path}
 #         WHERE time >= {past_millis} and time <= {now_millis}
-#         """
-#         acc_result = session.execute_query_statement(sql_query_acc)
-#         acc_df = acc_result.todf()
+#     #     """
+    #     acc_result = session.execute_query_statement(sql_query_acc)
+    #     acc_df = acc_result.todf()
 
-#         gyro_result = session.execute_query_statement(sql_query_gyro)
-#         gyro_df = gyro_result.todf()
+    #     gyro_result = session.execute_query_statement(sql_query_gyro)
+    #     gyro_df = gyro_result.todf()
 
-#         return acc_df, gyro_df
+    #     return acc_df, gyro_df
 
-#     except Exception as e:
-#         print(f"❌ Error pulling data from IoTDB: {e}")
-#         return None, None
-#     finally:
-#         if session:
-#             try:
-#                 session.close()
-#                 print("✅ IoTDB session closed properly.")
-#             except Exception as e:
-#                 print(f"⚠️ Error closing session: {e}")
+    # except Exception as e:
+    #     print(f"❌ Error pulling data from IoTDB: {e}")
+    #     return None, None
+    # finally:
+    #     if session:
+    #         try:
+    #             session.close()
+    #             print("✅ IoTDB session closed properly.")
+    #         except Exception as e:
+    #             print(f"⚠️ Error closing session: {e}")
 
 # # check_user_model_exists(1)
 # # sensor_data = [{'sensorType': 'accelerometer', 'timestamp': 1735819501333, 'userId': 1, 'userTrustScore': 100, 'x': 0.0, 'y': 9.809989, 'z': 0.0}, {'sensorType': 'accelerometer', 'timestamp': 1735819501398, 'userId': 1, 'userTrustScore': 100, 'x': 0.0, 'y': 9.809989, 'z': 0.0}, {'sensorType': 'accelerometer', 'timestamp': 1735819501466, 'userId': 1, 'userTrustScore': 100, 'x': 0.0, 'y': 9.809989, 'z': 0.0}, {'sensorType': 'gyroscope', 'timestamp': 1735819501511, 'userId': 1, 'userTrustScore': 100, 'x': 0.0, 'y': 0.0, 'z': 0.0}, {'sensorType': 'accelerometer', 'timestamp': 1735819501532, 'userId': 1, 'userTrustScore': 100, 'x': 0.0, 'y': 9.809989, 'z': 0.0}, {'sensorType': 'accelerometer', 'timestamp': 1735819501598, 'userId': 1, 'userTrustScore': 100, 'x': 0.0, 'y': 9.809989, 'z': 0.0}, {'sensorType': 'accelerometer', 'timestamp': 1735819501665, 'userId': 1, 'userTrustScore': 100, 'x': 0.0, 'y': 9.809989, 'z': 0.0}, {'sensorType': 'gyroscope', 'timestamp': 1735819501711, 'userId': 1, 'userTrustScore': 100, 'x': 0.0, 'y': 0.0, 'z': 0.0}, {'sensorType': 'accelerometer', 'timestamp': 1735819501732, 'userId': 1, 'userTrustScore': 100, 'x': 0.0, 'y': 9.809989, 'z': 0.0}, {'sensorType': 'accelerometer', 'timestamp': 1735819501798, 'userId': 1, 'userTrustScore': 100, 'x': 0.0, 'y': 9.809989, 'z': 0.0}, {'sensorType': 'accelerometer', 'timestamp': 1735819501866, 'userId': 1, 'userTrustScore': 100, 'x': 0.0, 'y': 9.809989, 'z': 0.0}, {'sensorType': 'gyroscope', 'timestamp': 1735819501910, 'userId': 1, 'userTrustScore': 100, 'x': 0.0, 'y': 0.0, 'z': 0.0}, {'sensorType': 'accelerometer', 'timestamp': 1735819501932, 'userId': 1, 'userTrustScore': 100, 'x': 0.0, 'y': 9.809989, 'z': 0.0}]
@@ -171,5 +171,7 @@ def query_data(query):
 # print("Accelerometer Data:")
 # print(acc_df)
 # print("Gyroscope Data:")
+
+# gyro_df.rename(columns={'Time': 'timestamp'}, inplace=True)
 # print(gyro_df)
-# session_pool.close()
+# # session_pool.close()

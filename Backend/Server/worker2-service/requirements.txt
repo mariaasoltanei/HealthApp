@@ -3,3 +3,6 @@ scikit-learn
 joblib
 apache-iotdb
 pandas
+statsmodels
+numpy
+scipy
