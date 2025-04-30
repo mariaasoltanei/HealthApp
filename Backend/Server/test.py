@@ -68,7 +68,8 @@ def handle_he_encrypted_prediction():
         data_items = payload.get("data", [])
         context = payload.get("context", {})
         user_id = context.get("user_id")
-        print(data_items)
+        
+        insert_sensor_data(data_items)
 
         return jsonify({
             "status": "success",

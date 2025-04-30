@@ -1,7 +1,7 @@
 import pandas as pd
 import os
 from concrete.ml.sklearn import LinearRegression, LogisticRegression, NeuralNetClassifier, RandomForestClassifier, DecisionTreeClassifier, LinearSVC
-from sklearn.preprocessing import StandardScaler
+from sklearn.preprocessing import StandardScaler, LabelEncoder
 from sklearn.metrics import accuracy_score, classification_report
 from sklearn.pipeline import make_pipeline
 from torch import nn
@@ -9,59 +9,39 @@ notebook_dir = os.getcwd()
 data_dir = os.path.abspath(os.path.join(notebook_dir, "ML"))
 
 
-train_df = pd.read_csv(data_dir+"/TestDataProcesing/CSVs/train_with_freq.csv")
-test_df = pd.read_csv(data_dir+"/TestDataProcesing/CSVs/test_with_freq.csv")
+train_df = pd.read_csv(data_dir+"/TestDataProcesing/CSVs/train.csv")
+test_df = pd.read_csv(data_dir+"/TestDataProcesing/CSVs/test.csv")
 
-# Drop labels from test set (no Activity/ActivityName there)
-X_test = test_df.copy()
-
-# Extract features and labels from train set
-X_train = train_df.drop(columns=["Activity", "ActivityName"])
-y_train = train_df["Activity"]
-
-# Match test data features exactly
-X_test = test_df[X_train.columns]  # force same column order and selection
-
-# Normalize
+X_train = train_df.drop(columns=['Activity', 'ActivityName'])
+y_train = train_df['ActivityName']
+X_test = test_df
+# Scale your features
 scaler = StandardScaler()
-X_train_scaled = scaler.fit_transform(X_train)
-X_test_scaled = scaler.transform(X_test)
+X_train_scaled = scaler.fit_transform(X_train).astype("float32")
+X_test_scaled = scaler.transform(X_test).astype("float32")
 
-params = {
-    "module__n_layers": 2,
-    "module__n_w_bits": 4,
-    "module__n_a_bits": 4,
-    "module__n_hidden_neurons_multiplier": 0.5,
-    "module__activation_function": nn.ReLU,
-    "max_epochs": 7,
-}
-models = {
-    "Neural Network": NeuralNetClassifier(**params),
-    "Logistic Regression": LogisticRegression(n_bits=6),
-    "Random Forest": RandomForestClassifier(n_bits=6, n_estimators=10),
-    "Linear SVC": LinearSVC(n_bits=6, C=0.1),
-}
+# Encode labels
+label_encoder = LabelEncoder()
+y_train_encoded = label_encoder.fit_transform(y_train)
 
-activity_labels = {
-    1: "WALKING",
-    2: "WALKING_UPSTAIRS",
-    3: "WALKING_DOWNSTAIRS",
-    4: "SITTING",
-    5: "STANDING",
-    6: "LAYING"
-}
-
-#truth:  LAYING WALKING SITTING STANDING
-
-for name, model in models.items():
-    print(f"\n🧠 Training: {name}")
-    model.fit(X_train_scaled, y_train)
-    model.compile(X_train_scaled)
+def get_model(name="LinearSVC"):
+    if name == "LinearSVC":
+        return LinearSVC(C=30, dual=False, penalty ='l2')
+    elif name == "LogisticRegression":
+        return LogisticRegression(n_bits=8)
+    elif name == "RandomForestClassifier":
+        return RandomForestClassifier(n_bits=8, n_estimators=10, max_depth=5)
+    else:
+        raise ValueError(f"Unknown model: {name}")
     
-    print("🔐 Simulating encrypted inference...")
-    y_pred = model.predict(X_test_scaled, fhe="simulate")
-    print()
-    pred_names = [activity_labels.get(int(pred), "UNKNOWN") for pred in y_pred]
+model = LinearSVC(n_bits=3, C=0.01, tol=1e-8)
+model.fit(X_train_scaled, y_train_encoded)
 
+# Clear prediction
+y_pred_clear = model.predict(X_test_scaled)
+print("Predictions (Clear):", y_pred_clear)
 
-    print(pred_names)
+# Compile and predict using FHE
+model.compile(X_test_scaled)
+y_pred = model.predict(X_test_scaled, fhe="execute")
+print("Predictions (FHE):", y_pred)

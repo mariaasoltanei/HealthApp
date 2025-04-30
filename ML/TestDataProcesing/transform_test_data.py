@@ -10,8 +10,8 @@ data_dir = os.path.abspath(os.path.join(notebook_dir, "ML"))
 WINDOW_SIZE = 128
 OVERLAP = 0.5
 SAMPLING_RATE = 50
-RAW_TEST_FILE = data_dir + "/TestDataProcesing/CSVs/labeledMockDataPhone.csv"
-OUTPUT_FILE = data_dir + "/TestDataProcesing/CSVs/train_with_freq.csv"
+RAW_TEST_FILE = data_dir+"/TestDataProcesing/CSVs/mockDataOriginal.csv"
+OUTPUT_FILE = data_dir+"/TestDataProcesing/CSVs/test_with_freq.csv"
 
 # --- TIME-DOMAIN FEATURE FUNCTIONS ---
 def findEnergy(arr):
@@ -51,17 +51,15 @@ def create_overlapping_windows(df, window_size=128, overlap=0.5):
     step = int(window_size * (1 - overlap))
     windows = []
     for start in range(0, len(df) - window_size + 1, step):
-        window = df.iloc[start:start+window_size]
+        window = df.iloc[start:start+window_size][['x', 'y', 'z']].to_numpy()
         windows.append(window)
     return windows
 
 # --- FEATURE EXTRACTION FOR A SENSOR ---
 def extract_features_from_window(window, sensor_prefix):
     row = {}
-    window_values = window[['x', 'y', 'z']].to_numpy()
-
     for i, axis in enumerate(['x', 'y', 'z']):
-        axis_data = window_values[:, i]
+        axis_data = window[:, i]
         # Time-domain features
         row.update({
             f"{sensor_prefix}_{axis}_mean": np.mean(axis_data),
@@ -78,25 +76,12 @@ def extract_features_from_window(window, sensor_prefix):
         freq_feats = findFreqFeatures(axis_data)
         for k, v in freq_feats.items():
             row[f"{sensor_prefix}_{axis}_{k}"] = v
-
     return row
 
 # --- PROCESS RAW SENSOR DATA ---
 def process_sensor_data(sensor_df, sensor_type):
     windows = create_overlapping_windows(sensor_df, WINDOW_SIZE, OVERLAP)
-    feature_rows = []
-
-    for window in windows:
-        feature_row = extract_features_from_window(window, sensor_type)
-
-        # Assign label to window based on most frequent Activity
-        if 'Activity' in window.columns:
-            feature_row['Activity'] = window['Activity'].mode()[0]
-            feature_row['ActivityName'] = window['ActivityName'].mode()[0]
-
-        feature_rows.append(feature_row)
-
-    return pd.DataFrame(feature_rows)
+    return pd.DataFrame([extract_features_from_window(w, sensor_type) for w in windows])
 
 # --- MAIN PROCESSING FUNCTION ---
 def prepare_test_data(raw_csv=RAW_TEST_FILE, output_csv=OUTPUT_FILE):

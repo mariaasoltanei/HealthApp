@@ -66,7 +66,7 @@ class SensorService : Service(), SensorEventListener {
         startForeground(NOTIFICATION_ID, notification)
 
         sensorManager = getSystemService(SENSOR_SERVICE) as SensorManager
-        accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
+        accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_LINEAR_ACCELERATION)
         gyroscope = sensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE)
 
         accelerometer?.let {
@@ -107,7 +107,7 @@ class SensorService : Service(), SensorEventListener {
         event?.let {
             val timestamp = System.currentTimeMillis()
             val sensorData = when (event.sensor.type) {
-                Sensor.TYPE_ACCELEROMETER -> SensorData(
+                Sensor.TYPE_LINEAR_ACCELERATION -> SensorData(
                     x = event.values[0],
                     y = event.values[1],
                     z = event.values[2],
@@ -147,7 +147,7 @@ class SensorService : Service(), SensorEventListener {
         if (dataToSend.isEmpty()) return
 
         try {
-            val encryptionLevel = ContextScoreComputerMock.decideEncryptionType()
+            val encryptionLevel = "aes"//ContextScoreComputerMock.decideEncryptionType()
             val timestamp = System.currentTimeMillis()
 
             val contextInfo = ContextInfo(
@@ -181,7 +181,6 @@ class SensorService : Service(), SensorEventListener {
                 sensorApiService.uploadSensorDataAes(payload)
 
             } else if (encryptionLevel == "he") {
-
                 val payload = SensorDataPayload(
                     data = dataToSend,
                     timestamp = timestamp,

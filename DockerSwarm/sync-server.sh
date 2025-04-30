@@ -3,7 +3,7 @@
 FLASK_DIR="../Backend/Server"
 
 
-NODES=(node1 node2 node3 node4)
+NODES=(node1)
 
 VAGRANT_CMD="/usr/local/bin/vagrant"
 FLASK_FILE="test.py"

@@ -8,7 +8,6 @@ import base64
 import numpy as np
 
 from database_operations import insert_sensor_data
-from db_session_pool import get_session
 
 app = Flask(__name__)
 with open("/app/aes-key", "rb") as f:

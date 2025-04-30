@@ -5,7 +5,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 object RetrofitClient {
 
-    private const val BASE_URL = "http://192.168.0.105:5001/"
+    private const val BASE_URL = "http://192.168.56.11:5000/"//"http://192.168.0.104:5001/"
 
         //FOR Docker swarm "http://192.168.0.104:5000/"
 

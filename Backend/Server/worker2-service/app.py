@@ -22,12 +22,10 @@ def predict():
 
 @app.route('/trigger', methods=['POST'])
 def trigger():
-        # Pull last 5 minutes data from DB and process it
-    acc_data, gyro_data = pull_last_5_minutes_data('user_1')
-    print(acc_data.head())
-    print(gyro_data.head())
     # Pull last 5 minutes data from DB and process it
-    print("Triggering worker 2 for last 5 minutes of data")
+    acc_data, gyro_data = pull_last_5_minutes_data('user_1')
+    print(acc_data)
+    print(gyro_data)
     return jsonify({"status": "Worker triggered successfully"})
 
 
