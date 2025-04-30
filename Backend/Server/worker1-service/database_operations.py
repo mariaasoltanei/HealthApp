@@ -11,11 +11,9 @@ def pull_last_5_minutes_data(user_id):
         session.open()
 
         now = datetime.utcnow()
-    
         five_minutes_ago = now - timedelta(minutes=5)
-        print(f"Five minutes ago: {five_minutes_ago}")
+        
         now_millis = int(now.timestamp() * 1000)
-        print(f"Current time in milliseconds: {now_millis}")
         past_millis = int(five_minutes_ago.timestamp() * 1000)
 
         accelerometer_path = f"root.users.{user_id}.accelerometer"

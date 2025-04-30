@@ -174,4 +174,4 @@ def query_data(query):
 
 # gyro_df.rename(columns={'Time': 'timestamp'}, inplace=True)
 # print(gyro_df)
-# # session_pool.close()
+# session_pool.get_session().close()

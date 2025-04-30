@@ -32,7 +32,7 @@ active_users = set()
 def periodic_trigger_workers():
     while True:
         try:
-            print("⏳ Triggering workers to process last 5 minutes of data...")
+            print("Triggering workers...")
 
             user_id = "user_1"  # make this dynamic if needed
             url1 = f"http://{WORKER1_SERVICE}:6000/trigger/user_{1}"

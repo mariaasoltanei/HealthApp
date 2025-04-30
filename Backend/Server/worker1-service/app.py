@@ -11,10 +11,21 @@ model = joblib.load("rf_model.pkl")
 @app.route('/trigger/<user_id>', methods=['POST'])
 def trigger(user_id):
     try:
-        acc_data, gyro_data = pull_last_5_minutes_data(user_id)
+        result = pull_last_5_minutes_data(user_id)
+
+        if not result or not isinstance(result, (list, tuple)) or len(result) != 2:
+            return jsonify({"error": "Data fetch failed"}), 500
+
+        acc_data, gyro_data = result
+
+        if acc_data is None or gyro_data is None:
+            return jsonify({"error": "No data received from DB"}), 500
 
         acc_data = pd.DataFrame(acc_data)
         gyro_data = pd.DataFrame(gyro_data)
+
+        if acc_data.empty or gyro_data.empty:
+            return jsonify({"error": "No data found for the last 5 minutes"}), 404
 
         df = process_data(acc_data, gyro_data)
         activity, confidence = getActivity(df, model)

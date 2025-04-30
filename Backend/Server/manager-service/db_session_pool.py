@@ -1,11 +1,11 @@
 from iotdb.SessionPool import SessionPool, PoolConfig
 
-IOTDB_HOST = "192.168.56.15"  
-IOTDB_PORT = 6667  
-USERNAME = "root"   
+IOTDB_HOST = "192.168.56.15"
+IOTDB_PORT = 6667
+USERNAME = "root"
 PASSWORD = "root"
 
-max_pool_size = 10
+max_pool_size = 15
 wait_timeout_in_ms = 3000
 
 def get_session_pool():
