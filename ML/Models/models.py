@@ -9,20 +9,21 @@ notebook_dir = os.getcwd()
 data_dir = os.path.abspath(os.path.join(notebook_dir, "ML"))
 
 
-train_df = pd.read_csv(data_dir+"/TestDataProcesing/CSVs/train.csv")
-test_df = pd.read_csv(data_dir+"/TestDataProcesing/CSVs/test.csv")
+train_df = pd.read_csv("/Users/mariaasoltanei/Desktop/FACULTATE/CERCETARE/HealthApp/ML/Models/train.csv")
+test_df = pd.read_csv("/Users/mariaasoltanei/Desktop/FACULTATE/CERCETARE/HealthApp/ML/Models/test.csv")
 
 X_train = train_df.drop(columns=['Activity', 'ActivityName'])
-y_train = train_df['ActivityName']
+y_train = train_df['Activity']
+print(y_train)
 X_test = test_df
 # Scale your features
 scaler = StandardScaler()
 X_train_scaled = scaler.fit_transform(X_train).astype("float32")
 X_test_scaled = scaler.transform(X_test).astype("float32")
 
-# Encode labels
 label_encoder = LabelEncoder()
 y_train_encoded = label_encoder.fit_transform(y_train)
+# print(y_train_encoded)
 
 def get_model(name="LinearSVC"):
     if name == "LinearSVC":
@@ -33,7 +34,7 @@ def get_model(name="LinearSVC"):
         return RandomForestClassifier(n_bits=8, n_estimators=10, max_depth=5)
     else:
         raise ValueError(f"Unknown model: {name}")
-    
+
 model = LinearSVC(n_bits=3, C=0.01, tol=1e-8)
 model.fit(X_train_scaled, y_train_encoded)
 

@@ -5,7 +5,7 @@ from collections import Counter
 
 notebook_dir = os.getcwd()
 data_dir = os.path.abspath(os.path.join(notebook_dir, ".."))
-sys.path.append(data_dir+"/HealthApp/ML") 
+sys.path.append(data_dir+"/HealthApp/ML")
 print(data_dir)
 from processingFunctions import *
 
@@ -36,7 +36,7 @@ dfAccData['zBody'] = filterAcceleration(dfAccData['z'])
 dfAccData['timestamp'] = pd.to_datetime(dfAccData['timestamp'], unit='ms')
 dfGyroData['timestamp'] = pd.to_datetime(dfGyroData['timestamp'], unit='ms')
 
-merged_df = pd.merge_asof(dfAccData, dfGyroData, on=['timestamp'], tolerance=pd.Timedelta('100ms'))
+merged_df = pd.merge_asof(dfAccData, dfGyroData, on=['timestamp'], tolerance=pd.Timedelta('200ms'))
 merged_df.dropna(inplace=True)
 merged_df =merged_df.rename(columns={'x_x':'xAcc', 'y_x':'yAcc', 'z_x':'zAcc', 'xBody_x':'xAccBody', 'yBody_x':'yAccBody', 'zBody_x':'zAccBody', 'x_y':'xGyro', 'y_y':'yGyro', 'z_y':'zGyro', 'xBody_y':'xGyroBody', 'yBody_y':'yGyroBody', 'zBody_y':'zGyroBody'})
 
@@ -136,7 +136,7 @@ colNames = {
     'body_acc_z':'zAccBody',
     'body_gyro_x': 'xGyroBody',
     'body_gyro_y': 'yGyroBody',
-    'body_gyro_z': 'zGyroBody', 
+    'body_gyro_z': 'zGyroBody',
     'total_acc_x': 'xAcc',
     'total_acc_y': 'yAcc',
     'total_acc_z': 'zAcc'
@@ -144,7 +144,7 @@ colNames = {
 
 windowed_data = []
 windowNo = 1
-#raport activitate pe zi 
+#raport activitate pe zi
 for i in range(0, len(merged_df) - window_length, shift):
     window = merged_df.iloc[i:i+window_length]
     print(window)

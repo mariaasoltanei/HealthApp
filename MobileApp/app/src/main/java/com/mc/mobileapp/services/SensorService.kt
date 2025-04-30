@@ -66,7 +66,7 @@ class SensorService : Service(), SensorEventListener {
         startForeground(NOTIFICATION_ID, notification)
 
         sensorManager = getSystemService(SENSOR_SERVICE) as SensorManager
-        accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_LINEAR_ACCELERATION)
+        accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
         gyroscope = sensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE)
 
         accelerometer?.let {
@@ -107,7 +107,7 @@ class SensorService : Service(), SensorEventListener {
         event?.let {
             val timestamp = System.currentTimeMillis()
             val sensorData = when (event.sensor.type) {
-                Sensor.TYPE_LINEAR_ACCELERATION -> SensorData(
+                Sensor.TYPE_ACCELEROMETER -> SensorData(
                     x = event.values[0],
                     y = event.values[1],
                     z = event.values[2],
