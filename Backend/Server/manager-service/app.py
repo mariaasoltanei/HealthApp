@@ -9,7 +9,11 @@ import numpy as np
 
 from database_operations import insert_sensor_data
 
+from prometheus_flask_exporter import PrometheusMetrics
+
 app = Flask(__name__)
+metrics = PrometheusMetrics(app)
+
 with open("/app/aes-key", "rb") as f:
     base64_key = f.read().strip()
 
@@ -107,6 +111,10 @@ def handle_he_encrypted_prediction():
 
     except Exception as e:
         return jsonify({"status": "error", "message": str(e)}), 400
+
+@app.route("/")
+def index():
+    return "🔒 Hello from Manager behind TLS!"
 
 if __name__ == "__main__":
     trigger_thread = threading.Thread(target=periodic_trigger_workers, daemon=True)

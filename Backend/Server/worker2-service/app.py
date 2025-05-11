@@ -5,7 +5,10 @@ import pandas as pd
 import joblib
 from process_data import process_data, getActivity
 
+from prometheus_flask_exporter import PrometheusMetrics
+
 app = Flask(__name__)
+metrics = PrometheusMetrics(app)
 model = joblib.load("lsvc_model.pkl")
 
 @app.route('/trigger/<user_id>', methods=['POST'])

@@ -20,7 +20,7 @@ def insert_sensor_data(sensor_data):
             x = record["x"]
             y = record["y"]
             z = record["z"]
-
+#todo change here for HE
             device_id = f"root.users.user_{user_id}.{sensor_type}"
             data_by_device[device_id].append((timestamp, [x, y, z]))
 
@@ -49,6 +49,7 @@ def insert_sensor_data(sensor_data):
 
     finally:
         if session:
+            session_pool.put_back(session)
             session.close()
 
 def check_user_model_exists(user_id):
@@ -57,19 +58,19 @@ def check_user_model_exists(user_id):
         session = session_pool.get_session()
         session.open()
 
-        path = f"root.users.user_{user_id}.accelerometer.x"
+        path = f"root.he.users.user_{user_id}.accelerometer.x"
 
         result = session.check_time_series_exists(path)
         if not result:
             print(f"Model for user {user_id} does not exist. Creating it...")
 
-            session.execute_non_query_statement(f"CREATE TIMESERIES root.users.user_{user_id}.accelerometer.x WITH DATATYPE=FLOAT, ENCODING=RLE, COMPRESSOR=SNAPPY")
-            session.execute_non_query_statement(f"CREATE TIMESERIES root.users.user_{user_id}.accelerometer.y WITH DATATYPE=FLOAT, ENCODING=RLE, COMPRESSOR=SNAPPY")
-            session.execute_non_query_statement(f"CREATE TIMESERIES root.users.user_{user_id}.accelerometer.z WITH DATATYPE=FLOAT, ENCODING=RLE, COMPRESSOR=SNAPPY")
+            session.execute_non_query_statement(f"CREATE TIMESERIES root.he.users.user_{user_id}.accelerometer.x WITH DATATYPE=FLOAT, ENCODING=RLE, COMPRESSOR=SNAPPY")
+            session.execute_non_query_statement(f"CREATE TIMESERIES root.he.users.user_{user_id}.accelerometer.y WITH DATATYPE=FLOAT, ENCODING=RLE, COMPRESSOR=SNAPPY")
+            session.execute_non_query_statement(f"CREATE TIMESERIES root.he.users.user_{user_id}.accelerometer.z WITH DATATYPE=FLOAT, ENCODING=RLE, COMPRESSOR=SNAPPY")
 
-            session.execute_non_query_statement(f"CREATE TIMESERIES root.users.user_{user_id}.gyroscope.x WITH DATATYPE=FLOAT, ENCODING=RLE, COMPRESSOR=SNAPPY")
-            session.execute_non_query_statement(f"CREATE TIMESERIES root.users.user_{user_id}.gyroscope.y WITH DATATYPE=FLOAT, ENCODING=RLE, COMPRESSOR=SNAPPY")
-            session.execute_non_query_statement(f"CREATE TIMESERIES root.users.user_{user_id}.gyroscope.z WITH DATATYPE=FLOAT, ENCODING=RLE, COMPRESSOR=SNAPPY")
+            session.execute_non_query_statement(f"CREATE TIMESERIES root.he.users.user_{user_id}.gyroscope.x WITH DATATYPE=FLOAT, ENCODING=RLE, COMPRESSOR=SNAPPY")
+            session.execute_non_query_statement(f"CREATE TIMESERIES root.he.users.user_{user_id}.gyroscope.y WITH DATATYPE=FLOAT, ENCODING=RLE, COMPRESSOR=SNAPPY")
+            session.execute_non_query_statement(f"CREATE TIMESERIES root.he.users.user_{user_id}.gyroscope.z WITH DATATYPE=FLOAT, ENCODING=RLE, COMPRESSOR=SNAPPY")
 
             print(f"Model for user {user_id} created successfully.")
         else:
@@ -80,6 +81,7 @@ def check_user_model_exists(user_id):
 
     finally:
         if session:
+            session_pool.put_back(session)
             session.close()
 
 def query_data(query):
@@ -107,59 +109,13 @@ def query_data(query):
 
     finally:
         if session:
+            session_pool.put_back(session)
             session.close()
 
 
-# def pull_last_5_minutes_data(user_id):
-#     session = None
-#     try:
-#         session = session_pool.get_session()
-#         session.open()
-
-#         now = datetime.utcnow() + timedelta(hours=3)
-#         print(f"Current UTC time: {now}")
-
-#         #test_Time= datetime(2025, 4, 29, 12, 30, 0)  # Replace with your test time
-#         five_minutes_ago = now - timedelta(minutes=50)
-#         print(f"Five minutes ago: {five_minutes_ago}")
-#         now_millis = int(now.timestamp() * 1000)
-#         print(f"Current time in milliseconds: {now_millis}")
-#         past_millis = int(five_minutes_ago.timestamp() * 1000)
-
-#         accelerometer_path = f"root.users.{user_id}.accelerometer"
-#         gyroscope_path = f"root.users.{user_id}.gyroscope"
-
-#         # Pull accelerometer
-#         sql_query_acc = f"""
-#         SELECT * FROM {accelerometer_path}
-#         WHERE time >= {past_millis} and time <= {now_millis}
-#         """
-
-#         # Pull gyroscope
-#         sql_query_gyro = f"""
-#         SELECT * FROM {gyroscope_path}
-#         WHERE time >= {past_millis} and time <= {now_millis}
-#     #     """
-    #     acc_result = session.execute_query_statement(sql_query_acc)
-    #     acc_df = acc_result.todf()
-
-    #     gyro_result = session.execute_query_statement(sql_query_gyro)
-    #     gyro_df = gyro_result.todf()
-
-    #     return acc_df, gyro_df
-
-    # except Exception as e:
-    #     print(f"❌ Error pulling data from IoTDB: {e}")
-    #     return None, None
-    # finally:
-    #     if session:
-    #         try:
-    #             session.close()
-    #             print("✅ IoTDB session closed properly.")
-    #         except Exception as e:
-    #             print(f"⚠️ Error closing session: {e}")
-
-# # check_user_model_exists(1)
+# check_user_model_exists(1)
+# df = query_data("SELECT * FROM root.he.users.user_1.accelerometer")
+# print(df)
 # # sensor_data = [{'sensorType': 'accelerometer', 'timestamp': 1735819501333, 'userId': 1, 'userTrustScore': 100, 'x': 0.0, 'y': 9.809989, 'z': 0.0}, {'sensorType': 'accelerometer', 'timestamp': 1735819501398, 'userId': 1, 'userTrustScore': 100, 'x': 0.0, 'y': 9.809989, 'z': 0.0}, {'sensorType': 'accelerometer', 'timestamp': 1735819501466, 'userId': 1, 'userTrustScore': 100, 'x': 0.0, 'y': 9.809989, 'z': 0.0}, {'sensorType': 'gyroscope', 'timestamp': 1735819501511, 'userId': 1, 'userTrustScore': 100, 'x': 0.0, 'y': 0.0, 'z': 0.0}, {'sensorType': 'accelerometer', 'timestamp': 1735819501532, 'userId': 1, 'userTrustScore': 100, 'x': 0.0, 'y': 9.809989, 'z': 0.0}, {'sensorType': 'accelerometer', 'timestamp': 1735819501598, 'userId': 1, 'userTrustScore': 100, 'x': 0.0, 'y': 9.809989, 'z': 0.0}, {'sensorType': 'accelerometer', 'timestamp': 1735819501665, 'userId': 1, 'userTrustScore': 100, 'x': 0.0, 'y': 9.809989, 'z': 0.0}, {'sensorType': 'gyroscope', 'timestamp': 1735819501711, 'userId': 1, 'userTrustScore': 100, 'x': 0.0, 'y': 0.0, 'z': 0.0}, {'sensorType': 'accelerometer', 'timestamp': 1735819501732, 'userId': 1, 'userTrustScore': 100, 'x': 0.0, 'y': 9.809989, 'z': 0.0}, {'sensorType': 'accelerometer', 'timestamp': 1735819501798, 'userId': 1, 'userTrustScore': 100, 'x': 0.0, 'y': 9.809989, 'z': 0.0}, {'sensorType': 'accelerometer', 'timestamp': 1735819501866, 'userId': 1, 'userTrustScore': 100, 'x': 0.0, 'y': 9.809989, 'z': 0.0}, {'sensorType': 'gyroscope', 'timestamp': 1735819501910, 'userId': 1, 'userTrustScore': 100, 'x': 0.0, 'y': 0.0, 'z': 0.0}, {'sensorType': 'accelerometer', 'timestamp': 1735819501932, 'userId': 1, 'userTrustScore': 100, 'x': 0.0, 'y': 9.809989, 'z': 0.0}]
 # # insert_sensor_data(sensor_data)
 # df = query_data("SELECT * FROM root.users.user_1.accelerometer")

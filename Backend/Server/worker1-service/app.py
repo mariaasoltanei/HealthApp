@@ -3,9 +3,13 @@ import random
 from database_operations import pull_last_5_minutes_data
 import pandas as pd
 import joblib
+import threading
+import time
 from process_data import process_data, getActivity
+from prometheus_flask_exporter import PrometheusMetrics
 
 app = Flask(__name__)
+metrics = PrometheusMetrics(app)
 model = joblib.load("rf_model.pkl")
 
 @app.route('/trigger/<user_id>', methods=['POST'])

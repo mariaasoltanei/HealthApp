@@ -8,9 +8,8 @@ PASSWORD = "root"
 max_pool_size = 15
 wait_timeout_in_ms = 3000
 
-def get_session_pool():
-    pool_config = PoolConfig(host=IOTDB_HOST,port=IOTDB_PORT, user_name=USERNAME,
-                         password=PASSWORD)
-    session_pool = SessionPool(pool_config, max_pool_size, wait_timeout_in_ms)
+pool_config = PoolConfig(host=IOTDB_HOST,port=IOTDB_PORT, user_name=USERNAME,password=PASSWORD)
+session_pool = SessionPool(pool_config, max_pool_size, wait_timeout_in_ms)
 
+def get_session_pool():
     return session_pool

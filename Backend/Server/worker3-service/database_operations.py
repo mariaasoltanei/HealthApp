@@ -16,8 +16,8 @@ def pull_last_5_minutes_data(user_id):
         now_millis = int(now.timestamp() * 1000)
         past_millis = int(five_minutes_ago.timestamp() * 1000)
 
-        accelerometer_path = f"root.users.{user_id}.accelerometer"
-        gyroscope_path = f"root.users.{user_id}.gyroscope"
+        accelerometer_path = f"root.he.users.{user_id}.accelerometer"
+        gyroscope_path = f"root.he.users.{user_id}.gyroscope"
 
         # Pull accelerometer
         sql_query_acc = f"""

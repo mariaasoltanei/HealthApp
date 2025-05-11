@@ -45,6 +45,7 @@ def pull_last_5_minutes_data(user_id):
         if session:
             try:
                 session.close()
+                session_pool.put_back(session)
                 print("✅ IoTDB session closed properly.")
             except Exception as e:
                 print(f"⚠️ Error closing session: {e}")

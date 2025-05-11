@@ -3,3 +3,4 @@ requests
 apache-iotdb
 cryptography
 numpy
+prometheus_flask_exporter
