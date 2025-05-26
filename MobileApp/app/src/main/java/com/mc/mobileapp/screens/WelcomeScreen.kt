@@ -51,27 +51,27 @@ fun WelcomeScreen(onLoginClick: () -> Unit, onRegisterClick: () -> Unit) {
             verticalArrangement = Arrangement.Center
         ) {
             Image(
-                painter = painterResource(id = R.drawable.ic_app_name_logo),
+                painter = painterResource(id = R.drawable.icon_logo),
                 contentDescription = "Fitness Icon",
                 modifier = Modifier
                     .size(256.dp)
             )
             Spacer(modifier = Modifier.height(16.dp))
-            Button(
-                onClick = {
-                    coroutineScope.launch {
-                        testScore(context)
-                    }
-                },
-            ) {
-                Text(
-                    text = "Test Score",
-                    style = MaterialTheme.typography.bodyMedium.copy(
-                        fontSize = 18.sp,
-                        color = Color.White
-                    )
-                )
-            }
+//            Button(
+//                onClick = {
+//                    coroutineScope.launch {
+//                        testScore(context)
+//                    }
+//                },
+//            ) {
+//                Text(
+//                    text = "Test Score",
+//                    style = MaterialTheme.typography.bodyMedium.copy(
+//                        fontSize = 18.sp,
+//                        color = Color.White
+//                    )
+//                )
+//            }
         }
 
         Row(

@@ -82,6 +82,7 @@ class SensorService : Service(), SensorEventListener {
             while (true) {
                 delay(5000)
                 sendSensorDataBatch()
+
                 delay(5000)
                 simulateHeartRateReading()
                 sendHeartRateBatch()
@@ -132,6 +133,7 @@ class SensorService : Service(), SensorEventListener {
                     sensorDataBuffer.add(data)
                 }
             }
+
         }
     }
 
@@ -141,6 +143,7 @@ class SensorService : Service(), SensorEventListener {
         val dataToSend: List<SensorData>
         synchronized(sensorDataBuffer) {
             dataToSend = ArrayList(sensorDataBuffer)
+            Log.d("SensorService", "Sending batch of size: ${dataToSend.size}")
             sensorDataBuffer.clear()
         }
 

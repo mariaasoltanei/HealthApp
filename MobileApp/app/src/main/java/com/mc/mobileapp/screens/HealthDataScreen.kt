@@ -65,7 +65,7 @@ fun HealthDataScreen(
 
         Dropdown(
             dropdownItems = activityLevels,
-            label = "Activity Multiplier",
+            label = "How active are you?",
             selectedItem = activityLevels.entries.find { it.value.toString() == activityMultiplier }?.key
                 ?: "",
             onSelectedItemChange = { selectedLabel ->
