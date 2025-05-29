@@ -101,6 +101,7 @@ fun WelcomeScreen(onLoginClick: () -> Unit, onRegisterClick: () -> Unit) {
         }
     }
 }
+
 suspend fun testScore(context: Context) {
     val batteryLevel = ScoreUtils.getBatteryLevel(context)
     val batteryTemperature = ScoreUtils.getBatteryTemperature(context)
@@ -141,6 +142,14 @@ suspend fun testScore(context: Context) {
                 }
             }
         }
+        val settingsClient = LocationServices.getSettingsClient(context)
+        val locationRequest = LocationRequest.Builder(Priority.PRIORITY_HIGH_ACCURACY, 1000L).build()
+        val settingsRequest = LocationSettingsRequest.Builder().addLocationRequest(locationRequest).build()
+
+        settingsClient.checkLocationSettings(settingsRequest)
+            .addOnFailureListener { e ->
+                Log.e("TestScore", "Location settings not satisfied: ${e.message}")
+            }
 
         fusedLocationClient.requestLocationUpdates(
             request,

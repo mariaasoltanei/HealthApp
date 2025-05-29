@@ -1,5 +1,6 @@
 package com.mc.mobileapp.screens
 
+import LandingViewModel
 import android.content.Context
 import android.content.Intent
 import android.util.Log
@@ -16,11 +17,20 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.mc.mobileapp.services.SensorService
+import com.mc.mobileapp.utilities.calculateAge
+import com.mc.mobileapp.utilities.calculateBMR
+import com.mc.mobileapp.utilities.calculateTDEE
 
 @Composable
-fun LandingScreen(onLogout: () -> Unit, onViewActivities: () -> Unit) {
+fun LandingScreen(
+    viewModel: LandingViewModel,
+    onLogout: () -> Unit,
+    onViewActivities: () -> Unit
+) {
     val context = LocalContext.current
+    val userData by viewModel.userHealthData.collectAsState()
 
     Column(
         modifier = Modifier
@@ -39,6 +49,50 @@ fun LandingScreen(onLogout: () -> Unit, onViewActivities: () -> Unit) {
             ),
             modifier = Modifier.padding(bottom = 24.dp)
         )
+
+        // User stats section before sensor controls
+        userData?.let { user ->
+            val age = calculateAge(user.birthDate)
+            val bmr = calculateBMR(user.gender, user.weight, user.height, age)
+            val tdee = calculateTDEE(bmr, user.activityMultiplier)
+            Log.d("LandingScreen", "User Data: $user, Age: $age, BMR: $bmr, TDEE: $tdee")
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            Card(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 16.dp),
+                elevation = CardDefaults.cardElevation(defaultElevation = 6.dp),
+                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant)
+            ) {
+                Column(modifier = Modifier.padding(16.dp)) {
+                    Text(
+                        text = "Your Stats",
+                        style = MaterialTheme.typography.titleMedium.copy(
+                            fontSize = 20.sp,
+                            fontWeight = FontWeight.Bold
+                        ),
+                        modifier = Modifier.padding(bottom = 12.dp)
+                    )
+                    Text(
+                        text = "BMR: ${bmr.toInt()} kcal",
+                        style = MaterialTheme.typography.bodyLarge.copy(
+                            fontWeight = FontWeight.SemiBold
+                        ),
+                        modifier = Modifier.padding(bottom = 8.dp)
+                    )
+                    Text(
+                        text = "TDEE: ${tdee.toInt()} kcal",
+                        style = MaterialTheme.typography.bodyLarge.copy(
+                            fontWeight = FontWeight.SemiBold
+                        )
+                    )
+                }
+            }
+        }
+
+        Spacer(modifier = Modifier.height(8.dp))
 
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -80,7 +134,9 @@ fun LandingScreen(onLogout: () -> Unit, onViewActivities: () -> Unit) {
                 )
             }
         }
+
         Spacer(modifier = Modifier.height(16.dp))
+
         Button(
             onClick = onViewActivities,
             modifier = Modifier
@@ -117,7 +173,6 @@ fun LandingScreen(onLogout: () -> Unit, onViewActivities: () -> Unit) {
                 )
             )
         }
-
     }
 
 }

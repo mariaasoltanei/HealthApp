@@ -9,16 +9,6 @@ VAGRANT_CMD="/usr/local/bin/vagrant"
 FLASK_FILE="test.py"
 REMOTE_DIR="/home/vagrant/Server"
 
-# for NODE in "${NODES[@]}"; do
-#   echo "➡️  $NODE: Starting Flask app..."
-#   sudo $VAGRANT_CMD ssh "$NODE" -c "cd $REMOTE_DIR && nohup python3 $FLASK_FILE > flask.log 2>&1 &"
-#   if [ $? -eq 0 ]; then
-#     echo "✅ $NODE: Flask started"
-#   else
-#     echo "❌ $NODE: Failed to start Flask"
-#   fi
-# done
-
 
 for NODE in "${NODES[@]}"; do
     echo "Copying Flask server to $NODE..."
@@ -29,4 +19,3 @@ for NODE in "${NODES[@]}"; do
         echo "Failed to copy to $NODE"
     fi
 done
-

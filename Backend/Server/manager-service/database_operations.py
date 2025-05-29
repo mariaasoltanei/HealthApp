@@ -64,13 +64,13 @@ def check_user_model_exists(user_id):
         if not result:
             print(f"Model for user {user_id} does not exist. Creating it...")
 
-            session.execute_non_query_statement(f"CREATE TIMESERIES root.he.users.user_{user_id}.accelerometer.x WITH DATATYPE=FLOAT, ENCODING=RLE, COMPRESSOR=SNAPPY")
-            session.execute_non_query_statement(f"CREATE TIMESERIES root.he.users.user_{user_id}.accelerometer.y WITH DATATYPE=FLOAT, ENCODING=RLE, COMPRESSOR=SNAPPY")
-            session.execute_non_query_statement(f"CREATE TIMESERIES root.he.users.user_{user_id}.accelerometer.z WITH DATATYPE=FLOAT, ENCODING=RLE, COMPRESSOR=SNAPPY")
+            session.execute_non_query_statement(f"CREATE TIMESERIES root.users.user_{user_id}.accelerometer.x WITH DATATYPE=FLOAT, ENCODING=RLE, COMPRESSOR=SNAPPY")
+            session.execute_non_query_statement(f"CREATE TIMESERIES root.users.user_{user_id}.accelerometer.y WITH DATATYPE=FLOAT, ENCODING=RLE, COMPRESSOR=SNAPPY")
+            session.execute_non_query_statement(f"CREATE TIMESERIES root.users.user_{user_id}.accelerometer.z WITH DATATYPE=FLOAT, ENCODING=RLE, COMPRESSOR=SNAPPY")
 
-            session.execute_non_query_statement(f"CREATE TIMESERIES root.he.users.user_{user_id}.gyroscope.x WITH DATATYPE=FLOAT, ENCODING=RLE, COMPRESSOR=SNAPPY")
-            session.execute_non_query_statement(f"CREATE TIMESERIES root.he.users.user_{user_id}.gyroscope.y WITH DATATYPE=FLOAT, ENCODING=RLE, COMPRESSOR=SNAPPY")
-            session.execute_non_query_statement(f"CREATE TIMESERIES root.he.users.user_{user_id}.gyroscope.z WITH DATATYPE=FLOAT, ENCODING=RLE, COMPRESSOR=SNAPPY")
+            session.execute_non_query_statement(f"CREATE TIMESERIES root.users.user_{user_id}.gyroscope.x WITH DATATYPE=FLOAT, ENCODING=RLE, COMPRESSOR=SNAPPY")
+            session.execute_non_query_statement(f"CREATE TIMESERIES root.users.user_{user_id}.gyroscope.y WITH DATATYPE=FLOAT, ENCODING=RLE, COMPRESSOR=SNAPPY")
+            session.execute_non_query_statement(f"CREATE TIMESERIES root.users.user_{user_id}.gyroscope.z WITH DATATYPE=FLOAT, ENCODING=RLE, COMPRESSOR=SNAPPY")
 
             print(f"Model for user {user_id} created successfully.")
         else:
@@ -112,13 +112,45 @@ def query_data(query):
             session_pool.put_back(session)
             session.close()
 
+def list_timeseries():
+    session = None
+    try:
+        session = session_pool.get_session()
+        session.open()
 
+        result = session.execute_query_statement("SHOW TIMESERIES")
+
+        rows = []
+        column_names = result.get_column_names()  # Dynamically get correct columns
+
+        while result.has_next():
+            row = result.next()
+            fields = [field.value for field in row.get_fields()]
+            rows.append(fields)
+
+        df = pd.DataFrame(rows, columns=column_names)
+        return df
+
+    except Exception as e:
+        print(f"Error while listing time series: {e}")
+        return None
+
+    finally:
+        if session:
+            session_pool.put_back(session)
+            session.close()
+
+df = list_timeseries()
+print(df)
 # check_user_model_exists(1)
-# df = query_data("SELECT * FROM root.he.users.user_1.accelerometer")
+# df = query_data("SELECT * FROM root.users.user_1.accelerometer")
 # print(df)
 # # sensor_data = [{'sensorType': 'accelerometer', 'timestamp': 1735819501333, 'userId': 1, 'userTrustScore': 100, 'x': 0.0, 'y': 9.809989, 'z': 0.0}, {'sensorType': 'accelerometer', 'timestamp': 1735819501398, 'userId': 1, 'userTrustScore': 100, 'x': 0.0, 'y': 9.809989, 'z': 0.0}, {'sensorType': 'accelerometer', 'timestamp': 1735819501466, 'userId': 1, 'userTrustScore': 100, 'x': 0.0, 'y': 9.809989, 'z': 0.0}, {'sensorType': 'gyroscope', 'timestamp': 1735819501511, 'userId': 1, 'userTrustScore': 100, 'x': 0.0, 'y': 0.0, 'z': 0.0}, {'sensorType': 'accelerometer', 'timestamp': 1735819501532, 'userId': 1, 'userTrustScore': 100, 'x': 0.0, 'y': 9.809989, 'z': 0.0}, {'sensorType': 'accelerometer', 'timestamp': 1735819501598, 'userId': 1, 'userTrustScore': 100, 'x': 0.0, 'y': 9.809989, 'z': 0.0}, {'sensorType': 'accelerometer', 'timestamp': 1735819501665, 'userId': 1, 'userTrustScore': 100, 'x': 0.0, 'y': 9.809989, 'z': 0.0}, {'sensorType': 'gyroscope', 'timestamp': 1735819501711, 'userId': 1, 'userTrustScore': 100, 'x': 0.0, 'y': 0.0, 'z': 0.0}, {'sensorType': 'accelerometer', 'timestamp': 1735819501732, 'userId': 1, 'userTrustScore': 100, 'x': 0.0, 'y': 9.809989, 'z': 0.0}, {'sensorType': 'accelerometer', 'timestamp': 1735819501798, 'userId': 1, 'userTrustScore': 100, 'x': 0.0, 'y': 9.809989, 'z': 0.0}, {'sensorType': 'accelerometer', 'timestamp': 1735819501866, 'userId': 1, 'userTrustScore': 100, 'x': 0.0, 'y': 9.809989, 'z': 0.0}, {'sensorType': 'gyroscope', 'timestamp': 1735819501910, 'userId': 1, 'userTrustScore': 100, 'x': 0.0, 'y': 0.0, 'z': 0.0}, {'sensorType': 'accelerometer', 'timestamp': 1735819501932, 'userId': 1, 'userTrustScore': 100, 'x': 0.0, 'y': 9.809989, 'z': 0.0}]
 # # insert_sensor_data(sensor_data)
 # df = query_data("SELECT * FROM root.users.user_1.accelerometer")
+# print(df)
+# df = query_data("SHOW TIMESERIES")
+# print(df)
 # df["datetime"] = pd.to_datetime(df["timestamp"], unit='ms')
 # df["datetime_str"] = df["datetime"].dt.strftime('%Y-%m-%d %H:%M:%S')
 # print(df)

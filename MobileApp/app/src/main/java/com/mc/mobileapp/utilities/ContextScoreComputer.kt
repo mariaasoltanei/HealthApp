@@ -36,16 +36,4 @@ object ContextScoreComputer {
     fun decideEncryptionType(context: Context): String {
         return if (computeContextScore(context) >= 0.6) "he" else "aes"
     }
-
-//    fun computeContextScoreWithHeartRate(context: Context, heartRate: Int): Double{
-//        var score = computeContextScore(context)
-//
-//        // Heart Rate
-//        if (heartRate > 100) score += 0.1
-//        else if (heartRate < 60) score += 0.2
-//
-//        return score.coerceIn(0.0, 1.0)
-//
-//    }
-
 }

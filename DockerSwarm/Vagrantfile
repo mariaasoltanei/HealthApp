@@ -12,22 +12,20 @@ Vagrant.configure("2") do |config|
       n.vm.box = "gusztavvargadr/ubuntu-server"
       n.vm.hostname = node[:name]
       n.vm.network "private_network", ip: node[:ip]
-      n.vm.network "forwarded_port", guest: 6667, host: 6667 if node[:name] == "node5"  # IoTDB port
-      n.vm.network "forwarded_port", guest: 8181, host: 8181 if node[:name] == "node5"  # IoTDB Web UI
-      if node[:name] == "node1"
-        n.vm.network "forwarded_port", guest: 443, host: 443    # NGINX (TLS entry point)
-        n.vm.network "forwarded_port", guest: 5000, host: 5000  # Flask (HTTP for testing)
-        n.vm.network "forwarded_port", guest: 9090, host: 9090  # Prometheus
-        n.vm.network "forwarded_port", guest: 3000, host: 3000  # Grafana
-        n.vm.network "forwarded_port", guest: 8080, host: 8080  # cAdvisor
+
+      # Forwarded Ports
+      if node[:name] == "node5"
+        n.vm.network "forwarded_port", guest: 6667, host: 6667  # IoTDB port
+        n.vm.network "forwarded_port", guest: 8181, host: 8181  # IoTDB Web UI
+      elsif node[:name] == "node1"
+        n.vm.network "forwarded_port", guest: 443, host: 443
+        n.vm.network "forwarded_port", guest: 5000, host: 5000
+        n.vm.network "forwarded_port", guest: 9090, host: 9090
+        n.vm.network "forwarded_port", guest: 3000, host: 3000
+        n.vm.network "forwarded_port", guest: 8080, host: 8080
       end
 
-      n.vm.provider "vmware_desktop" do |v|
-        v.gui = false
-        v.memory = 1024
-        v.cpus = 1
-      end
-
+      # Provision Script (applied to all nodes)
       n.vm.provision "shell", inline: <<-SHELL
         apt-get update
         apt-get install -y docker.io python3-pip
@@ -35,7 +33,24 @@ Vagrant.configure("2") do |config|
         systemctl start docker
         systemctl enable docker
         usermod -aG docker vagrant
+
+        if [ "#{node[:name]}" = "node5" ]; then
+          apt-get install -y lvm2
+          if ! lsblk | grep -q sdb1; then
+            echo ',,83' | sfdisk -q -D /dev/sdb
+            mkfs.ext4 /dev/sdb1
+          fi
+          mkdir -p /var/lib/iotdb
+          grep -q sdb1 /etc/fstab || echo '/dev/sdb1 /var/lib/iotdb ext4 defaults 0 0' >> /etc/fstab
+          mount /var/lib/iotdb
+        fi
       SHELL
+
+      n.vm.provider "vmware_desktop" do |v|
+        v.gui = false
+        v.memory = 1024
+        v.cpus = 1
+      end
     end
   end
 end

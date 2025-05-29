@@ -33,31 +33,55 @@ WORKER3_SERVICE = os.getenv("WORKER3_SERVICE", "worker3")
 
 active_users = set()
 
+@app.route('/prediction', methods=['POST'])
+def receive_results():
+    data = request.get_json()
+    print(f"📬 Received from worker: {data}")
+    return jsonify({"status": "received"}), 200
+
 def periodic_trigger_workers():
     while True:
         try:
             print("Triggering workers...")
+            user_id = "user_1"
+            url1 = f"http://{WORKER1_SERVICE}:6000/trigger/{user_id}"
+            url2 = f"http://{WORKER2_SERVICE}:6000/trigger/{user_id}"
 
-            user_id = "user_1"  # make this dynamic if needed
-            url1 = f"http://{WORKER1_SERVICE}:6000/trigger/user_{1}"
-            url2 = f"http://{WORKER2_SERVICE}:6000/trigger/user_{1}"
+            max_retries = 3
+            delay = 2
 
-            res1 = requests.post(url1, timeout=5)
-            res2 = requests.post(url2, timeout=5)
+            pred1 = pred2 = None
 
-            pred1 = res1.json() if res1.ok else None
-            pred2 = res2.json() if res2.ok else None
+            for attempt in range(max_retries):
+                if not pred1:
+                    res1 = requests.post(url1, timeout=5)
+                    if res1.ok:
+                        p1 = res1.json()
+                        if "prediction" in p1 and "confidence" in p1:
+                            pred1 = p1
+
+                if not pred2:
+                    res2 = requests.post(url2, timeout=5)
+                    if res2.ok:
+                        p2 = res2.json()
+                        if "prediction" in p2 and "confidence" in p2:
+                            pred2 = p2
+
+                if pred1 and pred2:
+                    break  # both predictions received
+
+                time.sleep(delay)  # wait before retrying
 
             if pred1 and pred2:
                 final = vote(pred1, pred2)
                 print(f"Final activity for {user_id}: {final}")
             else:
-                print(f"Incomplete responses for {user_id}")
+                print(f"Could not collect both predictions after retries for {user_id}")
 
         except Exception as e:
-            print(f"❌ Error triggering workers: {e}")
+            print(f"Error triggering workers: {e}")
 
-        time.sleep(30)  # Wait 5 minutes
+        time.sleep(30)  # or 300 for 5 minutes
 
 def vote(pred1, pred2):
     if pred1["prediction"] == pred2["prediction"]:
@@ -87,7 +111,7 @@ def handle_aes():
             }
             decrypted_batch.append(decrypted_item)
         except Exception as entry_error:
-            print(f"❌ Failed to decrypt AES item: {entry_error}")
+            print(f"Failed to decrypt AES item: {entry_error}")
 
     insert_sensor_data(decrypted_batch)
 
@@ -114,7 +138,7 @@ def handle_he_encrypted_prediction():
 
 @app.route("/")
 def index():
-    return "🔒 Hello from Manager behind TLS!"
+    return "TLS OK"
 
 if __name__ == "__main__":
     trigger_thread = threading.Thread(target=periodic_trigger_workers, daemon=True)

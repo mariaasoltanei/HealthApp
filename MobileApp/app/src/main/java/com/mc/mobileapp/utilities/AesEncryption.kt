@@ -12,7 +12,7 @@ import javax.crypto.spec.SecretKeySpec
 object AesEncryption {
 
     private const val AES_MODE = "AES/GCM/NoPadding"
-    private const val KEY_FILE_NAME = "aes_key.txt" // Must be in assets folder
+    private const val KEY_FILE_NAME = "aes_key.txt"
     private var secretKey: SecretKey? = null
 
     fun loadKeyFromAssets(context: Context) {

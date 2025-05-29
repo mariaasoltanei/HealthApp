@@ -9,12 +9,14 @@ import com.mc.mobileapp.ExerciseRepository
 import com.mc.mobileapp.ExerciseViewModel
 import com.mc.mobileapp.ExerciseViewModelFactory
 import com.mc.mobileapp.MainActivity
+import com.mc.mobileapp.UserRepository
 import com.mc.mobileapp.UserViewModel
 import com.mc.mobileapp.retrofit.IExerciseApiService
 import com.mc.mobileapp.retrofit.RetrofitClient
 import com.mc.mobileapp.screens.ActivityDetailsScreen
 import com.mc.mobileapp.screens.ActivityListScreen
 import com.mc.mobileapp.screens.LandingScreen
+import com.mc.mobileapp.screens.LandingViewModelFactory
 import com.mc.mobileapp.screens.LoginScreen
 import com.mc.mobileapp.screens.RegisterScreen
 import com.mc.mobileapp.screens.WelcomeScreen
@@ -35,8 +37,10 @@ fun AppNavGraph(navController: NavHostController, userViewModel: UserViewModel) 
         composable("login") {
             LoginScreen(
                 userViewModel = userViewModel,
-                onLoginSuccess = {
-                    navController.navigate("landing")
+                onLoginSuccess = { user ->
+                    user.let {
+                        navController.navigate("landing/${it.id}")
+                    }
                 },
                 onBackClick = { navController.popBackStack() }
             )
@@ -46,10 +50,11 @@ fun AppNavGraph(navController: NavHostController, userViewModel: UserViewModel) 
         composable("register") {
             RegisterScreen(
                 userViewModel = userViewModel,
-                onRegisterSuccess = {
-                    navController.navigate("landing")
+                onRegisterSuccess = { user ->
+                    user.let {
+                        navController.navigate("landing/${it.id}")
+                    }
                 },
-
                 onBackClick = { navController.popBackStack() } // Navigate back to welcome
             )
         }
@@ -83,8 +88,18 @@ fun AppNavGraph(navController: NavHostController, userViewModel: UserViewModel) 
         }
 
         //Landing Screen
-        composable("landing") {
+        // Landing Screen
+        composable(
+            route = "landing/{id}",
+            arguments = listOf(navArgument("id") { type = NavType.IntType })
+        ) { backStackEntry ->
+            val id = backStackEntry.arguments?.getInt("id") ?: 0
+            val dao = MainActivity.database.userDao()
+            val landingViewModel: LandingViewModel =
+                viewModel(factory = LandingViewModelFactory(dao, id))
+
             LandingScreen(
+                viewModel = landingViewModel,
                 onLogout = {
                     navController.navigate("welcome") {
                         popUpTo("welcome") { inclusive = true }

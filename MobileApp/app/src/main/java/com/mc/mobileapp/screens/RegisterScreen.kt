@@ -15,7 +15,7 @@ import javax.crypto.spec.SecretKeySpec
 @Composable
 fun RegisterScreen(
     userViewModel: UserViewModel,
-    onRegisterSuccess: () -> Unit,
+    onRegisterSuccess: (User) -> Unit,
     onBackClick: () -> Unit
 ) {
     var currentStep by remember { mutableStateOf(1) }
@@ -87,10 +87,10 @@ fun RegisterScreen(
                         activityMultiplier = activityMultiplier.toFloatOrNull() ?: 1.0f,
                         apiKey = apiKey
                     )
-                    userViewModel.registerUser(user, onSuccess = {
-                        onRegisterSuccess()
+                    userViewModel.registerUser(user, onSuccess = { registeredUser ->
+                        onRegisterSuccess(registeredUser)
                         Log.d("RegisterScreen", "User registered successfully.")
-                        sharedPreferences.edit().putString("email", email).apply()
+                        sharedPreferences.edit().putString("email", registeredUser.email).apply()
                     }, onError = {
                         errorMessage = it
                     })
