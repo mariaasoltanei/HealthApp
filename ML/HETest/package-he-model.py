@@ -1,6 +1,7 @@
 import pandas as pd
 import joblib
 from concrete.ml.sklearn import LinearSVC
+from concrete.ml.deployment import FHEModelClient, FHEModelDev, FHEModelServer
 
 df = pd.read_csv("/Users/mariaasoltanei/Desktop/FACULTATE/CERCETARE/HealthApp/ML/TestDataProcesing/CSVs/train.csv")
 
@@ -26,6 +27,9 @@ y = df["Activity"]
 
 model = LinearSVC(n_bits=7)
 model.fit(X, y)
-# model.compile(X)
+model.compile(X)
 
-joblib.dump(model, "lsvc_concrete_model.pkl")
+fhemodel_dev = FHEModelDev("/Users/mariaasoltanei/Desktop/FACULTATE/CERCETARE/HealthApp/ML/HETest/Model", model)
+fhemodel_dev.save()
+
+# joblib.dump(model, "lsvc_concrete_model.pkl")
