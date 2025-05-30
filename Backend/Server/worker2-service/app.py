@@ -1,45 +1,13 @@
-from flask import Flask, request, jsonify
-import random
-from database_operations import pull_last_5_minutes_data
 import pandas as pd
 import joblib
-import threading
-import time
-import requests
+from flask import Flask, request, jsonify
+from database_operations import pull_last_5_minutes_data
 from process_data import process_data, getActivity
 from prometheus_flask_exporter import PrometheusMetrics
 
 app = Flask(__name__)
 metrics = PrometheusMetrics(app)
 model = joblib.load("lsvc_model.pkl")
-
-# MANAGER_URL = "http://manager-service:5000/prediction"
-
-# def notify_manager(activity, confidence, retries=3, backoff_factor=2):
-#     payload = {
-#         "prediction": activity,
-#         "confidence": confidence
-#     }
-
-#     attempt = 0
-#     while attempt < retries:
-#         try:
-#             response = requests.post(MANAGER_URL, json=payload, timeout=5)
-#             if response.ok:
-#                 print(f"✅ Manager acknowledged result: {response.json()}")
-#                 return True  # Success
-#             else:
-#                 print(f"❌ Failed to notify manager, status code: {response.status_code}")
-#         except Exception as e:
-#             print(f"❌ Error notifying manager (Attempt {attempt + 1}): {e}")
-
-#         attempt += 1
-#         sleep_time = backoff_factor ** attempt
-#         print(f"⏳ Retrying in {sleep_time} seconds...")
-#         time.sleep(sleep_time)
-
-#     print("All retry attempts failed. Giving up.")
-#     return False  # All attempts failed
 
 @app.route('/trigger/<user_id>', methods=['POST'])
 def trigger(user_id):

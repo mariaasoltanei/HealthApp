@@ -6,7 +6,7 @@ ENV PYTHONUNBUFFERED=1
 WORKDIR /app
 
 COPY requirements.txt .
-COPY rf_model.pkl .
+# COPY rf_model.pkl .
 RUN pip install --upgrade pip
 RUN pip install -r requirements.txt
 

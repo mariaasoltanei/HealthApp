@@ -5,8 +5,8 @@ import numpy as np
 from collections import Counter
 
 def get_merged_dataframe(accelerometer_data: pd.DataFrame, gyroscope_data: pd.DataFrame) -> pd.DataFrame:
-    gyroscope_data = gyroscope_data.sort_values('Time')
-    accelerometer_data = accelerometer_data.sort_values('Time')
+    gyroscope_data = gyroscope_data.sort_values('timestamp')
+    accelerometer_data = accelerometer_data.sort_values('timestamp')
     gyroscope_data.rename(columns={'root.users.user_1.gyroscope.x': 'x', 'root.users.user_1.gyroscope.y': 'y', 'root.users.user_1.gyroscope.z': 'z'}, inplace=True)
     accelerometer_data.rename(columns={'root.users.user_1.accelerometer.x': 'x', 'root.users.user_1.accelerometer.y': 'y', 'root.users.user_1.accelerometer.z': 'z'}, inplace=True)
 
@@ -18,10 +18,10 @@ def get_merged_dataframe(accelerometer_data: pd.DataFrame, gyroscope_data: pd.Da
     accelerometer_data['yBody'] = filterAcceleration(accelerometer_data['y'])
     accelerometer_data['zBody'] = filterAcceleration(accelerometer_data['z'])
 
-    accelerometer_data['Time'] = pd.to_datetime(accelerometer_data['Time'], unit='ms')
-    gyroscope_data['Time'] = pd.to_datetime(gyroscope_data['Time'], unit='ms')
+    accelerometer_data['timestamp'] = pd.to_datetime(accelerometer_data['timestamp'], unit='ms')
+    gyroscope_data['timestamp'] = pd.to_datetime(gyroscope_data['timestamp'], unit='ms')
 
-    merged_df = pd.merge_asof(accelerometer_data, gyroscope_data, on=['Time'], tolerance=pd.Timedelta('200ms'))
+    merged_df = pd.merge_asof(accelerometer_data, gyroscope_data, on=['timestamp'], tolerance=pd.Timedelta('200ms'))
     merged_df.dropna(inplace=True)
     merged_df = merged_df.rename(columns={'x_x':'xAcc', 'y_x':'yAcc', 'z_x':'zAcc', 'xBody_x':'xAccBody', 'yBody_x':'yAccBody', 'zBody_x':'zAccBody', 'x_y':'xGyro', 'y_y':'yGyro', 'z_y':'zGyro', 'xBody_y':'xGyroBody', 'yBody_y':'yGyroBody', 'zBody_y':'zGyroBody'})
 

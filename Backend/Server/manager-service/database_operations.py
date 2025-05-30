@@ -140,8 +140,8 @@ def list_timeseries():
             session_pool.put_back(session)
             session.close()
 
-df = list_timeseries()
-print(df)
+# df = list_timeseries()
+# print(df)
 # check_user_model_exists(1)
 # df = query_data("SELECT * FROM root.users.user_1.accelerometer")
 # print(df)

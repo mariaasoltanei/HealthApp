@@ -14,6 +14,20 @@ services:
         constraints:
           - node.role == manager
 
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    networks:
+      - test-net
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - node.role == manager
+      restart_policy:
+        condition: on-failure
+
   manager:
     image: 192.168.56.11:5001/manager-test:latest
     ports:
@@ -77,5 +91,5 @@ services:
 networks:
   test-net:
     driver: overlay
-  monitoring_monitor-net:   # <-- ADD THIS
+  monitoring_monitor-net:
     external: true
