@@ -12,12 +12,7 @@ from cryptography.hazmat.primitives.ciphers.aead import AESGCM
 from prometheus_flask_exporter import PrometheusMetrics
 from concrete.ml.deployment import FHEModelClient, FHEModelDev, FHEModelServer
 
-# model = joblib.load("lsvc_concrete_model.pkl")
-# X_sample = np.load("sample_input.npy")
-# model.compile(X_sample)
-
 redis_client = redis.Redis(host="192.168.56.11", port=6379, decode_responses=True)
-
 
 fhemodel_client = FHEModelClient("/Users/mariaasoltanei/Desktop/FACULTATE/CERCETARE/HealthApp/ML/HETest/Model", key_dir="/Users/mariaasoltanei/Desktop/FACULTATE/CERCETARE/HealthApp/ML/HETest/Model")
 serialized_evaluation_keys = fhemodel_client.get_serialized_evaluation_keys()
@@ -57,24 +52,15 @@ for i in range(df.shape[0]):
 
 #worker
 print(f"Received batch of size: {len(encrypted_batch)}")
-#encrypted_batch = encrypted_batch[0]
 
 results = []
 with open("/Users/mariaasoltanei/Desktop/FACULTATE/CERCETARE/HealthApp/ML/HETest/Model"+ "/serialized_evaluation_keys.ekl", "rb") as f:
     serialized_evaluation_keys = f.read()
 
 fhemodel_server = FHEModelServer("/Users/mariaasoltanei/Desktop/FACULTATE/CERCETARE/HealthApp/ML/HETest/Model")  # path to compiled model directory
-# for enc_b64 in encrypted_batch:
-#     # print(f"Processing encrypted input: {enc_b64}")
-#     print("-------------")
-#     #encrypted_bytes = base64.b64decode(enc_b64)
-#     # print(f"Decoded encrypted input: {encrypted_bytes}")
-#     encrypted_result = fhemodel_server.run(enc_b64, serialized_evaluation_keys)
-
 decrypted_predictions = []
 
 for enc_b64 in encrypted_batch:
-    #encrypted_bytes = base64.b64decode(enc_b64)
     encrypted_result = fhemodel_server.run(enc_b64, serialized_evaluation_keys)
     decrypted = fhemodel_client.deserialize_decrypt_dequantize(encrypted_result)[0]
     print(f"Decrypted prediction: {decrypted}")
