@@ -6,7 +6,6 @@ from collections import Counter
 notebook_dir = os.getcwd()
 data_dir = os.path.abspath(os.path.join(notebook_dir, ".."))
 sys.path.append(data_dir+"/HealthApp/ML")
-
 from processingFunctions import *
 
 csv_path = os.path.join(os.getcwd(), "/Users/mariaasoltanei/Desktop/FACULTATE/CERCETARE/HealthApp/ML/TestDataProcesing/CSVs/labeledMockDataPhone.csv")
@@ -14,34 +13,34 @@ csv_path = os.path.join(os.getcwd(), "/Users/mariaasoltanei/Desktop/FACULTATE/CE
 df = pd.read_csv(csv_path)
 
 sensor_groups = {sensor: data for sensor, data in df.groupby('sensor_type')}
-
 dfGyroData = sensor_groups.get('gyroscope')
 dfAccData = sensor_groups.get('accelerometer')
 
-
 dfGyroData = dfGyroData.sort_values('timestamp')
 dfAccData = dfAccData.sort_values('timestamp')
+dfAccData['timestamp'] = pd.to_datetime(dfAccData['timestamp'], unit='ms')
+dfGyroData['timestamp'] = pd.to_datetime(dfGyroData['timestamp'], unit='ms')
 
 dfGyroData.drop(columns=['sensor_type', 'user_id'], inplace=True)
 dfAccData.drop(columns=['sensor_type', 'user_id'], inplace=True)
 
-dfGyroData['xBody'] = filterAcceleration(dfGyroData['x'])
-dfGyroData['yBody'] = filterAcceleration(dfGyroData['y'])
-dfGyroData['zBody'] = filterAcceleration(dfGyroData['z'])
-print("--------ACCELEROMETER NEXT-------")
-dfAccData = dfAccData.sort_values('timestamp')
-dfAccData['xBody'] = filterAcceleration(dfAccData['x'])
-dfAccData['yBody'] = filterAcceleration(dfAccData['y'])
-dfAccData['zBody'] = filterAcceleration(dfAccData['z'])
+#xBody is body_acc, x is total_acc
+dfAccData['xAccBody'] = filterAcceleration(dfAccData['x'])
+dfAccData['yAccBody'] = filterAcceleration(dfAccData['y'])
+dfAccData['zAccBody'] = filterAcceleration(dfAccData['z'])
 
-dfAccData['timestamp'] = pd.to_datetime(dfAccData['timestamp'], unit='ms')
-dfGyroData['timestamp'] = pd.to_datetime(dfGyroData['timestamp'], unit='ms')
+dfGyroData['xGyroBody'] = filterAcceleration(dfGyroData['x'])
+dfGyroData['yGyroBody'] = filterAcceleration(dfGyroData['y'])
+dfGyroData['zGyroBody'] = filterAcceleration(dfGyroData['z'])
+
+dfGyroData.drop(columns=['x', 'y', 'z'], inplace=True)
+dfAccData.rename(columns={'x': 'xAccTotal', 'y': 'yAccTotal', 'z': 'zAccTotal'}, inplace=True)
+# dfGyroData.rename(columns={'xGyroBody': 'x', 'yGyroBody': 'y', 'zGyroBody': 'z'}, inplace=True)
 
 merged_df = pd.merge_asof(dfAccData, dfGyroData, on=['timestamp'], tolerance=pd.Timedelta('150ms'))
 merged_df.dropna(inplace=True)
 merged_df.drop(columns=['Activity_x', 'ActivityName_x'], inplace=True)
-merged_df =merged_df.rename(columns={'x_x':'xAcc', 'y_x':'yAcc', 'z_x':'zAcc', 'xBody_x':'xAccBody', 'yBody_x':'yAccBody', 'zBody_x':'zAccBody', 'x_y':'xGyro', 'y_y':'yGyro', 'z_y':'zGyro', 'xBody_y':'xGyroBody', 'yBody_y':'yGyroBody', 'zBody_y':'zGyroBody', 'Activity_y':'Activity', 'ActivityName_y':'ActivityName'})
-
+merged_df.rename(columns={'Activity_y': 'Activity', 'ActivityName_y': 'ActivityName'}, inplace=True)
 
 testDataDict = {
         'body_acc_x_mean': [],
@@ -141,9 +140,9 @@ colNames = {
     'body_gyro_x': 'xGyroBody',
     'body_gyro_y': 'yGyroBody',
     'body_gyro_z': 'zGyroBody',
-    'total_acc_x': 'xAcc',
-    'total_acc_y': 'yAcc',
-    'total_acc_z': 'zAcc'
+    'total_acc_x': 'xAccTotal',
+    'total_acc_y': 'yAccTotal',
+    'total_acc_z': 'zAccTotal'
 }
 
 windowed_data = []
@@ -151,6 +150,9 @@ windowNo = 1
 #raport activitate pe zi
 for i in range(0, len(merged_df) - window_length, shift):
     window = merged_df.iloc[i:i+window_length]
+
+    if len(window) < window_length:
+        continue
 
     print(windowNo, ': ', (window['timestamp'].values[0]),'---->' ,window['timestamp'].values[-1],'\n')
     windowNo = windowNo +1

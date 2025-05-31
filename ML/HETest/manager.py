@@ -10,6 +10,7 @@ from flask import Flask, request, jsonify
 from process_data import process_data, getActivity
 from cryptography.hazmat.primitives.ciphers.aead import AESGCM
 from prometheus_flask_exporter import PrometheusMetrics
+from concrete.ml.deployment import FHEModelClient, FHEModelDev, FHEModelServer
 
 app = Flask(__name__)
 metrics = PrometheusMetrics(app)
@@ -31,6 +32,12 @@ def handle_he():
         three_minutes_ago = str(now_ms - 3 * 60 * 1000)
         three_hours_ago = str(now_ms - 3 * 60 * 60 * 1000)
 
+        # # Let's create the client and load the model
+        fhemodel_client = FHEModelClient("/Users/mariaasoltanei/Desktop/FACULTATE/CERCETARE/HealthApp/ML/HETest/Model", key_dir="/Users/mariaasoltanei/Desktop/FACULTATE/CERCETARE/HealthApp/ML/HETest/Model")
+
+        # # The client first need to create the private and evaluation keys.
+        # serialized_evaluation_keys = fhemodel_client.get_serialized_evaluation_keys()
+
         #todo: change this such that it is 3 mins ago
         entries = redis_client.xrange(key, max="+", count=1000)
         raw_data = []
@@ -46,25 +53,21 @@ def handle_he():
         if df.empty:
             return jsonify({"status": "error", "message": "No data in stream"}), 400
 
-
         acc_data = df[df["sensorType"] == "accelerometer"].copy()
         gyro_data = df[df["sensorType"] == "gyroscope"].copy()
 
         if acc_data.empty or gyro_data.empty:
             return jsonify({"error": "No data found for the last 5 minutes"}), 404
 
-
         df = process_data(acc_data, gyro_data)
 
-        # print(df)
-        x_features = df.values  # shape: (1, n_features)
-        q_x = model.quantize_input(x_features)
+        decrypted_predictions = []
+        encrypted_batch = []
 
-        # Encrypt each sample individually
-        encrypted_batch = [
-            base64.b64encode(model.fhe_circuit.encrypt(q_x[i:i+1]).serialize()).decode("utf-8")
-            for i in range(q_x.shape[0])
-        ]
+        for i in range(df.shape[0]):
+            clear_input = df.iloc[[i]].values  # shape: (1, n_features)
+            encrypted_input = fhemodel_client.quantize_encrypt_serialize(clear_input)
+            encrypted_batch.append(base64.b64encode(encrypted_input).decode("utf-8"))
 
         response = requests.post(
             "http://192.168.0.102:5002/infer",
@@ -72,16 +75,21 @@ def handle_he():
             headers={"Content-Type": "application/json"}
         )
 
-        encrypted_predictions = []
-        for enc_pred_b64 in response.json().get("predictions", []):
-            encrypted_bytes = base64.b64decode(enc_pred_b64)
-            enc_result = model.fhe_circuit.deserialize_result(encrypted_bytes)
-            prediction = model.fhe_circuit.decrypt(enc_result)
-            encrypted_predictions.append(int(prediction[0]))
+        try:
+            predictions_data = response.json()
+            if "predictions" not in predictions_data:
+                raise KeyError("Missing 'predictions' key in server response")
+            for enc_pred_b64 in predictions_data["predictions"]:
+                decrypted = fhemodel_client.deserialize_decrypt_dequantize(base64.b64decode(enc_pred_b64))[0]
+                decrypted_predictions.append(int(decrypted))
+        except KeyError as ke:
+            return jsonify({"status": "error", "message": str(ke)}), 500
+        except Exception as decryption_error:
+            return jsonify({"status": "error", "message": f"Decryption error: {str(decryption_error)}"}), 500
 
         return jsonify({
             "status": "success",
-            "predictions": encrypted_predictions
+            "predictions": decrypted_predictions
         }), 200
 
     except Exception as e:

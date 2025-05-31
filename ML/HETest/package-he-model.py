@@ -1,6 +1,6 @@
 import pandas as pd
 import joblib
-from concrete.ml.sklearn import LinearSVC
+from concrete.ml.sklearn import LinearSVC, XGBClassifier
 from concrete.ml.deployment import FHEModelClient, FHEModelDev, FHEModelServer
 
 df = pd.read_csv("/Users/mariaasoltanei/Desktop/FACULTATE/CERCETARE/HealthApp/ML/TestDataProcesing/CSVs/train.csv")
@@ -14,22 +14,21 @@ activity_map = {
     "LAYING": 6
 }
 
-# Apply the mapping to the training data
 df["Activity"] = df["ActivityName"].map(activity_map)
 
 X = df.drop(columns=["Activity", "ActivityName"])
-# Save a sample input for FHE model compilation later
-sample_input = X.iloc[[0]].values
+print(X.columns)
+
+from sklearn.preprocessing import LabelEncoder
+label_encoder = LabelEncoder()
+y = label_encoder.fit_transform(df["Activity"])
 import numpy as np
-np.save("sample_input.npy", sample_input)
+np.save("label_classes.npy", label_encoder.classes_)
+print(y)
 
-y = df["Activity"]
-
-model = LinearSVC(n_bits=7)
+model = model = XGBClassifier(n_bits=7)
 model.fit(X, y)
 model.compile(X)
 
 fhemodel_dev = FHEModelDev("/Users/mariaasoltanei/Desktop/FACULTATE/CERCETARE/HealthApp/ML/HETest/Model", model)
 fhemodel_dev.save()
-
-# joblib.dump(model, "lsvc_concrete_model.pkl")
