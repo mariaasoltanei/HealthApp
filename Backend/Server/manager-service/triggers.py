@@ -1,16 +1,44 @@
 import os
 import time
 import requests
+import json
+import pandas as pd
+from process_data import process_data
+from cryptography.hazmat.primitives.ciphers.aead import AESGCM
 
 WORKER1_SERVICE = os.getenv("WORKER1_SERVICE", "worker1")
 WORKER2_SERVICE = os.getenv("WORKER2_SERVICE", "worker2")
 WORKER3_SERVICE = os.getenv("WORKER3_SERVICE", "worker3")
 
-def periodic_trigger_worker3():
+def periodic_trigger_worker3(redis_client):
     while True:
         try:
             print("Triggering Worker3 for FHE inference...")
             user_id= "user_1"
+            now_ms = int(time.time() * 1000)
+            three_minutes_ago = str(now_ms - 3 * 60 * 1000)
+
+            stream_key = f"user:{user_id}:raw_stream"
+            entries = redis_client.xrange(stream_key, min=three_minutes_ago, max="+")
+
+            print(f"Found {len(entries)} entries in the stream for user {user_id}")
+            # if not entries:
+            #     print(f"No data found in the stream for user {user_id} in the last 3 minutes.")
+
+            raw_data = []
+            for _, fields in entries:
+                try:
+                    parsed = json.loads(fields["data"])
+                    raw_data.append(parsed)
+                except json.JSONDecodeError:
+                    continue
+
+            df = pd.DataFrame(raw_data)
+            acc_data = df[df["sensorType"] == "accelerometer"].copy()
+            gyro_data = df[df["sensorType"] == "gyroscope"].copy()
+
+            df = process_data(acc_data, gyro_data)
+
             url3 = f"http://{WORKER3_SERVICE}:6000/trigger/{user_id}"
             try:
                 res = requests.post(url3, timeout=5)

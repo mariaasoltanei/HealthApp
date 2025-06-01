@@ -2,6 +2,10 @@ Flask
 requests
 apache-iotdb
 cryptography
+scikit-learn
+joblib
+pandas
 numpy
-redis
+scipy
 prometheus_flask_exporter
+redis

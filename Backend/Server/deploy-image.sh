@@ -18,7 +18,6 @@ if [ -z "$INSTANCE" ]; then
 fi
 
 cd ${INSTANCE}-service
-ls
 echo "Building Docker image for $INSTANCE..."
 docker build -t ${INSTANCE}-test .
 
