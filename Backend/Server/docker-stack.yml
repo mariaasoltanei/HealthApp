@@ -7,6 +7,7 @@ services:
       - "443:443"
     networks:
       - test-net
+      # - monitoring_monitor-net
     deploy:
       restart_policy:
         condition: on-failure
@@ -33,6 +34,7 @@ services:
     ports:
       - "5000:5000"
     volumes:
+#     - /home/vagrant/Server/he-model:/app/he-model
       - /home/vagrant/Server/aes_key.txt:/app/aes-key:ro
     environment:
       - WORKER1_SERVICE=worker1
@@ -77,6 +79,8 @@ services:
 
   worker3:
     image: 192.168.56.11:5001/worker3-test:latest
+    # volumes:
+    #   - /home/vagrant/Server/he-model:/app/he-model
     networks:
       - test-net
       - monitoring_monitor-net

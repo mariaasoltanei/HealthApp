@@ -1,15 +1,14 @@
 import pandas as pd
 import numpy as np
 import math
-import statsmodels.api as sm
 from scipy.signal import butter, filtfilt, medfilt
 from scipy.stats import median_abs_deviation, entropy
 from scipy.fft import fft
 from scipy.stats import pearsonr
 
 def applyFilters(df):
-    fs = 50 
-    f_cutoff = 20  
+    fs = 50
+    f_cutoff = 20
     f_cutoff2 = 0.3  # Second filter cutoff frequency (Hz)
     df = medfilt(df, kernel_size=5)  #kernel_size=2
 
@@ -49,7 +48,7 @@ def findSMA(signal):
 
 def findAmplitude(signal):
     np_fft = np.fft.fft(signal)
-    amplitudes = 2 / 128 * np.abs(np_fft) 
+    amplitudes = 2 / 128 * np.abs(np_fft)
     return amplitudes.mean()
 
 def findMad(data):
@@ -64,18 +63,18 @@ def findSMAMagnitude(df):
 
 def findEnergy(signal):
     return sum(x ** 2 for x in signal)
-    #Sum of the squares divided by the number of values. 
+    #Sum of the squares divided by the number of values.
 
 def findQuantile(data):
     sorted_data = sorted(data)
     n = len(sorted_data)
-    
+
     q1_index = int(0.25 * (n + 1))  # Index of the first quartile
     q3_index = int(0.75 * (n + 1))  # Index of the third quartile
-    
+
     q1 = sorted_data[q1_index]
     q3 = sorted_data[q3_index]
-    
+
     iqr = q3 - q1
     return iqr
 
@@ -106,10 +105,6 @@ def entropy1(labels, base=None):
   return entropy(counts, base=base)
 
 
-def findArCoeff(df, order):
-    rho, sigma2 = sm.regression.linear_model.burg(df, order=order)
-    return rho
-
 def findMagnitudeBody(df):
     return np.sqrt(df['xBody']**2 + df['yBody']**2 + df['zBody']**2)
 
@@ -121,7 +116,7 @@ def findMagnitudeBodyJerk(df):
 
 def findFFT(df):
     return np.abs(np.fft.fft(df.values))
-     
+
 def maxInds(df):
     max_index = np.argmax(np.abs(df))
     return max_index

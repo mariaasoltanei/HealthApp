@@ -1,60 +1,61 @@
-
 import pandas as pd
 import joblib
-import redis
 import json
 import time
+import base64
+import numpy as np
+import tenseal as ts
 from flask import Flask, request, jsonify
-from process_data import process_data, getActivity
 from prometheus_flask_exporter import PrometheusMetrics
 
 app = Flask(__name__)
 metrics = PrometheusMetrics(app)
-#model = joblib.load("rf_model.pkl")
+model = joblib.load("model.pkl")
 
 @app.route('/trigger/<user_id>', methods=['POST'])
 def trigger(user_id):
     try:
-        r = redis.Redis(host="redis", port=6379, decode_responses=True)
-        stream_key = f"user:{user_id}:raw_stream"
+        print(f"Triggered worker3: {user_id}")
+        data = request.get_json()
+        encrypted_b64 = data.get("encrypted_features")
+        context_b64 = data.get("context")
 
-        now_ms = int(time.time() * 1000)
-        three_minutes_ago = str(now_ms - 3 * 60 * 1000)
+        # Decode base64 to bytes
+        encrypted_bytes = base64.b64decode(encrypted_b64)
+        context_bytes = base64.b64decode(context_b64)
 
-        entries = r.xrange(stream_key, min=three_minutes_ago, max="+")
+        # Load context and encrypted vector
+        context = ts.context_from(context_bytes)
+        encrypted_vector = ts.ckks_vector_from(context, encrypted_bytes)
 
-        raw_data = []
-        for _, fields in entries:
-            try:
-                parsed = json.loads(fields["data"])
-                raw_data.append(parsed)
-            except json.JSONDecodeError:
-                continue
+        weights = model.coef_
+        bias = model.intercept_
 
-        df = pd.DataFrame(raw_data)
-
-        if df.empty:
-            return jsonify({"status": "error", "message": "No data in stream"}), 400
-
-
-        acc_data = df[df["sensorType"] == "accelerometer"].copy()
-        gyro_data = df[df["sensorType"] == "gyroscope"].copy()
-
-        if acc_data.empty or gyro_data.empty:
-            return jsonify({"error": "No data found for the last 5 minutes"}), 404
-
-
-        df = process_data(acc_data, gyro_data)
-        #activity, confidence = getActivity(df, model)
-
-        print(df)
-
-        return jsonify({"status": "success"}), 200
+        # Run inference
+        logits = [encrypted_vector.dot(w) + b for w, b in zip(weights, bias)]
+        encrypted_logits_b64 = [base64.b64encode(logit.serialize()).decode("utf-8") for logit in logits]
+        return jsonify({"encrypted_logits": encrypted_logits_b64}), 200
 
     except Exception as e:
-        import traceback
-        traceback.print_exc()
-        return jsonify({"status": "error", "message": str(e)}), 500
+        print(f"Error in /trigger: {e}")
+        return jsonify({"error": str(e)}), 500
+
+# @app.route('/trigger/<user_id>', methods=['POST'])
+# def trigger(user_id):
+#     try:
+#         print(f"Triggeed worker3: {user_id}")
+#         data = request.get_json()
+#         encrypted_b64 = data.get("encrypted_features")
+#         context_b64 = data.get("context")
+
+#         print(f"Encrypted payload length: {len(encrypted_b64)}")
+#         print(f"Context payload length: {len(context_b64)}")
+#         return jsonify({"status": "success"}), 200
+
+#     except Exception as e:
+#         import traceback
+#         traceback.print_exc()
+#         return jsonify({"status": "error", "message": str(e)}), 500
 
 if __name__ == '__main__':
     app.run(host="0.0.0.0", port=6000)
